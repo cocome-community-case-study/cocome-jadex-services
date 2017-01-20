@@ -1,4 +1,4 @@
-package fypa2c.cocome.components;
+package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;

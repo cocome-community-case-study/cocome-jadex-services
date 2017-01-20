@@ -14,36 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 /**
- * Event emitted by the credit card reader when a credit card information has
- * been successfully scanned.
- * <p>
- * TODO Credit card information should be a type (class).
- * 
- * @see CardReaderModel
- * 
- * @author Sebastian Herold
+ * Event emitted by the cash desk after an unsuccessful attempt to validate a
+ * credit card by the banking component.
  */
-public final class CreditCardScannedEvent implements Serializable {
+public final class InvalidCreditCardEvent implements Serializable {
 
-	private static final long serialVersionUID = 5143156662313299874L;
-
-	//
-
-	private final String __creditCardInformation;
+	private static final long serialVersionUID = 2910273526834186955L;
 
 	//
 
-	public CreditCardScannedEvent(final String creditCardInformation) {
-		__creditCardInformation = creditCardInformation;
+	private final String __cardInfo;
+
+	//
+
+	public InvalidCreditCardEvent(final String cardInfo) {
+		__cardInfo = cardInfo;
 	}
 
-	public String getCreditCardInformation() {
-		return __creditCardInformation;
+	public String getCardInfo() {
+		return __cardInfo;
 	}
 
 }

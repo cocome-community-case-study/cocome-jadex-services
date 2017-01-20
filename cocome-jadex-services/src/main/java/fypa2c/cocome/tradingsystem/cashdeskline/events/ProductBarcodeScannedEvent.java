@@ -14,36 +14,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
-
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.inventory.application.store.SaleTO;
-
 /**
- * Event emitted by the cash desk on the store topic when a sale is finished and
- * should be registered in the inventory. It contains details of the sale so
- * that it can be accounted for in the inventory system.
+ * Event emitted by the bar code scanner after it recognized and scanned a
+ * barcode.
  * 
- * @author Yannick Welsch
+ * @see BarcodeScannerModel
+ * 
+ * @author Sebastian Herold
  */
-public final class AccountSaleEvent implements Serializable {
+public final class ProductBarcodeScannedEvent implements Serializable {
 
-	private static final long serialVersionUID = -5441935251526952790L;
-
-	//
-
-	private final SaleTO __sale;
+	private static final long serialVersionUID = -1603344911255933167L;
 
 	//
 
-	public AccountSaleEvent(final SaleTO sale) {
-		__sale = sale;
+	private final long __barcode;
+
+	//
+
+	public ProductBarcodeScannedEvent(final long barcode) {
+		__barcode = barcode;
 	}
 
-	public SaleTO getSale() {
-		return __sale;
+	public long getBarcode() {
+		return __barcode;
 	}
 
 }

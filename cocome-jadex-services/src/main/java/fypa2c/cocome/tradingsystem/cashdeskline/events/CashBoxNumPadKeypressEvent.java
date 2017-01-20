@@ -14,30 +14,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
+import org.cocome.tradingsystem.cashdeskline.datatypes.NumPadKeyStroke;
+
 /**
- * Event emitted by the cash desk if there is no product associated with the
- * scanned product bar code.
+ * Event emitted by the cash box after every numeric pad keystroke when the
+ * cashier is entering the cash amount handed over by the customer.
+ * 
+ * @author Lubomir Bulej
  */
-public final class InvalidProductBarcodeEvent implements Serializable {
+public final class CashBoxNumPadKeypressEvent implements Serializable {
 
-	private static final long serialVersionUID = -354692220702852330L;
-
-	//
-
-	private final long __invalidBarcode;
+	private static final long serialVersionUID = -5441935355616952790L;
 
 	//
 
-	public InvalidProductBarcodeEvent(final long invalidBarcode) {
-		__invalidBarcode = invalidBarcode;
+	private NumPadKeyStroke __keystroke;
+
+	//
+
+	public CashBoxNumPadKeypressEvent(final NumPadKeyStroke keystroke) {
+		__keystroke = keystroke;
 	}
 
-	public long getBarcode() {
-		return __invalidBarcode;
+	public NumPadKeyStroke getKeyStroke() {
+		return __keystroke;
 	}
 
 }

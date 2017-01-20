@@ -14,43 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
-import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
 
 /**
- * Event emitted by cash desk when a payment mode has been rejected.
+ * Event emitted by the cash desk after the cashier pressed a button to signal
+ * the start of sale. During the sale, the cashier may press to button to abort
+ * the current sale and start a new one.
  * 
  * @see CashBoxModel
- * 
- * @author Lubomir Bulej
  */
-public final class PaymentModeRejectedEvent implements Serializable {
+public final class SaleStartedEvent implements Serializable {
 
-	private static final long serialVersionUID = -7349265927547423726L;
-
-	//
-
-	private final PaymentMode __mode;
-
-	private final String __reason;
+	private static final long serialVersionUID = 2961207092223934936L;
 
 	//
 
-	public PaymentModeRejectedEvent(final PaymentMode mode, final String reason) {
-		__mode = mode;
-		__reason = reason;
-	}
-
-	public PaymentMode getMode() {
-		return __mode;
-	}
-
-	public String getReason() {
-		return __reason;
-	}
+	public SaleStartedEvent() { /* empty */}
 
 }

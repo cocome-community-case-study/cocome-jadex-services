@@ -14,25 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
 
 /**
- * Event emitted by the cash desk after the cashier pressed a button to signal
- * the start of sale. During the sale, the cashier may press to button to abort
- * the current sale and start a new one.
+ * Event emitted by the cash box after opening the cash box.
  * 
  * @see CashBoxModel
+ * 
+ * @author Lubomir Bulej
  */
-public final class SaleStartedEvent implements Serializable {
+public final class CashBoxOpenedEvent implements Serializable {
 
-	private static final long serialVersionUID = 2961207092223934936L;
+	private static final long serialVersionUID = -5029546123444960504L;
 
 	//
 
-	public SaleStartedEvent() { /* empty */}
+	public CashBoxOpenedEvent() { /* empty */}
 
 }

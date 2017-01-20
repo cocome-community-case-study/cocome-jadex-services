@@ -14,33 +14,36 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
+
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.cashdesk.cardreader.CardReaderModel;
+import org.cocome.tradingsystem.inventory.application.store.SaleTO;
 
 /**
- * Event emitted by the credit card reader after entering a credit card PIN.
+ * Event emitted by the cash desk on the store topic when a sale is finished and
+ * should be registered in the inventory. It contains details of the sale so
+ * that it can be accounted for in the inventory system.
  * 
- * @see CardReaderModel
+ * @author Yannick Welsch
  */
-public final class CreditCardPinEnteredEvent implements Serializable {
+public final class AccountSaleEvent implements Serializable {
 
-	private static final long serialVersionUID = 89778823632347027L;
-
-	//
-
-	private final int __pin;
+	private static final long serialVersionUID = -5441935251526952790L;
 
 	//
 
-	public CreditCardPinEnteredEvent(final int pin) {
-		__pin = pin;
+	private final SaleTO __sale;
+
+	//
+
+	public AccountSaleEvent(final SaleTO sale) {
+		__sale = sale;
 	}
 
-	public int getPIN() {
-		return __pin;
+	public SaleTO getSale() {
+		return __sale;
 	}
 
 }

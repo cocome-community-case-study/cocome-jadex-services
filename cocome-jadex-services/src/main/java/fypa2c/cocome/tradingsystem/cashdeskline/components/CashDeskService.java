@@ -1,4 +1,4 @@
-package fypa2c.cocome.components;
+package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
 import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.annotation.ServiceComponent;

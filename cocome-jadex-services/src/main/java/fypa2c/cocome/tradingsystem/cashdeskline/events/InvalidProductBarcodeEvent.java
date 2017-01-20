@@ -14,35 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
-import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
-
 /**
- * Event emitted by cash desk after accepting the payment mode the cashier
- * indicated.
- * 
- * @see CashBoxModel
+ * Event emitted by the cash desk if there is no product associated with the
+ * scanned product bar code.
  */
-public final class PaymentModeSelectedEvent implements Serializable {
+public final class InvalidProductBarcodeEvent implements Serializable {
 
-	private static final long serialVersionUID = -7394495671841623726L;
-
-	//
-
-	private final PaymentMode mode;
+	private static final long serialVersionUID = -354692220702852330L;
 
 	//
 
-	public PaymentModeSelectedEvent(final PaymentMode mode) {
-		this.mode = mode;
+	private final long __invalidBarcode;
+
+	//
+
+	public InvalidProductBarcodeEvent(final long invalidBarcode) {
+		__invalidBarcode = invalidBarcode;
 	}
 
-	public PaymentMode getMode() {
-		return this.mode;
+	public long getBarcode() {
+		return __invalidBarcode;
 	}
 
 }

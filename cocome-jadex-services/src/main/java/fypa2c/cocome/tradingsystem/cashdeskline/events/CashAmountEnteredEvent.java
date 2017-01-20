@@ -14,34 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 /**
- * Event emitted by the bar code scanner after it recognized and scanned a
- * barcode.
+ * Event emitted by the cash box after a valid cash amount has been entered and
+ * confirmed by the cashier by pressing the ENTER key.
  * 
- * @see BarcodeScannerModel
- * 
- * @author Sebastian Herold
+ * @author Lubomir Bulej
  */
-public final class ProductBarcodeScannedEvent implements Serializable {
+public final class CashAmountEnteredEvent implements Serializable {
 
-	private static final long serialVersionUID = -1603344911255933167L;
-
-	//
-
-	private final long __barcode;
+	private static final long serialVersionUID = -5441935251526952790L;
 
 	//
 
-	public ProductBarcodeScannedEvent(final long barcode) {
-		__barcode = barcode;
+	private final double __amount;
+
+	//
+
+	public CashAmountEnteredEvent(final double amount) {
+		__amount = amount;
 	}
 
-	public long getBarcode() {
-		return __barcode;
+	public double getCashAmount() {
+		return __amount;
 	}
 
 }

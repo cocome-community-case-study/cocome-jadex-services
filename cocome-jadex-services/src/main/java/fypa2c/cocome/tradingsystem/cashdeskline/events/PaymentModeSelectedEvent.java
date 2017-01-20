@@ -14,40 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
+import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
+import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
+
 /**
- * Event emitted by the cash desk line coordinator on the store topic to switch
- * a particular cash desk into express mode. If a cash desk changes its mode,
- * the event is reposted by the cash desk on the cash desk topic.
+ * Event emitted by cash desk after accepting the payment mode the cashier
+ * indicated.
  * 
- * @author Sebastian Herold
- * @author Lubomir Bulej
+ * @see CashBoxModel
  */
-public final class ExpressModeEnabledEvent implements Serializable {
+public final class PaymentModeSelectedEvent implements Serializable {
 
-	private static final long serialVersionUID = -6894844300001277997L;
-
-	//
-
-	private final String __cashDesk;
+	private static final long serialVersionUID = -7394495671841623726L;
 
 	//
 
-	public ExpressModeEnabledEvent(final String cashdesk) {
-		__cashDesk = cashdesk;
+	private final PaymentMode mode;
+
+	//
+
+	public PaymentModeSelectedEvent(final PaymentMode mode) {
+		this.mode = mode;
 	}
 
-	/**
-	 * Returns the name of the cash desk to be switched into express mode.
-	 * 
-	 * @return
-	 *         cash desk (channel) name
-	 */
-	public String getCashDesk() {
-		return __cashDesk;
+	public PaymentMode getMode() {
+		return this.mode;
 	}
 
 }

@@ -14,22 +14,36 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 /**
- * Event emitted by the cash desk after the cashier presses the button to
- * disable cash desk express mode.
+ * Event emitted by the credit card reader when a credit card information has
+ * been successfully scanned.
+ * <p>
+ * TODO Credit card information should be a type (class).
  * 
- * @see CashBoxModel
+ * @see CardReaderModel
+ * 
+ * @author Sebastian Herold
  */
-public final class ExpressModeDisabledEvent implements Serializable {
+public final class CreditCardScannedEvent implements Serializable {
 
-	private static final long serialVersionUID = -5349475990603060795L;
+	private static final long serialVersionUID = 5143156662313299874L;
 
 	//
 
-	public ExpressModeDisabledEvent() { /* empty */}
+	private final String __creditCardInformation;
+
+	//
+
+	public CreditCardScannedEvent(final String creditCardInformation) {
+		__creditCardInformation = creditCardInformation;
+	}
+
+	public String getCreditCardInformation() {
+		return __creditCardInformation;
+	}
 
 }

@@ -14,24 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
-
 /**
- * Event emitted by the cash desk after the cashier pressed a button to signal
- * that all items in the sale have been scanned.
+ * Event emitted by the cash desk after a sale has been accounted for in the
+ * store inventory to indicate that a sale has been successful.
  * 
- * @see CashBoxModel
+ * @author Yannick Welsch
  */
-public final class SaleFinishedEvent implements Serializable {
+public final class SaleSuccessEvent implements Serializable {
 
-	private static final long serialVersionUID = -1198744791703155060L;
+	private static final long serialVersionUID = 7349719632069989665L;
 
 	//
 
-	public SaleFinishedEvent() { /* empty */}
+	public SaleSuccessEvent() { /* empty */}
 
 }

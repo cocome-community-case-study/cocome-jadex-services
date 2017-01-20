@@ -14,25 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
-
 /**
- * Event emitted by the cash box after opening the cash box.
+ * Event emitted by the cash desk after the cashier presses the button to
+ * disable cash desk express mode.
  * 
  * @see CashBoxModel
- * 
- * @author Lubomir Bulej
  */
-public final class CashBoxOpenedEvent implements Serializable {
+public final class ExpressModeDisabledEvent implements Serializable {
 
-	private static final long serialVersionUID = -5029546123444960504L;
+	private static final long serialVersionUID = -5349475990603060795L;
 
 	//
 
-	public CashBoxOpenedEvent() { /* empty */}
+	public ExpressModeDisabledEvent() { /* empty */}
 
 }

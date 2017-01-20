@@ -14,30 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
+import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
+import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
+
 /**
- * Event emitted by the cash desk after having calculated the change amount
- * during cash payment.
+ * Event emitted by cash desk when a payment mode has been rejected.
+ * 
+ * @see CashBoxModel
+ * 
+ * @author Lubomir Bulej
  */
-public final class ChangeAmountCalculatedEvent implements Serializable {
+public final class PaymentModeRejectedEvent implements Serializable {
 
-	private static final long serialVersionUID = 3529515546013136702L;
-
-	//
-
-	private final double __changeAmount;
+	private static final long serialVersionUID = -7349265927547423726L;
 
 	//
 
-	public ChangeAmountCalculatedEvent(final double changeAmount) {
-		__changeAmount = changeAmount;
+	private final PaymentMode __mode;
+
+	private final String __reason;
+
+	//
+
+	public PaymentModeRejectedEvent(final PaymentMode mode, final String reason) {
+		__mode = mode;
+		__reason = reason;
 	}
 
-	public double getChangeAmount() {
-		return __changeAmount;
+	public PaymentMode getMode() {
+		return __mode;
+	}
+
+	public String getReason() {
+		return __reason;
 	}
 
 }

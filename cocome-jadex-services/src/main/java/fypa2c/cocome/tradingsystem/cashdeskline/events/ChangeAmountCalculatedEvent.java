@@ -14,30 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 /**
- * Event emitted by the cash desk after an unsuccessful attempt to validate a
- * credit card by the banking component.
+ * Event emitted by the cash desk after having calculated the change amount
+ * during cash payment.
  */
-public final class InvalidCreditCardEvent implements Serializable {
+public final class ChangeAmountCalculatedEvent implements Serializable {
 
-	private static final long serialVersionUID = 2910273526834186955L;
-
-	//
-
-	private final String __cardInfo;
+	private static final long serialVersionUID = 3529515546013136702L;
 
 	//
 
-	public InvalidCreditCardEvent(final String cardInfo) {
-		__cardInfo = cardInfo;
+	private final double __changeAmount;
+
+	//
+
+	public ChangeAmountCalculatedEvent(final double changeAmount) {
+		__changeAmount = changeAmount;
 	}
 
-	public String getCardInfo() {
-		return __cardInfo;
+	public double getChangeAmount() {
+		return __changeAmount;
 	}
 
 }

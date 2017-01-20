@@ -14,34 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.datatypes.NumPadKeyStroke;
+import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
 
 /**
- * Event emitted by the cash box after every numeric pad keystroke when the
- * cashier is entering the cash amount handed over by the customer.
+ * Event emitted by the cash desk after the cashier pressed a button to signal
+ * that all items in the sale have been scanned.
  * 
- * @author Lubomir Bulej
+ * @see CashBoxModel
  */
-public final class CashBoxNumPadKeypressEvent implements Serializable {
+public final class SaleFinishedEvent implements Serializable {
 
-	private static final long serialVersionUID = -5441935355616952790L;
-
-	//
-
-	private NumPadKeyStroke __keystroke;
+	private static final long serialVersionUID = -1198744791703155060L;
 
 	//
 
-	public CashBoxNumPadKeypressEvent(final NumPadKeyStroke keystroke) {
-		__keystroke = keystroke;
-	}
-
-	public NumPadKeyStroke getKeyStroke() {
-		return __keystroke;
-	}
+	public SaleFinishedEvent() { /* empty */}
 
 }

@@ -14,22 +14,40 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 /**
- * Event emitted by the cash desk after a sale has been accounted for in the
- * store inventory to indicate that a sale has been successful.
+ * Event emitted by the cash desk line coordinator on the store topic to switch
+ * a particular cash desk into express mode. If a cash desk changes its mode,
+ * the event is reposted by the cash desk on the cash desk topic.
  * 
- * @author Yannick Welsch
+ * @author Sebastian Herold
+ * @author Lubomir Bulej
  */
-public final class SaleSuccessEvent implements Serializable {
+public final class ExpressModeEnabledEvent implements Serializable {
 
-	private static final long serialVersionUID = 7349719632069989665L;
+	private static final long serialVersionUID = -6894844300001277997L;
 
 	//
 
-	public SaleSuccessEvent() { /* empty */}
+	private final String __cashDesk;
+
+	//
+
+	public ExpressModeEnabledEvent(final String cashdesk) {
+		__cashDesk = cashdesk;
+	}
+
+	/**
+	 * Returns the name of the cash desk to be switched into express mode.
+	 * 
+	 * @return
+	 *         cash desk (channel) name
+	 */
+	public String getCashDesk() {
+		return __cashDesk;
+	}
 
 }

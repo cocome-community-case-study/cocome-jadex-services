@@ -14,25 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.events;
+package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
 import org.cocome.tradingsystem.cashdeskline.cashdesk.cardreader.CardReaderModel;
 
 /**
- * Event emitted by the credit card reader if the scan of a credit card failed.
+ * Event emitted by the credit card reader after entering a credit card PIN.
  * 
  * @see CardReaderModel
- * 
- * @author Sebastian Herold
  */
-public final class CreditCardScanFailedEvent implements Serializable {
+public final class CreditCardPinEnteredEvent implements Serializable {
 
-	private static final long serialVersionUID = 2407849186409109443L;
+	private static final long serialVersionUID = 89778823632347027L;
 
 	//
 
-	public CreditCardScanFailedEvent() { /* empty */}
+	private final int __pin;
+
+	//
+
+	public CreditCardPinEnteredEvent(final int pin) {
+		__pin = pin;
+	}
+
+	public int getPIN() {
+		return __pin;
+	}
 
 }
