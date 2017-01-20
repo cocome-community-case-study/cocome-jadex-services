@@ -18,7 +18,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.datatypes.NumPadKeyStroke;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.NumPadKeyStroke;
 
 /**
  * Event emitted by the cash box after every numeric pad keystroke when the

@@ -19,7 +19,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.inventory.application.store.SaleTO;
+import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.SaleTO;
 
 /**
  * Event emitted by the cash desk on the store topic when a sale is finished and

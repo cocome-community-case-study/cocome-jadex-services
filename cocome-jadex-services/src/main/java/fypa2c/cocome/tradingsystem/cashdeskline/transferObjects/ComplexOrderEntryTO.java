@@ -1,3 +1,5 @@
+package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
+
 /***************************************************************************
  * Copyright 2013 DFG SPP 1593 (http://dfg-spp1593.de)
  *
@@ -14,7 +16,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-package org.cocome.tradingsystem.inventory.application.store;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

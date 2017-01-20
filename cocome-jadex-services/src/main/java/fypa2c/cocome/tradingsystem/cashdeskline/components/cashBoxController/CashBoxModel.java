@@ -1,3 +1,5 @@
+package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
+
 /***************************************************************************
  * Copyright 2013 DFG SPP 1593 (http://dfg-spp1593.de)
  *
@@ -14,30 +16,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.util.logging.Logger;
 
-import javax.jms.Connection;
-import javax.jms.Session;
+import javax.mail.Session;
 
 import org.cocome.tradingsystem.cashdeskline.datatypes.ControlKeyStroke;
-import org.cocome.tradingsystem.cashdeskline.datatypes.NumPadKeyStroke;
-import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
-import org.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
-import org.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
-import org.cocome.tradingsystem.cashdeskline.events.CashBoxNumPadKeypressEvent;
-import org.cocome.tradingsystem.cashdeskline.events.CashBoxOpenedEvent;
-import org.cocome.tradingsystem.cashdeskline.events.ExpressModeDisabledEvent;
-import org.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
-import org.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
-import org.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import org.cocome.tradingsystem.util.JmsHelper;
 import org.cocome.tradingsystem.util.JmsHelper.SessionBoundProducer;
 import org.cocome.tradingsystem.util.Names;
 import org.cocome.tradingsystem.util.event.ObjectMessageListener;
 import org.cocome.tradingsystem.util.mvc.AbstractModel;
+
+import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.NumPadKeyStroke;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxNumPadKeypressEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxOpenedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ExpressModeDisabledEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 
 /**
  * Implements the cash desk cash box model.

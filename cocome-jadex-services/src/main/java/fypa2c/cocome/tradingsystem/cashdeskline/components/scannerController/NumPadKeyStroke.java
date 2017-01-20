@@ -1,3 +1,5 @@
+package fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController;
+
 /***************************************************************************
  * Copyright 2013 DFG SPP 1593 (http://dfg-spp1593.de)
  *
@@ -14,7 +16,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-package org.cocome.tradingsystem.cashdeskline.datatypes;
 
 /**
  * Enumerates the keys that can be pressed on the cash box keyboard.

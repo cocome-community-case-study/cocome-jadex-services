@@ -18,8 +18,8 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.cashdesk.cashbox.CashBoxModel;
-import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.CashBoxModel;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
 
 /**
  * Event emitted by cash desk when a payment mode has been rejected.

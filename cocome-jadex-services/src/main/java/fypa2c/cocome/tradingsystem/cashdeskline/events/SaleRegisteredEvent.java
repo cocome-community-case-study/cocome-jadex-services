@@ -18,7 +18,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import org.cocome.tradingsystem.cashdeskline.datatypes.PaymentMode;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
 
 /**
  * Event emitted by the cash desk on the store topic when a successful sale has
