@@ -24,8 +24,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.cocome.tradingsystem.inventory.data.store.StockItem;
-
 /**
  * A transfer object class for exchanging basic stock item information between
  * client and the service-oriented application layer. It contains either copies

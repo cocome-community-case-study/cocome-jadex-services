@@ -16,15 +16,14 @@
 
 package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
 
-import org.cocome.tradingsystem.cashdeskline.events.AccountSaleEvent;
-import org.cocome.tradingsystem.util.event.EventConsumer;
+
+import fypa2c.cocome.tradingsystem.cashdeskline.events.AccountSaleEvent;
 
 /**
  * Defines events handled asynchronously by the store inventory application.
  * 
  * @author Lubomir Bulej
  */
-@EventConsumer
 interface IStoreEventConsumer {
 
 	/**

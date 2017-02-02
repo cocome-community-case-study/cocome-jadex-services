@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.cocome.tradingsystem.inventory.data.enterprise.Product;
+//import org.cocome.tradingsystem.inventory.data.enterprise.Product;
 
 /**
  * A transfer object class for exchanging basic product information between
@@ -130,20 +130,20 @@ public class ProductTO implements Serializable {
 		__purchasePrice = purchasePrice;
 	}
 
-	/**
-	 * Checks equality to a product entity.
-	 * <p>
-	 * Required for UC 8 (see {@link AmplCplexSolver}).
-	 */
-	public boolean equalsProduct(final Product that) {
-		if (that == null) {
-			return false;
-		}
-
-		return this.getBarcode() == that.getBarcode()
-				&& this.getId() == that.getId()
-				&& this.getName().equals(that.getName())
-				&& this.getPurchasePrice() == that.getPurchasePrice();
-	}
+//	/**
+//	 * Checks equality to a product entity.
+//	 * <p>
+//	 * Required for UC 8 (see {@link AmplCplexSolver}).
+//	 */
+//	public boolean equalsProduct(final Product that) {
+//		if (that == null) {
+//			return false;
+//		}
+//
+//		return this.getBarcode() == that.getBarcode()
+//				&& this.getId() == that.getId()
+//				&& this.getName().equals(that.getName())
+//				&& this.getPurchasePrice() == that.getPurchasePrice();
+//	}
 
 }

@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.cocome.tradingsystem.util.java.Lists;
 
 /**
  * A transfer object class for exchanging full order information between client
@@ -69,7 +68,7 @@ public class ComplexOrderTO extends OrderTO {
 	 *            the list of order entries
 	 */
 	public void setOrderEntryTOs(final List<ComplexOrderEntryTO> entries) {
-		__orderEntries = Lists.newArrayList(entries);
+		__orderEntries = new ArrayList<ComplexOrderEntryTO>(entries);
 	}
 
 }

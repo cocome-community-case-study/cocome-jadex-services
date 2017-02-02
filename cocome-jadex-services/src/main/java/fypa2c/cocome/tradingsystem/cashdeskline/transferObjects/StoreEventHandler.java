@@ -16,8 +16,9 @@
 
 package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
 
-import org.cocome.tradingsystem.cashdeskline.events.AccountSaleEvent;
 import org.cocome.tradingsystem.util.event.AbstractSerializableEventDispatcher;
+
+import fypa2c.cocome.tradingsystem.cashdeskline.events.AccountSaleEvent;
 
 /**
  * Store server event handler. Handles events supported by the store inventory

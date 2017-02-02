@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.cocome.tradingsystem.inventory.data.enterprise.TradingEnterprise;
 
 /**
  * Transfer object for {@link TradingEnterprise} objects in a client-server

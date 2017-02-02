@@ -16,8 +16,6 @@
 
 package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
 
-import org.cocome.tradingsystem.inventory.data.store.StockItem;
-
 /**
  * Interface provide access to the {@link StockItemTO} transfer object. This is
  * necessary to allow creating code that need to handle access to {@link ProductWithStockItemTO}, {@link ProductWithSupplierTO}, and

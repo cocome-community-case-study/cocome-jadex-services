@@ -23,7 +23,6 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.cocome.tradingsystem.inventory.data.IData;
-import org.cocome.tradingsystem.inventory.data.persistence.IPersistenceContext;
 import org.cocome.tradingsystem.inventory.data.persistence.ITransactionContext;
 
 /**
