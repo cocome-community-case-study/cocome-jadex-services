@@ -26,4 +26,5 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 		return Future.DONE;
 	}
 
+	
 }
