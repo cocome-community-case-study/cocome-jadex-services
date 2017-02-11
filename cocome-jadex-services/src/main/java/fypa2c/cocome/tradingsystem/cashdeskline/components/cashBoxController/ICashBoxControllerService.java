@@ -8,7 +8,7 @@ public interface ICashBoxControllerService {
 	
 	public IFuture<Void> sendSaleFinishedEvent();
 	
-	public IFuture<Void> sendPaymentModeEvent(PaymmentMode mode);
+	public IFuture<Void> sendPaymentModeEvent(PaymentMode mode);
 	
 	public IFuture<Void> sendCashAmountEnteredEvent(double amount, boolean finalInput);
 	

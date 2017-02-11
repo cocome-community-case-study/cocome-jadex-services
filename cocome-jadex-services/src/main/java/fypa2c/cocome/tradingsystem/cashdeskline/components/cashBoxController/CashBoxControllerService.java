@@ -19,11 +19,36 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 		return this.publishEvent(new SaleStartedEvent());
 	}
 
+
 	@Override
 	public IFuture<Void> receiveEvent(IEvent event) {
 		
 		System.out.println(this.toString());
 		return Future.DONE;
+	}
+
+	@Override
+	public IFuture<Void> sendSaleFinishedEvent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IFuture<Void> sendPaymentModeEvent(PaymentMode mode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IFuture<Void> sendCashAmountEnteredEvent(double amount, boolean finalInput) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IFuture<Void> sendCashBoxClosedEvent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
