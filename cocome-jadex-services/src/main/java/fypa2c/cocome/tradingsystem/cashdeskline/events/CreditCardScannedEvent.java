@@ -28,7 +28,7 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold
  */
-public final class CreditCardScannedEvent implements Serializable {
+public final class CreditCardScannedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 5143156662313299874L;
 

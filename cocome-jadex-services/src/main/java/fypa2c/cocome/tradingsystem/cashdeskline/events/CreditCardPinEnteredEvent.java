@@ -25,7 +25,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.
  * 
  * @see CardReaderModel
  */
-public final class CreditCardPinEnteredEvent implements Serializable {
+public final class CreditCardPinEnteredEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 89778823632347027L;
 

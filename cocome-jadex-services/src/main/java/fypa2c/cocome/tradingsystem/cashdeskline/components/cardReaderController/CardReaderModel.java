@@ -23,12 +23,13 @@ import java.util.logging.Logger;
 import javax.jms.Connection;
 import javax.jms.Session;
 
-import org.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
-import org.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import org.cocome.tradingsystem.util.JmsHelper;
 import org.cocome.tradingsystem.util.JmsHelper.SessionBoundProducer;
 import org.cocome.tradingsystem.util.Names;
 import org.cocome.tradingsystem.util.mvc.AbstractModel;
+
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 
 /**
  * Implements the cash desk credit card reader model.
@@ -39,7 +40,7 @@ import org.cocome.tradingsystem.util.mvc.AbstractModel;
  * @author Lubomir Bulej
  */
 public final class CardReaderModel
-		extends AbstractModel<CardReaderModel> implements ICardReader {
+		extends AbstractModel<CardReaderModel> implements ICardReaderModel {
 
 	private static final Logger LOG =
 			Logger.getLogger(CardReaderModel.class.getName());

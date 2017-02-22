@@ -27,7 +27,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.
  * 
  * @author Sebastian Herold
  */
-public final class CreditCardScanFailedEvent implements Serializable {
+public final class CreditCardScanFailedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 2407849186409109443L;
 
