@@ -26,7 +26,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * the sale (number of items, mode of payment) intended for the cash desk line
  * coordinator.
  */
-public final class SaleRegisteredEvent implements Serializable {
+public final class SaleRegisteredEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 6202472706841986582L;
 

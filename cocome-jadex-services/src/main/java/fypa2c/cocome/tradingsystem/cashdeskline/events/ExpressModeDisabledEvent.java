@@ -24,7 +24,7 @@ import java.io.Serializable;
  * 
  * @see CashBoxModel
  */
-public final class ExpressModeDisabledEvent implements Serializable {
+public final class ExpressModeDisabledEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -5349475990603060795L;
 

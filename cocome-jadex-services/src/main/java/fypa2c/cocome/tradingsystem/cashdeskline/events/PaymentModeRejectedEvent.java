@@ -28,7 +28,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * 
  * @author Lubomir Bulej
  */
-public final class PaymentModeRejectedEvent implements Serializable {
+public final class PaymentModeRejectedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -7349265927547423726L;
 

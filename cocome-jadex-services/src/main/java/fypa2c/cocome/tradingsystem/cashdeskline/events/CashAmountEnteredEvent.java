@@ -24,7 +24,7 @@ import java.io.Serializable;
  * 
  * @author Lubomir Bulej
  */
-public final class CashAmountEnteredEvent implements Serializable {
+public final class CashAmountEnteredEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -5441935251526952790L;
 

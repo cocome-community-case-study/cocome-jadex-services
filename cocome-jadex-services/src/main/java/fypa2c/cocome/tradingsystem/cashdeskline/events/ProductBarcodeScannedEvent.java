@@ -26,7 +26,7 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold
  */
-public final class ProductBarcodeScannedEvent implements Serializable {
+public final class ProductBarcodeScannedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -1603344911255933167L;
 

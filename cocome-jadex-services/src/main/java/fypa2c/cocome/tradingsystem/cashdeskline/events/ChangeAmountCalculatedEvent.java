@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Event emitted by the cash desk after having calculated the change amount
  * during cash payment.
  */
-public final class ChangeAmountCalculatedEvent implements Serializable {
+public final class ChangeAmountCalculatedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 3529515546013136702L;
 

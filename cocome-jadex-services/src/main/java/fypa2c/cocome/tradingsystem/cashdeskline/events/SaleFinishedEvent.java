@@ -26,7 +26,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Cas
  * 
  * @see CashBoxModel
  */
-public final class SaleFinishedEvent implements Serializable {
+public final class SaleFinishedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -1198744791703155060L;
 

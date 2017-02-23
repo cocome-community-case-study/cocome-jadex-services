@@ -23,7 +23,7 @@ import java.io.Serializable;
  * sale in response to a barcode scan. It contains information about the current
  * item, its price and the running total.
  */
-public final class RunningTotalChangedEvent implements Serializable {
+public final class RunningTotalChangedEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -300914931510566066L;
 

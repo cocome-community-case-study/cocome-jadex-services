@@ -28,7 +28,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.SaleTO;
  * 
  * @author Yannick Welsch
  */
-public final class AccountSaleEvent implements Serializable {
+public final class AccountSaleEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -5441935251526952790L;
 

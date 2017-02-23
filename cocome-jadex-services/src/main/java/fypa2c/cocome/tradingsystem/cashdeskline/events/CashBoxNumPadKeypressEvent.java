@@ -26,7 +26,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.Num
  * 
  * @author Lubomir Bulej
  */
-public final class CashBoxNumPadKeypressEvent implements Serializable {
+public final class CashBoxNumPadKeypressEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -5441935355616952790L;
 

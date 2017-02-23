@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Event emitted by the cash desk if there is no product associated with the
  * scanned product bar code.
  */
-public final class InvalidProductBarcodeEvent implements Serializable {
+public final class InvalidProductBarcodeEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -354692220702852330L;
 

@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Event emitted by the cash desk after an unsuccessful attempt to validate a
  * credit card by the banking component.
  */
-public final class InvalidCreditCardEvent implements Serializable {
+public final class InvalidCreditCardEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 2910273526834186955L;
 

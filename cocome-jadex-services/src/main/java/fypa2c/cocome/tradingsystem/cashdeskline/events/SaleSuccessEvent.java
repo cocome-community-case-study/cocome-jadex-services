@@ -24,7 +24,7 @@ import java.io.Serializable;
  * 
  * @author Yannick Welsch
  */
-public final class SaleSuccessEvent implements Serializable {
+public final class SaleSuccessEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = 7349719632069989665L;
 

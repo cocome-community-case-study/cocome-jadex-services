@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @author Sebastian Herold
  * @author Lubomir Bulej
  */
-public final class ExpressModeEnabledEvent implements Serializable {
+public final class ExpressModeEnabledEvent implements IEvent, Serializable {
 
 	private static final long serialVersionUID = -6894844300001277997L;
 
