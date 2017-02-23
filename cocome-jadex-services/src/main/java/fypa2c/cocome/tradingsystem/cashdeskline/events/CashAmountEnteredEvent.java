@@ -31,15 +31,22 @@ public final class CashAmountEnteredEvent implements IEvent, Serializable {
 	//
 
 	private final double __amount;
+	
+	private final boolean __finalInput;
 
 	//
 
-	public CashAmountEnteredEvent(final double amount) {
+	public CashAmountEnteredEvent(final double amount, final boolean finalInput) {
 		__amount = amount;
+		__finalInput = finalInput;
 	}
 
 	public double getCashAmount() {
 		return __amount;
+	}
+	
+	public boolean isFinalinput(){
+		return __finalInput;
 	}
 
 }

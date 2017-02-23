@@ -2,6 +2,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
@@ -20,7 +21,6 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 	
 	@Override
 	public IFuture<Void> receiveEvent(IEvent event) {
-		
 		System.out.println(this.toString());
 		return Future.DONE;
 	}
@@ -43,13 +43,13 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 
 	@Override
 	public IFuture<Void> sendCashAmountEnteredEvent(double amount, boolean finalInput) {
-		return publishEvent(new CashAmountEnteredEvent(amount));
+		//TODO finalInput is included  in CAEEvent in the UseCase 1 specification. Don't know if this is really necessary
+		return publishEvent(new CashAmountEnteredEvent(amount, finalInput));
 	}
 
 	@Override
 	public IFuture<Void> sendCashBoxClosedEvent() {
-		// TODO Auto-generated method stub
-		return null;
+		return publishEvent(new CashBoxClosedEvent());
 	}
 
 	
