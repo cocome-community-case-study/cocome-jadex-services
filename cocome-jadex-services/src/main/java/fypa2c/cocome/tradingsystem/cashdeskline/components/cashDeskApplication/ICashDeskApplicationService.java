@@ -19,7 +19,7 @@ public interface ICashDeskApplicationService {
 	
 	//public IFuture<> validateCard(String creditInfo,int pin);
 	
-	public IFuture<Void> sendInvalidCardEvent();
+	public IFuture<Void> sendInvalidCardEvent(String creditInfo);
 	
 	//public IFuture<> debitCard(transactionId);
 	
