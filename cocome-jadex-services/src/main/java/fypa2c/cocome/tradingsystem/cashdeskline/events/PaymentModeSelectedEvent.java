@@ -17,8 +17,6 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
-
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.CashBoxModel;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
 
 /**

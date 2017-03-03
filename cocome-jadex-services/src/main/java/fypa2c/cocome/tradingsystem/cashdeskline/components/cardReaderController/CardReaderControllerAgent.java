@@ -14,13 +14,13 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+@Agent
 @ProvidedServices({
 	@ProvidedService(type=ICardReaderControllerService.class, implementation=@Implementation(CardReaderControllerService.class))//,
 })
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-@Agent
 public class CardReaderControllerAgent
 {
 	@Agent

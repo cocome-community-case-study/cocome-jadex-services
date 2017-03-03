@@ -18,7 +18,6 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.CardReaderModel;
 
 /**
  * Event emitted by the credit card reader after entering a credit card PIN.

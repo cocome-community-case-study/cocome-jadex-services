@@ -18,7 +18,6 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.CashBoxModel;
 
 /**
  * Event emitted by the cash desk after the cashier pressed a button to signal

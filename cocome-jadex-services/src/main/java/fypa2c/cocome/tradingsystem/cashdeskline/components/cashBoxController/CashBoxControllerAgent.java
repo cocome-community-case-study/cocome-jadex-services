@@ -19,10 +19,10 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+@Agent
 @ProvidedServices({
 	@ProvidedService(name="controller", type=ICashBoxControllerService.class, implementation=@Implementation(CashBoxControllerService.class))//,
 })
-@Agent
 public class CashBoxControllerAgent extends EventAgent
 {
 	@Agent
@@ -44,12 +44,14 @@ public class CashBoxControllerAgent extends EventAgent
 	
 	public void startButtonPressed()
 	{
+		System.out.println("startButtonPressed() called");
 		providedService.sendSaleStartedEvent();
 	}
 	
 	@AgentBody
 	public void testRun()
 	{
+		System.out.println("testRun() called");
 		IComponentStep<Void> step =  new IComponentStep<Void>() {
 
 			@Override

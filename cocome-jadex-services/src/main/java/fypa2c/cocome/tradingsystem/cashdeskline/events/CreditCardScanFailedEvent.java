@@ -18,8 +18,6 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.CardReaderModel;
-
 /**
  * Event emitted by the credit card reader if the scan of a credit card failed.
  * 

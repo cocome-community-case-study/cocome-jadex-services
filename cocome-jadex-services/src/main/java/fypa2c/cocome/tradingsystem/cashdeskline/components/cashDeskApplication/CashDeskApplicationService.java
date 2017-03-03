@@ -12,7 +12,6 @@ import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.ProductWithStock
 import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.SaleTO;
 import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.annotation.ServiceComponent;
-import jadex.bridge.service.types.monitoring.IMonitoringService.PublishEventLevel;
 import jadex.commons.future.IFuture;
 
 @Service
