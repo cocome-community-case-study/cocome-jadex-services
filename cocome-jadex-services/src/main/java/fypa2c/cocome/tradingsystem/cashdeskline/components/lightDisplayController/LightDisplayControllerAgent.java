@@ -14,13 +14,19 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the light which shows the express mode.
+ * It should glow if the express mode is enabled.
+ *
+ * @author Florian Abt
+ */
+@Agent
 @ProvidedServices({
 	@ProvidedService(type=ILightDisplayControllerService.class, implementation=@Implementation(LightDisplayControllerService.class))//,
 })
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-@Agent
 public class LightDisplayControllerAgent
 {
 	@Agent

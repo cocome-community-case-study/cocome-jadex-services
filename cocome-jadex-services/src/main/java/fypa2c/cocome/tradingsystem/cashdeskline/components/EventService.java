@@ -14,14 +14,15 @@ import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.commons.future.TerminationCommand;
 
-@Service
+
 /**
  * This service implements the publish/subscribe pattern for all services to deliver events. 
  * It provides a subscribe service for an specific event. 
  * The subscriber is notified if the event is published.
+ * 
  * @author Florian Abt
- *
  */
+@Service
 public class EventService implements IEventService {
 	
 	//Every event is mapped to set of subscriber, which want to be notified at this event

@@ -19,6 +19,11 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the CashBox of a cash desk in the trading system.
+ *
+ * @author Florian Abt
+ */
 @Agent
 @ProvidedServices({
 	@ProvidedService(name="cashBoxController", type=ICashBoxControllerService.class, implementation=@Implementation(CashBoxControllerService.class))//,
@@ -39,12 +44,17 @@ public class CashBoxControllerAgent extends EventAgent
 		return Future.DONE;
 	}
 	
+	
 	public void startButtonPressed()
 	{
 		System.out.println("startButtonPressed() called");
 		providedService.sendSaleStartedEvent();
 	}
 	
+	/*
+	 * This method is only for testing the system during development.
+	 * It starts the agents and simulates a sale process.
+	 */
 	@AgentBody
 	public void testRun()
 	{

@@ -27,6 +27,11 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the cash desk application.  
+ *
+ * @author Florian Abt
+ */
 @Agent
 @ProvidedServices({
 	@ProvidedService(name="cashDeskApplication", type=ICashDeskApplicationService.class, implementation=@Implementation(CashDeskApplicationService.class))//,

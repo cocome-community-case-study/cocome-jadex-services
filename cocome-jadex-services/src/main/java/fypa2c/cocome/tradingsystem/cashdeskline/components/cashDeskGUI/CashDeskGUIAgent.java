@@ -14,13 +14,18 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the graphical user interface of a cash desk which shows the different information to the user.
+ *
+ * @author Florian Abt
+ */
+@Agent
 @ProvidedServices({
 	@ProvidedService(type=ICashDeskGUIService.class, implementation=@Implementation(CashDeskGUIService.class))//,
 })
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-@Agent
 public class CashDeskGUIAgent
 {
 	@Agent

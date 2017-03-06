@@ -14,13 +14,19 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the product scanner of a cash desk in the trading system.
+ * It scans the bar codes of the products.
+ *
+ * @author Florian Abt
+ */
+@Agent
 @ProvidedServices({
 	@ProvidedService(type=IScannerControllerService.class, implementation=@Implementation(ScannerControllerService.class))//,
 })
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-@Agent
 public class ScannerControllerAgent
 {
 	@Agent

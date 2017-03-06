@@ -14,13 +14,19 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the printer of a cash desk in the trading system.
+ * It is responsible for printing the bill.
+ *
+ * @author Florian Abt
+ */
+@Agent
 @ProvidedServices({
 	@ProvidedService(type=IPrinterControllerService.class, implementation=@Implementation(PrinterControllerService.class))//,
 })
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-@Agent
 public class PrinterControllerAgent
 {
 	@Agent

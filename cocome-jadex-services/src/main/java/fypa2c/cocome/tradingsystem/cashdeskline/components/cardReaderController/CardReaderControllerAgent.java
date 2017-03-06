@@ -15,6 +15,13 @@ import jadex.micro.annotation.ProvidedServices;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
 
+/**
+ * This agent represents the card reader of a cash desk in the trading system.
+ * It is responsible for the card reading process and the PIN entering process.
+ * The information is delivered to the CashDeskApplication.
+ *
+ * @author Florian Abt
+ */
 @Agent
 @ProvidedServices({
 	@ProvidedService(name="controller",type=ICardReaderControllerService.class, implementation=@Implementation(CardReaderControllerService.class))//,

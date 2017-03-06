@@ -7,6 +7,13 @@ import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.annotation.ServiceComponent;
 import jadex.commons.future.IFuture;
 
+/**
+ * This class implements the provided services of the CardReaderControllerAgent. 
+ * The send*Event methods are services which only the CardReaderControllerAgent should call to publish the appropriate event. 
+ * To subscribe for Events see IEventService. 
+ *
+ * @author Florian Abt
+ */
 @Service
 public class CardReaderControllerService extends EventService implements ICardReaderControllerService
 {
