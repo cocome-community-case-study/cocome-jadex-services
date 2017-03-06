@@ -1,8 +1,10 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.components.IEventService;
 import jadex.commons.future.IFuture;
 
-public interface ICashBoxControllerService {
+
+public interface ICashBoxControllerService extends IEventService{
 	
 	public IFuture<Void> sendSaleStartedEvent();
 	

@@ -21,7 +21,7 @@ import jadex.micro.annotation.RequiredServices;
 
 @Agent
 @ProvidedServices({
-	@ProvidedService(name="controller", type=ICashBoxControllerService.class, implementation=@Implementation(CashBoxControllerService.class))//,
+	@ProvidedService(name="cashBoxController", type=ICashBoxControllerService.class, implementation=@Implementation(CashBoxControllerService.class))//,
 })
 public class CashBoxControllerAgent extends EventAgent
 {
@@ -30,14 +30,11 @@ public class CashBoxControllerAgent extends EventAgent
 	
 	ICashBoxControllerService providedService;
 	
-//	@ProvidedService("controller")
-//	protected ICashBoxControllerService cashService;
-	
 	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
-		providedService = (ICashBoxControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("controller");
+		providedService = (ICashBoxControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
 
 		return Future.DONE;
 	}
@@ -56,19 +53,19 @@ public class CashBoxControllerAgent extends EventAgent
 
 			@Override
 			public IFuture<Void> execute(IInternalAccess ia) {
+				
 				startButtonPressed();
 				return Future.DONE;
 			}
 		};
 		
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
-		agent.getExternalAccess().scheduleStep(step);
+		
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		agent.getExternalAccess().scheduleStep(step);
 	}
 

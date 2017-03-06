@@ -1,6 +1,7 @@
 package fypa2c.cocome.tradingsystem.cashdeskline;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.CashBoxControllerAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication.CashDeskApplicationAgent;
 import jadex.base.PlatformConfiguration;
 import jadex.base.Starter;
 
@@ -15,6 +16,7 @@ public class StarterTest {
 		PlatformConfiguration config = PlatformConfiguration.getDefaultNoGui();
 		
 		config.addComponent(CashBoxControllerAgent.class);
+		config.addComponent(CashDeskApplicationAgent.class);
 		Starter.createPlatform(config).get();
 	}
 

@@ -2,6 +2,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController
 
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
+import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -16,7 +17,7 @@ import jadex.micro.annotation.RequiredServices;
 
 @Agent
 @ProvidedServices({
-	@ProvidedService(type=ICardReaderControllerService.class, implementation=@Implementation(CardReaderControllerService.class))//,
+	@ProvidedService(name="controller",type=ICardReaderControllerService.class, implementation=@Implementation(CardReaderControllerService.class))//,
 })
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
@@ -26,9 +27,13 @@ public class CardReaderControllerAgent
 	@Agent
 	protected IInternalAccess agent;
 	
+	ICardReaderControllerService providedService;
+	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		providedService = (ICardReaderControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("controller");
+		
 		return Future.DONE;
 	}
 
