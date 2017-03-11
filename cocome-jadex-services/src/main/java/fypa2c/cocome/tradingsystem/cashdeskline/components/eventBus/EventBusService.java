@@ -1,19 +1,15 @@
-package fypa2c.cocome.tradingsystem.cashdeskline.components;
+package fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import antlr.debug.NewLineEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import jadex.bridge.service.annotation.Service;
-import jadex.commons.future.Future;
-import jadex.commons.future.IFuture;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.commons.future.TerminationCommand;
-
 
 /**
  * This service implements the publish/subscribe pattern for all services to deliver events. 
@@ -23,34 +19,12 @@ import jadex.commons.future.TerminationCommand;
  * @author Florian Abt
  */
 @Service
-public class EventService implements IEventService {
-	
-	//TODO Remove publish/subscribe
-	
+public class EventBusService implements IEventBusService{
+
 	//Every event is mapped to set of subscriber, which want to be notified at this event
 	protected Map<String, Set<SubscriptionIntermediateFuture<IEvent>>> subscriptions 
-		= new HashMap<String, Set<SubscriptionIntermediateFuture<IEvent>>>();
-
-	/**
-	 * Notifies all subscriber of the event
-	 * @param event : the specific event whose subscriber should be notified
-	 */
-	protected IFuture<Void> publishEvent(IEvent event){
-		//Notify the subscriber of this event.
-		if(subscriptions.containsKey(event.getClass().getName())){
-			for(SubscriptionIntermediateFuture<IEvent> subscriber : subscriptions.get(event.getClass().getName())){
-				subscriber.addIntermediateResultIfUndone(event);
-			}
-		}
-		
-		return Future.DONE;
-	}
-
-	protected IFuture<Void> receiveEvent(IEvent event) {
-		// TODO receive events
-		return null;
-	}
-
+			= new HashMap<String, Set<SubscriptionIntermediateFuture<IEvent>>>();
+	
 	@Override
 	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvent(IEvent event) {
 		System.out.println("EventService recieved an subscription");
