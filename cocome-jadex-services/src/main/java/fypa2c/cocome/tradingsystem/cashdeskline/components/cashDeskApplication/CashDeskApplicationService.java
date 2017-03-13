@@ -29,32 +29,32 @@ public class CashDeskApplicationService extends EventService implements ICashDes
 
 	@Override
 	public IFuture<Void> sendRunningTotalChangedEvent(String productName, double productPrice, double runningTotal) {
-		return publishEvent(new RunningTotalChangedEvent(productName, productPrice, runningTotal));
+		return component.publishEvent(new RunningTotalChangedEvent(productName, productPrice, runningTotal));
 	}
 
 	@Override
 	public IFuture<Void> sendChangeAmountCalculatedEvent(double changeAmount) {
-		return publishEvent(new ChangeAmountCalculatedEvent(changeAmount));
+		return component.publishEvent(new ChangeAmountCalculatedEvent(changeAmount));
 	}
 
 	@Override
 	public IFuture<Void> sendSaleSuccessEvent() {
-		return publishEvent(new SaleSuccessEvent());
+		return component.publishEvent(new SaleSuccessEvent());
 	}
 
 	@Override
 	public IFuture<Void> sendAccountSaleEvent(SaleTO transferSale) {
-		return publishEvent(new AccountSaleEvent(transferSale));
+		return component.publishEvent(new AccountSaleEvent(transferSale));
 	}
 
 	@Override
 	public IFuture<Void> sendSaleRegisteredEvent(String topicName, ProductWithStockItemTO p, PaymentMode mode) {
 		//TODO calculate saleItemCount, 
-		return publishEvent(new SaleRegisteredEvent(topicName, 0, mode));
+		return component.publishEvent(new SaleRegisteredEvent(topicName, 0, mode));
 	}
 
 	@Override
 	public IFuture<Void> sendInvalidCardEvent(String cardInfo) {
-		return publishEvent(new InvalidCreditCardEvent(cardInfo));
+		return component.publishEvent(new InvalidCreditCardEvent(cardInfo));
 	}
 }

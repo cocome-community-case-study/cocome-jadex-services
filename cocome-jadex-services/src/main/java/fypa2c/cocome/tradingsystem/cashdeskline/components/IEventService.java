@@ -13,8 +13,5 @@ import jadex.micro.annotation.RequiredService;
  */
 public interface IEventService {
 	
-	public Future<Void> publishEvent(IEvent event);
-	
-	public Future<Void> receiveEvent(IEvent event);
 	
 }

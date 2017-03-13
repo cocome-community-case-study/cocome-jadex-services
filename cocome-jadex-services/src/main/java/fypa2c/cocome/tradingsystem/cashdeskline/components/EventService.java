@@ -23,16 +23,5 @@ import jadex.commons.future.TerminationCommand;
 @Service
 public class EventService implements IEventService {
 
-	@Override
-	public Future<Void> publishEvent(IEvent event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Future<Void> receiveEvent(IEvent event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 }

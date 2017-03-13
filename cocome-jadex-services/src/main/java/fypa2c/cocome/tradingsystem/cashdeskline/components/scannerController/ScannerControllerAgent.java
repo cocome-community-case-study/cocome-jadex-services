@@ -1,5 +1,6 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.types.cms.IComponentManagementService;
@@ -27,7 +28,7 @@ import jadex.micro.annotation.RequiredServices;
 @RequiredServices({
 	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-public class ScannerControllerAgent
+public class ScannerControllerAgent extends EventAgent
 {
 	@Agent
 	protected IInternalAccess agent;

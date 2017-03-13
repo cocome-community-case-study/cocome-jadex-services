@@ -22,11 +22,11 @@ public class CardReaderControllerService extends EventService implements ICardRe
 
 	@Override
 	public IFuture<Void> sendCreditCardScannedEvent(String creditInfo) {
-		return publishEvent(new CreditCardScannedEvent(creditInfo));
+		return component.publishEvent(new CreditCardScannedEvent(creditInfo));
 	}
 
 	@Override
 	public IFuture<Void> sendPINEnteredEvent(int pin) {
-		return publishEvent(new CreditCardPinEnteredEvent(pin));
+		return component.publishEvent(new CreditCardPinEnteredEvent(pin));
 	}
 }
