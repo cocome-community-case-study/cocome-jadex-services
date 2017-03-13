@@ -39,8 +39,8 @@ import jadex.micro.annotation.RequiredServices;
 @RequiredServices({
 	@RequiredService(name="cashBoxController", type=ICashBoxControllerService.class, multiple=false, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
-public class CashDeskApplicationAgent extends EventAgent
-{
+public class CashDeskApplicationAgent extends EventAgent {
+
 	@Agent
 	protected IInternalAccess agent;
 	
