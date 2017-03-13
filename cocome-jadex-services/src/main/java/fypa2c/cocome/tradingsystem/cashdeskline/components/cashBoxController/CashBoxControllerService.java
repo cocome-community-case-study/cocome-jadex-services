@@ -27,12 +27,6 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 
 	
 	@Override
-	public IFuture<Void> receiveEvent(IEvent event) {
-		System.out.println(this.toString());
-		return Future.DONE;
-	}
-	
-	@Override
 	public IFuture<Void> sendSaleStartedEvent() {
 		System.out.println("sendSaleStartedEvent() called");
 		return this.publishEvent(new SaleStartedEvent());

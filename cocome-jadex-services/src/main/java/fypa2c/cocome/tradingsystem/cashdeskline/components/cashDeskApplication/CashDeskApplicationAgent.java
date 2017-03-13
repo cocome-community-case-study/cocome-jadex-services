@@ -4,7 +4,15 @@ import java.util.Collection;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
@@ -37,7 +45,7 @@ import jadex.micro.annotation.RequiredServices;
 	@ProvidedService(name="cashDeskApplication", type=ICashDeskApplicationService.class, implementation=@Implementation(CashDeskApplicationService.class))//,
 })
 @RequiredServices({
-	@RequiredService(name="cashBoxController", type=ICashBoxControllerService.class, multiple=false, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
+	@RequiredService(name="eventBus", type=IEventBusService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 })
 public class CashDeskApplicationAgent extends EventAgent {
 
@@ -58,38 +66,52 @@ public class CashDeskApplicationAgent extends EventAgent {
 		return Future.DONE;
 	}
 	
+	/**
+	 * This method is called after the creation of the agent. 
+	 * The agent subscribes to all events, it wants to listen by the event bus.
+	 */
 	@AgentBody
 	public void subscribeToEvents(){
-		System.out.println("CDA subscribes for SSE");
-		ISubscriptionIntermediateFuture<IEvent> subscription = ((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleStartedEvent());
-
-		subscription.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
+		
+		//create a listener for events
+		IIntermediateResultListener<IEvent> listener = new IIntermediateResultListener<IEvent>() {
 			
+			@Override
+			public void intermediateResultAvailable(IEvent result) {
+				System.out.println("CashDeskApplicationAgent received the event : "+result.getClass().getName());
+				//TODO receive events
+				
+			}
+
 			@Override
 			public void exceptionOccurred(Exception exception) {
 				// TODO Auto-generated method stub
 				
 			}
-			
+
 			@Override
 			public void resultAvailable(Collection<IEvent> result) {
 				// TODO Auto-generated method stub
 				
 			}
-			
-			@Override
-			public void intermediateResultAvailable(IEvent result) {
-				System.out.println("CashDeskApplication received the event : "+result.getClass().getName());
-				//TODO receive events
-				
-			}
-			
+
 			@Override
 			public void finished() {
 				// TODO Auto-generated method stub
 				
 			}
-		});
+
+		};
+		
+		//Subscribe to specific events
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new ProductBarcodeScannedEvent(0)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleFinishedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new PaymentModeSelectedEvent(null)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CreditCardScannedEvent(null)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CreditCardPinEnteredEvent(0)).addIntermediateResultListener(listener);		
 	}
 
 }
