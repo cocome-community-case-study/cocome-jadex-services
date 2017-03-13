@@ -91,11 +91,11 @@ public class CashDeskGUIAgent extends EventAgent
 		};
 		
 		//Subscribe to specific events
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new RunningTotalChangedEvent(null,0,0)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleSuccessEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new InvalidCreditCardEvent(null)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new RunningTotalChangedEvent(null,0,0)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleSuccessEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new InvalidCreditCardEvent(null)).addIntermediateResultListener(listener);
 	}
 
 }

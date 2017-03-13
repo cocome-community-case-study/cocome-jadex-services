@@ -97,14 +97,17 @@ public class CashBoxControllerAgent extends EventAgent
 		};
 		
 		//Subscribe to specific events
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
+		
+		
+		//Call test method
+		testRun();
 	}
 	
 	
 	
 	public void startButtonPressed()
 	{
-		System.out.println("startButtonPressed() called");
 		providedService.sendSaleStartedEvent();
 	}
 	
@@ -113,7 +116,6 @@ public class CashBoxControllerAgent extends EventAgent
 	 * This method is only for testing the system during development.
 	 * It simulates a sale process.
 	 */
-	@AgentBody
 	public void testRun()
 	{
 		System.out.println("testRun() called");

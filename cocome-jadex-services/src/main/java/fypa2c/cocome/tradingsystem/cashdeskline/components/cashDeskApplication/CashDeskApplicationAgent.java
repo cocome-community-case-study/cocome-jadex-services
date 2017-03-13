@@ -1,7 +1,6 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication;
 
 import java.util.Collection;
-
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
@@ -60,7 +59,6 @@ public class CashDeskApplicationAgent extends EventAgent {
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
-		System.out.println("CDA created");
 		providedService = (ICashDeskApplicationService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashDeskApplication");
 		
 		return Future.DONE;
@@ -104,14 +102,14 @@ public class CashDeskApplicationAgent extends EventAgent {
 		};
 		
 		//Subscribe to specific events
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new ProductBarcodeScannedEvent(0)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleFinishedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new PaymentModeSelectedEvent(null)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CreditCardScannedEvent(null)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CreditCardPinEnteredEvent(0)).addIntermediateResultListener(listener);		
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new ProductBarcodeScannedEvent(0)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleFinishedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new PaymentModeSelectedEvent(null)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CreditCardScannedEvent(null)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CreditCardPinEnteredEvent(0)).addIntermediateResultListener(listener);		
 	}
 
 }

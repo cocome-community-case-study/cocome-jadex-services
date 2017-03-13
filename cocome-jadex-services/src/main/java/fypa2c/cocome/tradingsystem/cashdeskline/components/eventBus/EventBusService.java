@@ -29,7 +29,7 @@ public class EventBusService implements IEventBusService{
 	
 	@Override
 	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvent(IEvent event) {
-		System.out.println("EventService recieved an subscription");
+		System.out.println("EventBus subscription service recieved an subscription");
 		//new SubscriptionIntermediateFuture for an event
 		final SubscriptionIntermediateFuture<IEvent> sifuture = new SubscriptionIntermediateFuture<IEvent>();
 		

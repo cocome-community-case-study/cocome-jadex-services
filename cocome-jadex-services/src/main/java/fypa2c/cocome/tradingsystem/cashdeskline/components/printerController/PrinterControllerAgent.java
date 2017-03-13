@@ -94,13 +94,13 @@ public class PrinterControllerAgent extends EventAgent
 		};
 		
 		//Subscribe to specific events
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new RunningTotalChangedEvent(null,0,0)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleFinishedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("cashBoxController").get()).subscribeToEvent(new SaleSuccessEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new RunningTotalChangedEvent(null,0,0)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleFinishedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
+		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleSuccessEvent()).addIntermediateResultListener(listener);
 		
 	}
 
