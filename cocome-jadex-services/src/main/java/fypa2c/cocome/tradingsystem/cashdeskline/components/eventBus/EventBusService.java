@@ -7,6 +7,8 @@ import java.util.Set;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import jadex.bridge.service.annotation.Service;
+import jadex.commons.future.Future;
+import jadex.commons.future.IFuture;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.commons.future.TerminationCommand;
@@ -52,5 +54,17 @@ public class EventBusService implements IEventBusService{
 		});
 		
 		return sifuture;
+	}
+
+	@Override
+	public IFuture<Void> publishEvent(IEvent event) {
+		//Notify the subscriber of this event.
+		if(subscriptions.containsKey(event.getClass().getName())){
+			for(SubscriptionIntermediateFuture<IEvent> subscriber : subscriptions.get(event.getClass().getName())){
+				subscriber.addIntermediateResultIfUndone(event);
+			}
+		}
+	
+		return Future.DONE;
 	}
 }
