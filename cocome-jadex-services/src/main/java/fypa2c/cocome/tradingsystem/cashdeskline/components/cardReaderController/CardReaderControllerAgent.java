@@ -1,11 +1,17 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
+import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
@@ -58,6 +64,60 @@ public class CardReaderControllerAgent extends EventAgent
 		return Future.DONE;
 	}
 	
+	@AgentBody
+	public IFuture<Void> body(){
+		initializeTestGUI();
+		
+		return Future.DONE;
+	}
 	
+	/**
+	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
+	 * @return
+	 */
+	public IFuture<Void> initializeTestGUI(){
+		IEvent[] events = new IEvent[2];
+		events[0] = new CreditCardScannedEvent(null);
+		events[1] = new CreditCardPinEnteredEvent(0);
+		TestGUI gui= createTestGUI("CardReaderControllerAgent", events);
+		
+		//Add ActionListener to Buttons
+		gui.getButtons()[0].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendCreditCardScannedEvent(null);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[1].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendPINEnteredEvent(0);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		
+		return Future.DONE;
+	}
 
 }

@@ -1,18 +1,28 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.AccountSaleEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.InvalidCreditCardEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.RunningTotalChangedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleRegisteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
+import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
@@ -66,9 +76,19 @@ public class CashDeskApplicationAgent extends EventAgent {
 	
 	/**
 	 * This method is called after the creation of the agent. 
-	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
 	@AgentBody
+	public IFuture<Void> body(){
+		subscribeToEvents();
+		
+		initializeTestGUI();
+		
+		return Future.DONE;
+	}
+	 
+	/** 
+	 * The agent subscribes to all events, it wants to listen by the event bus.
+	 */
 	public void subscribeToEvents(){
 		
 		//create a listener for events
@@ -110,6 +130,126 @@ public class CashDeskApplicationAgent extends EventAgent {
 		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
 		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CreditCardScannedEvent(null)).addIntermediateResultListener(listener);
 		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CreditCardPinEnteredEvent(0)).addIntermediateResultListener(listener);		
+	}
+	
+	/**
+	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
+	 * @return
+	 */
+	public IFuture<Void> initializeTestGUI(){
+		IEvent[] events = new IEvent[6];
+		events[0] = new RunningTotalChangedEvent(null, 0, 0);
+		events[1] = new ChangeAmountCalculatedEvent(0);
+		events[2] = new SaleSuccessEvent();
+		events[3] = new AccountSaleEvent(null);
+		events[4] = new SaleRegisteredEvent(null, 0, null);
+		events[5] = new InvalidCreditCardEvent(null);
+		TestGUI gui= createTestGUI("CashDeskApplicationAgent", events);
+		
+		//Add ActionListener to Buttons
+		gui.getButtons()[0].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendRunningTotalChangedEvent(null, 0, 0);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[1].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendChangeAmountCalculatedEvent(0);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[2].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendSaleSuccessEvent();
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[3].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendAccountSaleEvent(null);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[4].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendSaleRegisteredEvent(null, null, null);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[5].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendInvalidCardEvent(null);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		return Future.DONE;
 	}
 
 }

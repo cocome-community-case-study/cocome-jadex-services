@@ -55,9 +55,17 @@ public class CashDeskGUIAgent extends EventAgent
 	
 	/**
 	 * This method is called after the creation of the agent. 
-	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
 	@AgentBody
+	public IFuture<Void> body(){
+		subscribeToEvents();
+		
+		return Future.DONE;
+	}
+	 
+	/**
+	 * The agent subscribes to all events, it wants to listen by the event bus.
+	 */
 	public void subscribeToEvents(){
 		
 		//create a listener for events

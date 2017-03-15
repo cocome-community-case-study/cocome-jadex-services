@@ -7,6 +7,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.CashDeskG
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.EventBusAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.lightDisplayController.LightDisplayControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.printerController.PrinterControllerAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.ScannerControllerAgent;
 import jadex.base.PlatformConfiguration;
 import jadex.base.Starter;
 
@@ -27,6 +28,7 @@ public class StarterTest {
 		config.addComponent(CashDeskGUIAgent.class);
 		config.addComponent(LightDisplayControllerAgent.class);
 		config.addComponent(PrinterControllerAgent.class);
+		config.addComponent(ScannerControllerAgent.class);
 		Starter.createPlatform(config).get();
 	}
 

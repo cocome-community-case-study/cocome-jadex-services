@@ -1,11 +1,20 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
@@ -61,9 +70,25 @@ public class CashBoxControllerAgent extends EventAgent
 	
 	/**
 	 * This method is called after the creation of the agent. 
-	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
 	@AgentBody
+	public IFuture<Void> body(){
+		subscribeToEvents();
+		
+		initializeTestGUI();
+		
+		testRun();
+		
+		
+		
+		return Future.DONE;
+	}
+	
+	
+	
+	/**
+	 * The agent subscribes to all events, it wants to listen by the event bus.
+	 */
 	public void subscribeToEvents(){
 		
 		//create a listener for events
@@ -98,10 +123,109 @@ public class CashBoxControllerAgent extends EventAgent
 		
 		//Subscribe to specific events
 		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
+	}
+	
+	
+	/**
+	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
+	 * @return
+	 */
+	public IFuture<Void> initializeTestGUI(){
+		IEvent[] events = new IEvent[5];
+		events[0] = new SaleStartedEvent();
+		events[1] = new SaleFinishedEvent();
+		events[2] = new PaymentModeSelectedEvent(null);
+		events[3] = new CashAmountEnteredEvent(0, true);
+		events[4] = new CashBoxClosedEvent(); 
+		TestGUI gui= createTestGUI("CashBoxControllerAgent", events);
+		
+		//Add ActionListener to Buttons
+		gui.getButtons()[0].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						providedService.sendSaleStartedEvent();
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[1].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendSaleFinishedEvent();
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[2].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendPaymentModeEvent(null);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[3].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendCashAmountEnteredEvent(0, true);
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
+		
+		gui.getButtons()[4].addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IComponentStep<Void> step =  new IComponentStep<Void>() {
+
+					@Override
+					public IFuture<Void> execute(IInternalAccess ia) {
+						
+						providedService.sendCashBoxClosedEvent();
+						return Future.DONE;
+					}
+				};
+				agent.getExternalAccess().scheduleStep(step);
+			}
+		});
 		
 		
-		//Call test method
-		testRun();
+		return Future.DONE;
 	}
 	
 	
@@ -110,7 +234,6 @@ public class CashBoxControllerAgent extends EventAgent
 	{
 		providedService.sendSaleStartedEvent();
 	}
-	
 	
 	/*
 	 * This method is only for testing the system during development.
@@ -138,5 +261,5 @@ public class CashBoxControllerAgent extends EventAgent
 		}
 		agent.getExternalAccess().scheduleStep(step);
 	}
-
+	
 }
