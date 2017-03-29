@@ -260,6 +260,7 @@ public class CashBoxControllerAgent extends EventAgent
 			e.printStackTrace();
 		}
 		agent.getExternalAccess().scheduleStep(step);
+		System.out.println("testRun() finished");
 	}
 	
 }

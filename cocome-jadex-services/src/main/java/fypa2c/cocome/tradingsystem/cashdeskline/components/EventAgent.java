@@ -1,10 +1,12 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
@@ -52,7 +54,8 @@ public class EventAgent {
 	 * @return the TestGUI
 	 */
 	public TestGUI createTestGUI(String title, IEvent[] events){
-		return new TestGUI(title, events);
+		gui = new TestGUI(title, events);
+		return gui;
 	}
 	
 	
@@ -68,16 +71,22 @@ public class EventAgent {
 		
 		private JButton[] buttons;
 		
+		private JPanel gridPanel;
+		
 		public TestGUI(String title, IEvent[] events){
 			frame = new JFrame(title);
-			frame.setSize(300, 200);
-			frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS));
+			int wigth = 300;
+			frame.setSize(wigth, 200);
+			frame.getContentPane().setLayout(new BorderLayout());
 			buttons = new JButton[events.length];
+			gridPanel = new JPanel();
+			gridPanel.setLayout(new GridLayout(events.length, 1));
 			for(int i=0; i<events.length; i++){
 				String[] name = events[i].getClass().getName().split("\\.");
 				buttons[i] = new JButton("send "+name[name.length-1]);
-				frame.getContentPane().add(buttons[i]);
+				gridPanel.add(buttons[i]);
 			}
+			frame.getContentPane().add(gridPanel, BorderLayout.NORTH);
 			frame.setVisible(true);
 		}
 		
