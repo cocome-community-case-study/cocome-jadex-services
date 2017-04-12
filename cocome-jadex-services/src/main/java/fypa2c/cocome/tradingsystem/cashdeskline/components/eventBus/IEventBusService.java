@@ -1,6 +1,7 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import jadex.commons.IFilter;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
 
@@ -14,13 +15,20 @@ import jadex.commons.future.ISubscriptionIntermediateFuture;
 //TODO Add store channel
 public interface IEventBusService {
 
+//	/**
+//	 * Subscribe to an event to be notified if the event happens.
+//	 * @param event : The event to be listened
+//	 * @return the IntermediateFuture, so the subscriber can listen to an event
+//	 */
+//	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvent(IEvent event);
+	
 	/**
-	 * Subscribe to an event to be notified if the event happens.
-	 * @param event : The event to be listened
+	 * Subscribe to all events to be notified if an event happens.
+	 * @param filter : An optional filter, which listens to special events.
+	 * 					  Must be null, if you want to receive all events.
 	 * @return the IntermediateFuture, so the subscriber can listen to an event
 	 */
-	//TODO add filter
-	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvent(IEvent event);
+	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvents(IFilter<IEvent> filter);
 	
 	/**
 	 * Publish an event on the bus. Every component, which subscribed for the

@@ -1,6 +1,7 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
@@ -29,15 +30,20 @@ public class EventBusAgent extends EventAgent {
 	@Agent
 	protected IInternalAccess agent;
 	
-	IEventBusService providedService;
-	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
-		providedService = (IEventBusService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("eventBus");
 	 
 		return Future.DONE;
 	}
 	
+	/**
+	 * to get the Service of this agent for access to all provided services
+	 * @return
+	 */
+	private IEventBusService getServiceProvided()
+	{
+		return (IEventBusService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
+	}
 	
 }
