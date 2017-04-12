@@ -3,9 +3,11 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
-import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
@@ -22,15 +24,23 @@ import jadex.bridge.component.IExecutionFeature;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
+import jadex.bridge.service.types.cms.IComponentDescription;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IIntermediateResultListener;
+import jadex.commons.future.IResultListener;
+import jadex.commons.future.ISubscriptionIntermediateFuture;
+import jadex.commons.future.IntermediateFuture;
+import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
 import jadex.micro.annotation.AgentFeature;
+import jadex.micro.annotation.AgentService;
 import jadex.micro.annotation.Binding;
+import jadex.micro.annotation.Feature;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
@@ -46,24 +56,14 @@ import jadex.micro.annotation.RequiredServices;
 @ProvidedServices({
 	@ProvidedService(name="cashBoxController", type=ICashBoxControllerService.class, implementation=@Implementation(CashBoxControllerService.class))//,
 })
-@RequiredServices({
-	@RequiredService(name="eventBus", type=IEventBusService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
-})
 public class CashBoxControllerAgent extends EventAgent
 {
 	@Agent
 	protected IInternalAccess agent;
 	
-	@AgentFeature
-	IRequiredServicesFeature requiredServicesFeature;
-	
-	ICashBoxControllerService providedService;
-	
-	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
-		providedService = (ICashBoxControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
 
 		return Future.DONE;
 	}
@@ -73,13 +73,12 @@ public class CashBoxControllerAgent extends EventAgent
 	 */
 	@AgentBody
 	public IFuture<Void> body(){
-		subscribeToEvents();
 		
 		initializeTestGUI();
 		
-		testRun();
-		
-		
+		subscribeToEvents();
+				
+		//testRun();
 		
 		return Future.DONE;
 	}
@@ -89,45 +88,34 @@ public class CashBoxControllerAgent extends EventAgent
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public void subscribeToEvents(){
+	public IFuture<Void> subscribeToEvents(){
 		
-		//create a listener for events
-		IIntermediateResultListener<IEvent> listener = new IIntermediateResultListener<IEvent>() {
+		//Create filter for specific events
+		IFilter<IEvent> filter = new IFilter<IEvent>() {
 			
 			@Override
-			public void intermediateResultAvailable(IEvent result) {
-				System.out.println("CashBoxControllerAgent received the event : "+result.getClass().getName());
-				//TODO receive events
-				
+			public boolean filter(IEvent obj) {
+				if(obj instanceof ChangeAmountCalculatedEvent){
+					return true;
+				}
+				return false;
 			}
-
-			@Override
-			public void exceptionOccurred(Exception exception) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void resultAvailable(Collection<IEvent> result) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void finished() {
-				// TODO Auto-generated method stub
-				
-			}
-
 		};
 		
-		//Subscribe to specific events
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
+		//subscribe
+		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
+		
+		//waiting for Events
+		while(sifuture.hasNextIntermediateResult()){
+			System.out.println("CashBoxControllerAgent received "+sifuture.getNextIntermediateResult().getClass().getName());
+		}
+		
+	return Future.DONE;
 	}
 	
 	
 	/**
-	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
+	 * start the TestGUI and initialize the ActionLister methods of the buttons.
 	 * @return
 	 */
 	public IFuture<Void> initializeTestGUI(){
@@ -137,39 +125,23 @@ public class CashBoxControllerAgent extends EventAgent
 		events[2] = new PaymentModeSelectedEvent(null);
 		events[3] = new CashAmountEnteredEvent(0, true);
 		events[4] = new CashBoxClosedEvent(); 
-		TestGUI gui= createTestGUI("CashBoxControllerAgent", events);
+		TestGUI gui= new TestGUI("CashBoxControllerAgent", events);
 		
 		//Add ActionListener to Buttons
 		gui.getButtons()[0].addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						providedService.sendSaleStartedEvent();
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendSaleStartedEvent();
 			}
+						
 		});
 		
 		gui.getButtons()[1].addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendSaleFinishedEvent();
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendSaleFinishedEvent();
 			}
 		});
 		
@@ -177,16 +149,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendPaymentModeEvent(null);
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendPaymentModeEvent(null);
 			}
 		});
 		
@@ -194,16 +157,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendCashAmountEnteredEvent(0, true);
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendCashAmountEnteredEvent(0, true);
 			}
 		});
 		
@@ -211,16 +165,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendCashBoxClosedEvent();
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendCashBoxClosedEvent();
 			}
 		});
 		
@@ -228,11 +173,20 @@ public class CashBoxControllerAgent extends EventAgent
 		return Future.DONE;
 	}
 	
+	/**
+	 * to get the Service of this agent for access to all provided services
+	 * @return
+	 */
+	private ICashBoxControllerService getServiceProvided()
+	{
+		return (ICashBoxControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
+	}
 	
+//---------------------------------------Test Methods-------------------------------
 	
 	public void startButtonPressed()
 	{
-		providedService.sendSaleStartedEvent();
+		getServiceProvided().sendSaleStartedEvent();
 	}
 	
 	/*
@@ -248,6 +202,7 @@ public class CashBoxControllerAgent extends EventAgent
 			public IFuture<Void> execute(IInternalAccess ia) {
 				
 				startButtonPressed();
+				System.out.println("startButton pressed");
 				return Future.DONE;
 			}
 		};
@@ -261,6 +216,7 @@ public class CashBoxControllerAgent extends EventAgent
 		}
 		agent.getExternalAccess().scheduleStep(step);
 		System.out.println("testRun() finished");
+		startButtonPressed();
 	}
 	
 }

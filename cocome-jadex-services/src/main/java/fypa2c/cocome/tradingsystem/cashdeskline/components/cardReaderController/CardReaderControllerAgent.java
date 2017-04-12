@@ -3,10 +3,12 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+
+import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
-import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
@@ -17,6 +19,7 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IIntermediateResultListener;
@@ -41,25 +44,16 @@ import jadex.micro.annotation.RequiredServices;
  */
 @Agent
 @ProvidedServices({
-	@ProvidedService(name="controller",type=ICardReaderControllerService.class, implementation=@Implementation(CardReaderControllerService.class))//,
-})
-@RequiredServices({
-	@RequiredService(name="eventBus", type=IEventBusService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
+	@ProvidedService(name="CardReaderController",type=ICardReaderControllerService.class, implementation=@Implementation(CardReaderControllerService.class))//,
 })
 public class CardReaderControllerAgent extends EventAgent
 {
 	@Agent
 	protected IInternalAccess agent;
 	
-	@AgentFeature
-	IRequiredServicesFeature requiredServicesFeature;
-	
-	ICardReaderControllerService providedService;
-	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
-		providedService = (ICardReaderControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("controller");
 		
 		return Future.DONE;
 	}
@@ -68,7 +62,36 @@ public class CardReaderControllerAgent extends EventAgent
 	public IFuture<Void> body(){
 		initializeTestGUI();
 		
+		subscribeToEvents();
+		
 		return Future.DONE;
+	}
+	
+	/**
+	 * The agent subscribes to all events, it wants to listen by the event bus.
+	 */
+	public IFuture<Void> subscribeToEvents(){
+		
+		//Create filter for specific events
+		IFilter<IEvent> filter = new IFilter<IEvent>() {
+			
+			@Override
+			public boolean filter(IEvent obj) {
+				//This Agent listen to nothing
+				//If it should listen to an event, add an instanceof test here
+				return false;
+			}
+		};
+		
+		//subscribe
+		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
+		
+		//waiting for Events
+		while(sifuture.hasNextIntermediateResult()){
+			System.out.println("CardReaderController received "+sifuture.getNextIntermediateResult().getClass().getName());
+		}
+		
+	return Future.DONE;
 	}
 	
 	/**
@@ -79,23 +102,14 @@ public class CardReaderControllerAgent extends EventAgent
 		IEvent[] events = new IEvent[2];
 		events[0] = new CreditCardScannedEvent(null);
 		events[1] = new CreditCardPinEnteredEvent(0);
-		TestGUI gui= createTestGUI("CardReaderControllerAgent", events);
+		TestGUI gui= new TestGUI("CardReaderControllerAgent", events);
 		
 		//Add ActionListener to Buttons
 		gui.getButtons()[0].addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendCreditCardScannedEvent(null);
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendCreditCardScannedEvent(null);
 			}
 		});
 		
@@ -103,21 +117,21 @@ public class CardReaderControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendPINEnteredEvent(0);
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendPINEnteredEvent(0);
 			}
 		});
 		
 		
 		return Future.DONE;
+	}
+	
+	/**
+	 * to get the Service of this agent for access to all provided services
+	 * @return
+	 */
+	private ICardReaderControllerService getServiceProvided()
+	{
+		return (ICardReaderControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("CardReaderController");
 	}
 
 }

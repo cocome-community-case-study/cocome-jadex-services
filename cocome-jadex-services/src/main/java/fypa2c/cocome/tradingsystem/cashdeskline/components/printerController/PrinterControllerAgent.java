@@ -2,6 +2,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.printerController;
 
 import java.util.Collection;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.ICardReaderControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
@@ -13,11 +14,14 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
+import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IIntermediateResultListener;
+import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
@@ -39,16 +43,10 @@ import jadex.micro.annotation.RequiredServices;
 @ProvidedServices({
 	@ProvidedService(type=IPrinterControllerService.class, implementation=@Implementation(PrinterControllerService.class))//,
 })
-@RequiredServices({
-	@RequiredService(name="eventBus", type=IEventBusService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
-})
 public class PrinterControllerAgent extends EventAgent
 {
 	@Agent
 	protected IInternalAccess agent;
-	
-	@AgentFeature
-	IRequiredServicesFeature requiredServicesFeature;
 	
 	@AgentCreated
 	public IFuture<Void> creation()
@@ -69,47 +67,56 @@ public class PrinterControllerAgent extends EventAgent
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public void subscribeToEvents(){
+	public IFuture<Void> subscribeToEvents(){
 		
-		//create a listener for events
-		IIntermediateResultListener<IEvent> listener = new IIntermediateResultListener<IEvent>() {
-			
-			@Override
-			public void intermediateResultAvailable(IEvent result) {
-				System.out.println("PrinterController received the event : "+result.getClass().getName());
-				//TODO receive events
+		//Create filter for specific events
+				IFilter<IEvent> filter = new IFilter<IEvent>() {
+					
+					@Override
+					public boolean filter(IEvent obj) {
+						if(obj instanceof SaleStartedEvent){
+							return true;
+						}
+						if(obj instanceof RunningTotalChangedEvent){
+							return true;
+						}
+						if(obj instanceof SaleFinishedEvent){
+							return true;
+						}
+						if(obj instanceof CashAmountEnteredEvent){
+							return true;
+						}
+						if(obj instanceof ChangeAmountCalculatedEvent){
+							return true;
+						}
+						if(obj instanceof CashBoxClosedEvent){
+							return true;
+						}
+						if(obj instanceof SaleSuccessEvent){
+							return true;
+						}
+						return false;
+					}
+				};
 				
-			}
-
-			@Override
-			public void exceptionOccurred(Exception exception) {
-				// TODO Auto-generated method stub
+				//subscribe
+				ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 				
-			}
-
-			@Override
-			public void resultAvailable(Collection<IEvent> result) {
-				// TODO Auto-generated method stub
+				//waiting for Events
+				while(sifuture.hasNextIntermediateResult()){
+					System.out.println("PrinterControllerAgent received "+sifuture.getNextIntermediateResult().getClass().getName());
+				}
 				
-			}
-
-			@Override
-			public void finished() {
-				// TODO Auto-generated method stub
-				
-			}
-
-		};
-		
-		//Subscribe to specific events
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleStartedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new RunningTotalChangedEvent(null,0,0)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleFinishedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashAmountEnteredEvent(0,true)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new ChangeAmountCalculatedEvent(0)).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new CashBoxClosedEvent()).addIntermediateResultListener(listener);
-		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvent(new SaleSuccessEvent()).addIntermediateResultListener(listener);
-		
+			return Future.DONE;
+	}
+	
+	/**
+	 * to get the Service of this agent for access to all provided services
+	 * @return
+	 */
+	private IPrinterControllerService getServiceProvided()
+	{
+		return (IPrinterControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("CardReaderController");
 	}
 
 }

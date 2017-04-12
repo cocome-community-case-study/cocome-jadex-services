@@ -30,6 +30,7 @@ public class StarterTest {
 		config.addComponent(PrinterControllerAgent.class);
 		config.addComponent(ScannerControllerAgent.class);
 		Starter.createPlatform(config).get();
+		//TODO Components are cilled after 30 sec, don't know, how to avoid this
 	}
 
 }

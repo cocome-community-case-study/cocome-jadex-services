@@ -3,8 +3,10 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
-import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent.TestGUI;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.ICardReaderControllerService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
@@ -12,9 +14,12 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEven
 import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
+import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
+import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
@@ -35,19 +40,15 @@ import jadex.micro.annotation.RequiredServices;
 @ProvidedServices({
 	@ProvidedService(type=IScannerControllerService.class, implementation=@Implementation(ScannerControllerService.class))//,
 })
-@RequiredServices({
-	@RequiredService(name="cmsservice", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
-})
 public class ScannerControllerAgent extends EventAgent
 {
 	@Agent
 	protected IInternalAccess agent;
 	
-	IScannerControllerService providedService;
-	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		
 		return Future.DONE;
 	}
 
@@ -58,8 +59,38 @@ public class ScannerControllerAgent extends EventAgent
 	public IFuture<Void> body(){
 		initializeTestGUI();
 		
+		subscribeToEvents();
+		
 		return Future.DONE;
 	}
+	
+	/**
+	 * The agent subscribes to all events, it wants to listen by the event bus.
+	 */
+	public IFuture<Void> subscribeToEvents(){
+		
+		//Create filter for specific events
+		IFilter<IEvent> filter = new IFilter<IEvent>() {
+			
+			@Override
+			public boolean filter(IEvent obj) {
+				//This Agent listen to nothing
+				//If it should listen to an event, add an instanceof test here
+				return false;
+			}
+		};
+		
+		//subscribe
+		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
+		
+		//waiting for Events
+		while(sifuture.hasNextIntermediateResult()){
+			System.out.println("ScannerControllerAgent received "+sifuture.getNextIntermediateResult().getClass().getName());
+		}
+		
+	return Future.DONE;
+	}
+	
 	
 	/**
 	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
@@ -67,27 +98,27 @@ public class ScannerControllerAgent extends EventAgent
 	public IFuture<Void> initializeTestGUI(){
 		IEvent[] events = new IEvent[1];
 		events[0] = new ProductBarcodeScannedEvent(0);
-		TestGUI gui= createTestGUI("ScannerControllerAgent", events);
+		TestGUI gui= new TestGUI("ScannerControllerAgent", events);
 		
 		//Add ActionListener to Buttons
 		gui.getButtons()[0].addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-					@Override
-					public IFuture<Void> execute(IInternalAccess ia) {
-						
-						providedService.sendProductBarCodeScannedEvent(0);
-						return Future.DONE;
-					}
-				};
-				agent.getExternalAccess().scheduleStep(step);
+				getServiceProvided().sendProductBarCodeScannedEvent(0);
 			}
 		});
 		
 		
 		return Future.DONE;
+	}
+	
+	/**
+	 * to get the Service of this agent for access to all provided services
+	 * @return
+	 */
+	private IScannerControllerService getServiceProvided()
+	{
+		return (IScannerControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("CardReaderController");
 	}
 }
