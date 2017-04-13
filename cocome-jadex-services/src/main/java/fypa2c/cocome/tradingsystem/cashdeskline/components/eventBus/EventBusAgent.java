@@ -5,6 +5,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICa
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
+import jadex.commons.Boolean3;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.Agent;
@@ -21,29 +22,9 @@ import jadex.micro.annotation.ProvidedServices;
  *
  * @author Florian Abt
  */
-@Agent 
 @ProvidedServices({
 	@ProvidedService(name="eventBus", type=IEventBusService.class, implementation=@Implementation(EventBusService.class))//,
 })
 public class EventBusAgent extends EventAgent {
 
-	@Agent
-	protected IInternalAccess agent;
-	
-	@AgentCreated
-	public IFuture<Void> creation()
-	{
-	 
-		return Future.DONE;
-	}
-	
-	/**
-	 * to get the Service of this agent for access to all provided services
-	 * @return
-	 */
-	private IEventBusService getServiceProvided()
-	{
-		return (IEventBusService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
-	}
-	
 }

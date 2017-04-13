@@ -20,12 +20,15 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
+import jadex.bridge.SFuture;
 import jadex.bridge.component.IExecutionFeature;
 import jadex.bridge.service.RequiredServiceInfo;
+import jadex.bridge.service.annotation.Timeout;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentDescription;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -38,6 +41,7 @@ import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
 import jadex.micro.annotation.AgentFeature;
+import jadex.micro.annotation.AgentKilled;
 import jadex.micro.annotation.AgentService;
 import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.Feature;
@@ -52,7 +56,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(name="cashBoxController", type=ICashBoxControllerService.class, implementation=@Implementation(CashBoxControllerService.class))//,
 })
@@ -72,23 +76,38 @@ public class CashBoxControllerAgent extends EventAgent
 	 * This method is called after the creation of the agent. 
 	 */
 	@AgentBody
-	public IFuture<Void> body(){
+	public void body(){
 		
 		initializeTestGUI();
 		
 		subscribeToEvents();
 				
 		//testRun();
+		System.out.println("Body ended");
+		
+	}
+	
+	/**
+	 * This method is called after the creation of the agent. 
+	 */
+	@AgentKilled
+	public IFuture<Void> kill(){
+		
+		System.out.println("Agent killed");
 		
 		return Future.DONE;
 	}
 	
 	
 	
+	
+	
+	
+	
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public IFuture<Void> subscribeToEvents(){
+	public void subscribeToEvents(){
 		
 		//Create filter for specific events
 		IFilter<IEvent> filter = new IFilter<IEvent>() {
@@ -105,19 +124,24 @@ public class CashBoxControllerAgent extends EventAgent
 		//subscribe
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
+		
 		//waiting for Events
-		while(sifuture.hasNextIntermediateResult()){
-			IEvent result = sifuture.getNextIntermediateResult();
-			System.out.println("CashBoxControllerAgent received "+result.getClass().getName());
-			if (result instanceof ChangeAmountCalculatedEvent) {
-				//TODO open CashBox
-				System.out.println("CashBoxController: Open CashBox");
-			} else {
-				//if more Events are added to the filter, describe here what the agent should do if it receives the event
+		try{
+			while(sifuture.hasNextIntermediateResult()){
+				IEvent result = sifuture.getNextIntermediateResult();
+				System.out.println("CashBoxControllerAgent received "+result.getClass().getName());
+				if (result instanceof ChangeAmountCalculatedEvent) {
+					//TODO open CashBox
+					System.out.println("CashBoxController: Open CashBox");
+				} else {
+					//if more Events are added to the filter, describe here what the agent should do if it receives the event
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-	return Future.DONE;
+		
 	}
 	
 	
@@ -125,7 +149,7 @@ public class CashBoxControllerAgent extends EventAgent
 	 * start the TestGUI and initialize the ActionLister methods of the buttons.
 	 * @return
 	 */
-	public IFuture<Void> initializeTestGUI(){
+	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[5];
 		events[0] = new SaleStartedEvent();
 		events[1] = new SaleFinishedEvent();
@@ -175,9 +199,6 @@ public class CashBoxControllerAgent extends EventAgent
 				getServiceProvided().sendCashBoxClosedEvent();
 			}
 		});
-		
-		
-		return Future.DONE;
 	}
 	
 	/**

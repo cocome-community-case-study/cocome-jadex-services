@@ -9,13 +9,17 @@ import java.util.Map;
 import java.util.Set;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import jadex.bridge.IInternalAccess;
+import jadex.bridge.SFuture;
 import jadex.bridge.service.annotation.Service;
+import jadex.bridge.service.annotation.ServiceComponent;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.commons.future.TerminationCommand;
+import jadex.micro.annotation.Component;
 
 /**
  * This service implements the publish/subscribe pattern for all services to deliver events. 
@@ -26,6 +30,9 @@ import jadex.commons.future.TerminationCommand;
  */
 @Service
 public class EventBusService implements IEventBusService{
+	
+	@ServiceComponent 
+	protected IInternalAccess service;
 
 //	//Every event is mapped to set of subscriber, which want to be notified at this event
 //	protected Map<String, Set<SubscriptionIntermediateFuture<IEvent>>> subscriptions 
@@ -73,7 +80,8 @@ public class EventBusService implements IEventBusService{
 		//Add the subscriber to the subscription list
 		SubscriptionEntry entry = new SubscriptionEntry(filter, sifuture);
 		subscriptions.add(entry);
-		
+	
+		SFuture.avoidCallTimeouts((Future<?>) sifuture, service);
 		
 		//Add termination command, which is called if the subscription ends. It removes the SubscriptionEntry.
 		sifuture.setTerminationCommand(new TerminationCommand() {
@@ -81,6 +89,7 @@ public class EventBusService implements IEventBusService{
 			@Override
 			public void terminated(Exception reason) {
 				
+				reason.printStackTrace();
 				subscriptions.remove(entry);
 				
 			}

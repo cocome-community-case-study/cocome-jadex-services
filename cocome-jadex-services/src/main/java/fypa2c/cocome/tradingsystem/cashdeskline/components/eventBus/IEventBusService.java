@@ -1,6 +1,7 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import jadex.bridge.service.annotation.Timeout;
 import jadex.commons.IFilter;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
@@ -28,6 +29,7 @@ public interface IEventBusService {
 	 * 					  Must be null, if you want to receive all events.
 	 * @return the IntermediateFuture, so the subscriber can listen to an event
 	 */
+	@Timeout(Timeout.NONE)
 	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvents(IFilter<IEvent> filter);
 	
 	/**
