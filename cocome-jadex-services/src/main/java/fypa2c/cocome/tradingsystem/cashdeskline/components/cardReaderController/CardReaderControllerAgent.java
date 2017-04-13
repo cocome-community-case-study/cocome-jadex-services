@@ -88,7 +88,8 @@ public class CardReaderControllerAgent extends EventAgent
 		
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
-			System.out.println("CardReaderController received "+sifuture.getNextIntermediateResult().getClass().getName());
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("CardReaderController received "+result.getClass().getName());
 		}
 		
 	return Future.DONE;

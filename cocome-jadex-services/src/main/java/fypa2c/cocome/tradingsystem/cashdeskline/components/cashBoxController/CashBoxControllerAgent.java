@@ -107,7 +107,14 @@ public class CashBoxControllerAgent extends EventAgent
 		
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
-			System.out.println("CashBoxControllerAgent received "+sifuture.getNextIntermediateResult().getClass().getName());
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("CashBoxControllerAgent received "+result.getClass().getName());
+			if (result instanceof ChangeAmountCalculatedEvent) {
+				//TODO open CashBox
+				System.out.println("CashBoxController: Open CashBox");
+			} else {
+				//if more Events are added to the filter, describe here what the agent should do if it receives the event
+			}
 		}
 		
 	return Future.DONE;

@@ -77,7 +77,8 @@ public class LightDisplayControllerAgent extends EventAgent
 		
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
-			System.out.println("LightDisplayController received "+sifuture.getNextIntermediateResult().getClass().getName());
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("LightDisplayController received "+result.getClass().getName());
 		}
 		
 	return Future.DONE;

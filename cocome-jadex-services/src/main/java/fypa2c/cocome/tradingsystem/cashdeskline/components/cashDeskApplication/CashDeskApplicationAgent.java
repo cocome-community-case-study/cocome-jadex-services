@@ -123,7 +123,52 @@ public class CashDeskApplicationAgent extends EventAgent {
 				
 				//waiting for Events
 				while(sifuture.hasNextIntermediateResult()){
-					System.out.println("CashDeskApplicationAgent received "+sifuture.getNextIntermediateResult().getClass().getName());
+					IEvent result = sifuture.getNextIntermediateResult();
+					System.out.println("CashDeskApplicationAgent received "+result.getClass().getName());
+					if(result instanceof SaleStartedEvent){
+						//TODO Start process "Product Selection"
+						System.out.println("CashDeskApplication: Start process \"Product Selection\"");
+					}
+					if(result instanceof ProductBarcodeScannedEvent){
+						//TODO Add product to shopping cart if it is in stock (getProductWithStockItem)
+						System.out.println("CashDeskApplication: Add product to shopping cart if it's in stock");
+						getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
+					}
+					if(result instanceof SaleFinishedEvent){
+						//TODO Finish process "Product Selection"
+						System.out.println("CashDeskApplication: Finish process \"Product Selection\"");
+					}
+					if(result instanceof PaymentModeSelectedEvent){
+						//TODO Start process "Cash Payment" or "Card Payment"
+						System.out.println("CashDeskApplication: Start process \"Cash Payment\" or \"Card Payment\"");
+					}
+					if(result instanceof CashAmountEnteredEvent){
+						//TODO Calculate (new due amount or) change amount
+						System.out.println("CashDeskApplication: Calculate (new due amount or) change amount");
+						getServiceProvided().sendChangeAmountCalculatedEvent(0);
+					}
+					if(result instanceof CashBoxClosedEvent){
+						//TODO Update inventory and register sale
+						System.out.println("CashDeskApplication: Update inventory and register sale");
+						getServiceProvided().sendSaleSuccessEvent();
+						getServiceProvided().sendAccountSaleEvent(null);
+						getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+					}
+					if(result instanceof CreditCardScannedEvent){
+						//TODO Store credit card info and wait for CreditCardPinEnteredEvent
+						System.out.println("CashDeskApplication: Store credit card info and wait for CreditCardPinEnteredEvent");
+					}
+					if(result instanceof CreditCardPinEnteredEvent){
+						//TODO valdiateCard (How to realise the Bank?)
+						System.out.println("CashDeskApplication: validate Card");
+						//If Card is invalid, send InvalidCreditCardEvent()
+						//getServiceProvided().sendInvalidCardEvent(null);
+						//else
+						System.out.println("CashDeskApplication: if Card is valid, finish payment process successfully");
+						getServiceProvided().sendSaleSuccessEvent();
+						getServiceProvided().sendAccountSaleEvent(null);
+						getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+					}
 				}
 				
 			return Future.DONE;

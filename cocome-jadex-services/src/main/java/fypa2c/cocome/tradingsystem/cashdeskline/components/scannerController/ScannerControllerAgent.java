@@ -85,7 +85,8 @@ public class ScannerControllerAgent extends EventAgent
 		
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
-			System.out.println("ScannerControllerAgent received "+sifuture.getNextIntermediateResult().getClass().getName());
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("ScannerControllerAgent received "+result.getClass().getName());
 		}
 		
 	return Future.DONE;
