@@ -29,6 +29,7 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -51,7 +52,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(name="cashDeskApplication", type=ICashDeskApplicationService.class, implementation=@Implementation(CashDeskApplicationService.class))//,
 })
@@ -71,114 +72,111 @@ public class CashDeskApplicationAgent extends EventAgent {
 	 * This method is called after the creation of the agent. 
 	 */
 	@AgentBody
-	public IFuture<Void> body(){
+	public void body(){
 		
 		initializeTestGUI();
 		
 		subscribeToEvents();
 		
-		return Future.DONE;
 	}
 	 
 	/** 
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public IFuture<Void> subscribeToEvents(){
+	public void subscribeToEvents(){
 		
 		//Create filter for specific events
-				IFilter<IEvent> filter = new IFilter<IEvent>() {
+		IFilter<IEvent> filter = new IFilter<IEvent>() {
 					
-					@Override
-					public boolean filter(IEvent obj) {
-						if(obj instanceof SaleStartedEvent){
-							return true;
-						}
-						if(obj instanceof ProductBarcodeScannedEvent){
-							return true;
-						}
-						if(obj instanceof SaleFinishedEvent){
-							return true;
-						}
-						if(obj instanceof PaymentModeSelectedEvent){
-							return true;
-						}
-						if(obj instanceof CashAmountEnteredEvent){
-							return true;
-						}
-						if(obj instanceof CashBoxClosedEvent){
-							return true;
-						}
-						if(obj instanceof CreditCardScannedEvent){
-							return true;
-						}
-						if(obj instanceof CreditCardPinEnteredEvent){
-							return true;
-						}
-						return false;
-					}
-				};
-				
-				//subscribe
-				ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
-				
-				//waiting for Events
-				while(sifuture.hasNextIntermediateResult()){
-					IEvent result = sifuture.getNextIntermediateResult();
-					System.out.println("CashDeskApplicationAgent received "+result.getClass().getName());
-					if(result instanceof SaleStartedEvent){
-						//TODO Start process "Product Selection"
-						System.out.println("CashDeskApplication: Start process \"Product Selection\"");
-					}
-					if(result instanceof ProductBarcodeScannedEvent){
-						//TODO Add product to shopping cart if it is in stock (getProductWithStockItem)
-						System.out.println("CashDeskApplication: Add product to shopping cart if it's in stock");
-						getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
-					}
-					if(result instanceof SaleFinishedEvent){
-						//TODO Finish process "Product Selection"
-						System.out.println("CashDeskApplication: Finish process \"Product Selection\"");
-					}
-					if(result instanceof PaymentModeSelectedEvent){
-						//TODO Start process "Cash Payment" or "Card Payment"
-						System.out.println("CashDeskApplication: Start process \"Cash Payment\" or \"Card Payment\"");
-					}
-					if(result instanceof CashAmountEnteredEvent){
-						//TODO Calculate (new due amount or) change amount
-						System.out.println("CashDeskApplication: Calculate (new due amount or) change amount");
-						getServiceProvided().sendChangeAmountCalculatedEvent(0);
-					}
-					if(result instanceof CashBoxClosedEvent){
-						//TODO Update inventory and register sale
-						System.out.println("CashDeskApplication: Update inventory and register sale");
-						getServiceProvided().sendSaleSuccessEvent();
-						getServiceProvided().sendAccountSaleEvent(null);
-						getServiceProvided().sendSaleRegisteredEvent(null, null, null);
-					}
-					if(result instanceof CreditCardScannedEvent){
-						//TODO Store credit card info and wait for CreditCardPinEnteredEvent
-						System.out.println("CashDeskApplication: Store credit card info and wait for CreditCardPinEnteredEvent");
-					}
-					if(result instanceof CreditCardPinEnteredEvent){
-						//TODO valdiateCard (How to realise the Bank?)
-						System.out.println("CashDeskApplication: validate Card");
-						//If Card is invalid, send InvalidCreditCardEvent()
-						//getServiceProvided().sendInvalidCardEvent(null);
-						//else
-						System.out.println("CashDeskApplication: if Card is valid, finish payment process successfully");
-						getServiceProvided().sendSaleSuccessEvent();
-						getServiceProvided().sendAccountSaleEvent(null);
-						getServiceProvided().sendSaleRegisteredEvent(null, null, null);
-					}
+			@Override
+			public boolean filter(IEvent obj) {
+				if(obj instanceof SaleStartedEvent){
+					return true;
 				}
-				
-			return Future.DONE;
+				if(obj instanceof ProductBarcodeScannedEvent){
+					return true;
+				}
+				if(obj instanceof SaleFinishedEvent){
+					return true;
+				}
+				if(obj instanceof PaymentModeSelectedEvent){
+					return true;
+				}
+				if(obj instanceof CashAmountEnteredEvent){
+					return true;
+				}
+				if(obj instanceof CashBoxClosedEvent){
+					return true;
+				}
+				if(obj instanceof CreditCardScannedEvent){
+					return true;
+				}
+				if(obj instanceof CreditCardPinEnteredEvent){
+					return true;
+				}
+				return false;
+			}
+		};
+		
+		//subscribe
+		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
+		
+		//waiting for Events
+		while(sifuture.hasNextIntermediateResult()){
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("CashDeskApplicationAgent received "+result.getClass().getName());
+			if(result instanceof SaleStartedEvent){
+				//TODO Start process "Product Selection"
+				System.out.println("CashDeskApplication: Start process \"Product Selection\"");
+			}
+			if(result instanceof ProductBarcodeScannedEvent){
+				//TODO Add product to shopping cart if it is in stock (getProductWithStockItem)
+				System.out.println("CashDeskApplication: Add product to shopping cart if it's in stock");
+				getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
+			}
+			if(result instanceof SaleFinishedEvent){
+				//TODO Finish process "Product Selection"
+				System.out.println("CashDeskApplication: Finish process \"Product Selection\"");
+			}
+			if(result instanceof PaymentModeSelectedEvent){
+				//TODO Start process "Cash Payment" or "Card Payment"
+				System.out.println("CashDeskApplication: Start process \"Cash Payment\" or \"Card Payment\"");
+			}
+			if(result instanceof CashAmountEnteredEvent){
+				//TODO Calculate (new due amount or) change amount
+				System.out.println("CashDeskApplication: Calculate (new due amount or) change amount");
+				getServiceProvided().sendChangeAmountCalculatedEvent(0);
+			}
+			if(result instanceof CashBoxClosedEvent){
+				//TODO Update inventory and register sale
+				System.out.println("CashDeskApplication: Update inventory and register sale");
+				getServiceProvided().sendSaleSuccessEvent();
+				getServiceProvided().sendAccountSaleEvent(null);
+				getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+			}
+			if(result instanceof CreditCardScannedEvent){
+				//TODO Store credit card info and wait for CreditCardPinEnteredEvent
+				System.out.println("CashDeskApplication: Store credit card info and wait for CreditCardPinEnteredEvent");
+			}
+			if(result instanceof CreditCardPinEnteredEvent){
+				//TODO valdiateCard (How to realise the Bank?)
+				System.out.println("CashDeskApplication: validate Card");
+				//If Card is invalid, send InvalidCreditCardEvent()
+				//getServiceProvided().sendInvalidCardEvent(null);
+				//else
+				System.out.println("CashDeskApplication: if Card is valid, finish payment process successfully");
+				getServiceProvided().sendSaleSuccessEvent();
+				getServiceProvided().sendAccountSaleEvent(null);
+				getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+			}
+		}
 	}
 	
 	/**
 	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
 	 * @return
 	 */
-	public IFuture<Void> initializeTestGUI(){
+	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[6];
 		events[0] = new RunningTotalChangedEvent(null, 0, 0);
 		events[1] = new ChangeAmountCalculatedEvent(0);
@@ -236,8 +234,6 @@ public class CashDeskApplicationAgent extends EventAgent {
 				getServiceProvided().sendInvalidCardEvent(null);
 			}
 		});
-		
-		return Future.DONE;
 	}
 
 	

@@ -13,6 +13,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.Agent;
@@ -28,7 +29,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @RequiredServices({
 	@RequiredService(name="eventBus", type=IEventBusService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
 	@RequiredService(name="cms", type=IComponentManagementService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM))

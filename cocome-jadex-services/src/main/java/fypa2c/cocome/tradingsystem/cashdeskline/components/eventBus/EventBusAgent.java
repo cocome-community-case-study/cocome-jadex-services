@@ -22,6 +22,7 @@ import jadex.micro.annotation.ProvidedServices;
  *
  * @author Florian Abt
  */
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(name="eventBus", type=IEventBusService.class, implementation=@Implementation(EventBusService.class))//,
 })

@@ -11,6 +11,7 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -33,7 +34,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(type=ILightDisplayControllerService.class, implementation=@Implementation(LightDisplayControllerService.class))//,
 })
@@ -49,17 +50,16 @@ public class LightDisplayControllerAgent extends EventAgent
 	}
 	
 	@AgentBody
-	public IFuture<Void> body(){
+	public void body(){
 		
 		subscribeToEvents();
 		
-		return Future.DONE;
 	}
 	
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public IFuture<Void> subscribeToEvents(){
+	public void subscribeToEvents(){
 		
 		//Create filter for specific events
 		IFilter<IEvent> filter = new IFilter<IEvent>() {
@@ -80,8 +80,6 @@ public class LightDisplayControllerAgent extends EventAgent
 			IEvent result = sifuture.getNextIntermediateResult();
 			System.out.println("LightDisplayController received "+result.getClass().getName());
 		}
-		
-	return Future.DONE;
 	}
 	
 	/**

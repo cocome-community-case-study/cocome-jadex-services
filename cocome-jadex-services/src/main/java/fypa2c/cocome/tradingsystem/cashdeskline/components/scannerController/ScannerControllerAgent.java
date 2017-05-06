@@ -16,6 +16,7 @@ import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -36,7 +37,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(type=IScannerControllerService.class, implementation=@Implementation(ScannerControllerService.class))//,
 })
@@ -56,18 +57,17 @@ public class ScannerControllerAgent extends EventAgent
 	 * This method is called after the creation of the agent. 
 	 */
 	@AgentBody
-	public IFuture<Void> body(){
+	public void body(){
 		initializeTestGUI();
 		
 		subscribeToEvents();
 		
-		return Future.DONE;
 	}
 	
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public IFuture<Void> subscribeToEvents(){
+	public void subscribeToEvents(){
 		
 		//Create filter for specific events
 		IFilter<IEvent> filter = new IFilter<IEvent>() {
@@ -88,15 +88,13 @@ public class ScannerControllerAgent extends EventAgent
 			IEvent result = sifuture.getNextIntermediateResult();
 			System.out.println("ScannerControllerAgent received "+result.getClass().getName());
 		}
-		
-	return Future.DONE;
 	}
 	
 	
 	/**
 	 * Test method to start the TestGUI and initialize the ActionLister methods of the buttons.
 	 */
-	public IFuture<Void> initializeTestGUI(){
+	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[1];
 		events[0] = new ProductBarcodeScannedEvent(0);
 		TestGUI gui= new TestGUI("ScannerControllerAgent", events);
@@ -109,9 +107,6 @@ public class ScannerControllerAgent extends EventAgent
 				getServiceProvided().sendProductBarCodeScannedEvent(0);
 			}
 		});
-		
-		
-		return Future.DONE;
 	}
 	
 	/**

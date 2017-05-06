@@ -88,7 +88,7 @@ public class CashBoxControllerAgent extends EventAgent
 	}
 	
 	/**
-	 * This method is called after the creation of the agent. 
+	 * This method is called before the deletion of the agent. 
 	 */
 	@AgentKilled
 	public IFuture<Void> kill(){
@@ -121,6 +121,7 @@ public class CashBoxControllerAgent extends EventAgent
 			}
 		};
 		
+		
 		//subscribe
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
@@ -139,6 +140,7 @@ public class CashBoxControllerAgent extends EventAgent
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 		
 		

@@ -17,6 +17,7 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -39,7 +40,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(type=IPrinterControllerService.class, implementation=@Implementation(PrinterControllerService.class))//,
 })
@@ -58,84 +59,82 @@ public class PrinterControllerAgent extends EventAgent
 	 * This method is called after the creation of the agent. 
 	 */
 	@AgentBody 
-	public IFuture<Void> body(){
+	public void body(){
+		
 		subscribeToEvents();
 		
-		return Future.DONE;
 	}
 	 
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public IFuture<Void> subscribeToEvents(){
+	public void subscribeToEvents(){
 		
 		//Create filter for specific events
-				IFilter<IEvent> filter = new IFilter<IEvent>() {
-					
-					@Override
-					public boolean filter(IEvent obj) {
-						if(obj instanceof SaleStartedEvent){
-							return true;
-						}
-						if(obj instanceof RunningTotalChangedEvent){
-							return true;
-						}
-						if(obj instanceof SaleFinishedEvent){
-							return true;
-						}
-						if(obj instanceof CashAmountEnteredEvent){
-							return true;
-						}
-						if(obj instanceof ChangeAmountCalculatedEvent){
-							return true;
-						}
-						if(obj instanceof CashBoxClosedEvent){
-							return true;
-						}
-						if(obj instanceof SaleSuccessEvent){
-							return true;
-						}
-						return false;
-					}
-				};
-				
-				//subscribe
-				ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
-				
-				//waiting for Events
-				while(sifuture.hasNextIntermediateResult()){
-					IEvent result = sifuture.getNextIntermediateResult();
-					System.out.println("PrinterControllerAgent received "+result.getClass().getName());
-					if(result instanceof SaleStartedEvent){
-						//TODO Start printing process
-						System.out.println("PronterController: Start printing process");
-					}
-					if(result instanceof RunningTotalChangedEvent){
-						//TODO print changes
-						System.out.println("PrinterController: Print changes");
-					}
-					if(result instanceof SaleFinishedEvent){
-						//TODO Print total
-						System.out.println("PrinterController: Print total");
-					}
-					if(result instanceof CashAmountEnteredEvent){
-						//TODO Print entered cash amount
-						System.out.println("PrinterController: Print entered cash amount");
-					}
-					if(result instanceof ChangeAmountCalculatedEvent){
-						//TODO Print change amount
-						System.out.println("PrinterController: Print change amount");
-					}
-					if(result instanceof CashBoxClosedEvent){
-						//do nothing and wait for SaleSuccessEvent
-					}
-					if(result instanceof SaleSuccessEvent){
-						//TODO Finish printing
-						System.out.println("PrinterController: Finish printing");
-					}
+		IFilter<IEvent> filter = new IFilter<IEvent>() {
+			
+			@Override
+			public boolean filter(IEvent obj) {
+				if(obj instanceof SaleStartedEvent){
+					return true;
 				}
-				
-			return Future.DONE;
+				if(obj instanceof RunningTotalChangedEvent){
+					return true;
+				}
+				if(obj instanceof SaleFinishedEvent){
+					return true;
+				}
+				if(obj instanceof CashAmountEnteredEvent){
+					return true;
+				}
+				if(obj instanceof ChangeAmountCalculatedEvent){
+					return true;
+				}
+				if(obj instanceof CashBoxClosedEvent){
+					return true;
+				}
+				if(obj instanceof SaleSuccessEvent){
+					return true;
+				}
+				return false;
+			}
+		};
+		
+		//subscribe
+		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
+		
+		//waiting for Events
+		while(sifuture.hasNextIntermediateResult()){
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("PrinterControllerAgent received "+result.getClass().getName());
+			if(result instanceof SaleStartedEvent){
+				//TODO Start printing process
+				System.out.println("PronterController: Start printing process");
+			}
+			if(result instanceof RunningTotalChangedEvent){
+				//TODO print changes
+				System.out.println("PrinterController: Print changes");
+			}
+			if(result instanceof SaleFinishedEvent){
+				//TODO Print total
+				System.out.println("PrinterController: Print total");
+			}
+			if(result instanceof CashAmountEnteredEvent){
+				//TODO Print entered cash amount
+				System.out.println("PrinterController: Print entered cash amount");
+			}
+			if(result instanceof ChangeAmountCalculatedEvent){
+				//TODO Print change amount
+				System.out.println("PrinterController: Print change amount");
+			}
+			if(result instanceof CashBoxClosedEvent){
+				//do nothing and wait for SaleSuccessEvent
+			}
+			if(result instanceof SaleSuccessEvent){
+				//TODO Finish printing
+				System.out.println("PrinterController: Finish printing");
+			}
+		}
 	}
 	
 	/**

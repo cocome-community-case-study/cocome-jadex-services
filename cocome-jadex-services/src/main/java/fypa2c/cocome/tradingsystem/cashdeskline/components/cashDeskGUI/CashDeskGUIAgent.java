@@ -16,6 +16,7 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
+import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
@@ -37,7 +38,7 @@ import jadex.micro.annotation.RequiredServices;
  *
  * @author Florian Abt
  */
-@Agent
+@Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(type=ICashDeskGUIService.class, implementation=@Implementation(CashDeskGUIService.class))//,
 })
@@ -56,71 +57,69 @@ public class CashDeskGUIAgent extends EventAgent
 	 * This method is called after the creation of the agent. 
 	 */
 	@AgentBody
-	public IFuture<Void> body(){
+	public void body(){
+		
 		subscribeToEvents();
 		
-		return Future.DONE;
 	}
 	 
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
-	public IFuture<Void> subscribeToEvents(){
+	public void subscribeToEvents(){
 		
 		//Create filter for specific events
-				IFilter<IEvent> filter = new IFilter<IEvent>() {
-					
-					@Override
-					public boolean filter(IEvent obj) {
-						if(obj instanceof SaleStartedEvent){
-							return true;
-						}
-						if(obj instanceof RunningTotalChangedEvent){
-							return true;
-						}
-						if(obj instanceof CashAmountEnteredEvent){
-							return true;
-						}
-						if(obj instanceof SaleSuccessEvent){
-							return true;
-						}
-						if(obj instanceof InvalidCreditCardEvent){
-							return true;
-						}
-						return false;
-					}
-				};
-				
-				//subscribe
-				ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
-				
-				//waiting for Events
-				while(sifuture.hasNextIntermediateResult()){
-					IEvent result = sifuture.getNextIntermediateResult();
-					System.out.println("CashDeskGUIAgent received "+result.getClass().getName());
-					if(result instanceof SaleStartedEvent){
-						//TODO Start GUI "Sale"
-						System.out.println("CashDeskGUI: Satrt GUI \"Sale\"");
-					}
-					if(result instanceof RunningTotalChangedEvent){
-						//TODO Update GUI with selected product information
-						System.out.println("CashDeskGUI: Update GUI with selected product information");
-					}
-					if(result instanceof CashAmountEnteredEvent){
-						//TODO Update GUI with entered cash amount
-						System.out.println("CashDeskGUI: Update GUI with with entered cash amount");
-					}
-					if(result instanceof SaleSuccessEvent){
-						//TODO Exit GUI "Sale"
-						System.out.println("CashDeskGUI: Exit GUI \"Sale\"");
-					}
-					if(result instanceof InvalidCreditCardEvent){
-						//TODO Udate GUI, invalid credit card
-						System.out.println("CashDeskGUI: Udate GUI, invalid credit card");
-					}
+		IFilter<IEvent> filter = new IFilter<IEvent>() {
+			
+			@Override
+			public boolean filter(IEvent obj) {
+				if(obj instanceof SaleStartedEvent){
+					return true;
 				}
-				
-			return Future.DONE;
+				if(obj instanceof RunningTotalChangedEvent){
+					return true;
+				}
+				if(obj instanceof CashAmountEnteredEvent){
+					return true;
+				}
+				if(obj instanceof SaleSuccessEvent){
+					return true;
+				}
+				if(obj instanceof InvalidCreditCardEvent){
+					return true;
+				}
+				return false;
+			}
+		};
+		
+		//subscribe
+		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
+		
+		//waiting for Events
+		while(sifuture.hasNextIntermediateResult()){
+			IEvent result = sifuture.getNextIntermediateResult();
+			System.out.println("CashDeskGUIAgent received "+result.getClass().getName());
+			if(result instanceof SaleStartedEvent){
+				//TODO Start GUI "Sale"
+				System.out.println("CashDeskGUI: Satrt GUI \"Sale\"");
+			}
+			if(result instanceof RunningTotalChangedEvent){
+				//TODO Update GUI with selected product information
+				System.out.println("CashDeskGUI: Update GUI with selected product information");
+			}
+			if(result instanceof CashAmountEnteredEvent){
+				//TODO Update GUI with entered cash amount
+				System.out.println("CashDeskGUI: Update GUI with with entered cash amount");
+			}
+			if(result instanceof SaleSuccessEvent){
+				//TODO Exit GUI "Sale"
+				System.out.println("CashDeskGUI: Exit GUI \"Sale\"");
+			}
+			if(result instanceof InvalidCreditCardEvent){
+				//TODO Udate GUI, invalid credit card
+				System.out.println("CashDeskGUI: Udate GUI, invalid credit card");
+			}
+		}
 	}
 	
 	/**
