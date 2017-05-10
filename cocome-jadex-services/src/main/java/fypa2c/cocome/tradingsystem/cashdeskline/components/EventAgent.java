@@ -1,13 +1,5 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import jadex.bridge.service.RequiredServiceInfo;
@@ -17,7 +9,6 @@ import jadex.commons.Boolean3;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.Agent;
-import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentFeature;
 import jadex.micro.annotation.AgentKilled;
 import jadex.micro.annotation.Binding;
@@ -76,7 +67,7 @@ public class EventAgent {
 	 * Prints a log message in the console identified by the log name of the class.
 	 * @param message
 	 */
-	protected void printInfoLog(String message){
+	public void printInfoLog(String message){
 		System.out.println(log+": "+message);
 	}
 	

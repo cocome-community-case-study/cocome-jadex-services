@@ -8,8 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
-import jadex.commons.future.ISubscriptionIntermediateFuture;
-import jadex.commons.future.IntermediateFuture;
 
 /**
  * Test class which creates a GUI to test the sending and receiving of events 

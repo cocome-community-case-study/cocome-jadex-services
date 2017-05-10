@@ -15,13 +15,6 @@ import jadex.commons.future.ISubscriptionIntermediateFuture;
  */
 //TODO Add store channel
 public interface IEventBusService {
-
-//	/**
-//	 * Subscribe to an event to be notified if the event happens.
-//	 * @param event : The event to be listened
-//	 * @return the IntermediateFuture, so the subscriber can listen to an event
-//	 */
-//	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvent(IEvent event);
 	
 	/**
 	 * Subscribe to all events to be notified if an event happens.

@@ -1,21 +1,17 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI;
 
 import java.util.Collection;
+
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
-import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.InvalidCreditCardEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.RunningTotalChangedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
 import jadex.bridge.IInternalAccess;
-import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
-import jadex.bridge.service.component.IRequiredServicesFeature;
-import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
@@ -25,13 +21,9 @@ import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
-import jadex.micro.annotation.AgentFeature;
-import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
-import jadex.micro.annotation.RequiredService;
-import jadex.micro.annotation.RequiredServices;
 
 /**
  * This agent represents the graphical user interface of a cash desk which shows the different information to the user.
@@ -98,30 +90,52 @@ public class CashDeskGUIAgent extends EventAgent
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
 		//waiting for Events
-		while(sifuture.hasNextIntermediateResult()){
-			IEvent result = sifuture.getNextIntermediateResult();
-			printInfoLog("Received "+result.getClass().getName());
-			if(result instanceof SaleStartedEvent){
-				//TODO Start GUI "Sale"
-				printInfoLog("Satrt GUI \"Sale\"");
+		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
+			
+			@Override
+			public void exceptionOccurred(Exception exception) {
+				printInfoLog("Exception occurred");
+				exception.printStackTrace();
+				
 			}
-			if(result instanceof RunningTotalChangedEvent){
-				//TODO Update GUI with selected product information
-				printInfoLog("Update GUI with selected product information");
+			
+			@Override
+			public void resultAvailable(Collection<IEvent> result) {
+				printInfoLog("Received IEvent collection");
+				
 			}
-			if(result instanceof CashAmountEnteredEvent){
-				//TODO Update GUI with entered cash amount
-				printInfoLog("Update GUI with with entered cash amount");
+			
+			@Override
+			public void intermediateResultAvailable(IEvent result) {
+				printInfoLog("Received "+result.getClass().getName());
+				if(result instanceof SaleStartedEvent){
+					//TODO Start GUI "Sale"
+					printInfoLog("Start GUI \"Sale\"");
+				}
+				if(result instanceof RunningTotalChangedEvent){
+					//TODO Update GUI with selected product information
+					printInfoLog("Update GUI with selected product information");
+				}
+				if(result instanceof CashAmountEnteredEvent){
+					//TODO Update GUI with entered cash amount
+					printInfoLog("Update GUI with with entered cash amount");
+				}
+				if(result instanceof SaleSuccessEvent){
+					//TODO Exit GUI "Sale"
+					printInfoLog("Exit GUI \"Sale\"");
+				}
+				if(result instanceof InvalidCreditCardEvent){
+					//TODO Udate GUI, invalid credit card
+					printInfoLog("Udate GUI, invalid credit card");
+				}
 			}
-			if(result instanceof SaleSuccessEvent){
-				//TODO Exit GUI "Sale"
-				printInfoLog("Exit GUI \"Sale\"");
+			
+			@Override
+			public void finished() {
+				printInfoLog("IntermediateFuture finished");
+				
 			}
-			if(result instanceof InvalidCreditCardEvent){
-				//TODO Udate GUI, invalid credit card
-				printInfoLog("Udate GUI, invalid credit card");
-			}
-		}
+		});
 	}
 	
 	/**

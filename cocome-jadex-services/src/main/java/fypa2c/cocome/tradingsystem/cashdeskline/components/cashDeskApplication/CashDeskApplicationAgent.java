@@ -2,6 +2,8 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
+
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
@@ -21,23 +23,19 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleRegisteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
 import jadex.bridge.IInternalAccess;
-import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
-import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
+import jadex.commons.future.IIntermediateResultListener;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
-import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
-import jadex.micro.annotation.RequiredService;
-import jadex.micro.annotation.RequiredServices;
 
 /**
  * This agent represents the cash desk application.  
@@ -115,54 +113,77 @@ public class CashDeskApplicationAgent extends EventAgent {
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
 		//waiting for Events
-		while(sifuture.hasNextIntermediateResult()){
-			IEvent result = sifuture.getNextIntermediateResult();
-			printInfoLog("Received "+result.getClass().getName());
-			if(result instanceof SaleStartedEvent){
-				//TODO Start process "Product Selection"
-				printInfoLog("Start process \"Product Selection\"");
+		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
+			
+			@Override
+			public void exceptionOccurred(Exception exception) {
+				printInfoLog("Exception occurred");
+				exception.printStackTrace();
+				
 			}
-			if(result instanceof ProductBarcodeScannedEvent){
-				//TODO Add product to shopping cart if it is in stock (getProductWithStockItem)
-				printInfoLog("Add product to shopping cart if it's in stock");
-				getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
+			
+			@Override
+			public void resultAvailable(Collection<IEvent> result) {
+				printInfoLog("Received IEvent collection");
+				
 			}
-			if(result instanceof SaleFinishedEvent){
-				//TODO Finish process "Product Selection"
-				printInfoLog("Finish process \"Product Selection\"");
+			
+			@Override
+			public void intermediateResultAvailable(IEvent result) {
+				printInfoLog("Received "+result.getClass().getName());
+				if(result instanceof SaleStartedEvent){
+					//TODO Start process "Product Selection"
+					printInfoLog("Start process \"Product Selection\"");
+				}
+				if(result instanceof ProductBarcodeScannedEvent){
+					//TODO Add product to shopping cart if it is in stock (getProductWithStockItem)
+					printInfoLog("Add product to shopping cart if it's in stock");
+					getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
+				}
+				if(result instanceof SaleFinishedEvent){
+					//TODO Finish process "Product Selection"
+					printInfoLog("Finish process \"Product Selection\"");
+				}
+				if(result instanceof PaymentModeSelectedEvent){
+					//TODO Start process "Cash Payment" or "Card Payment"
+					printInfoLog("Start process \"Cash Payment\" or \"Card Payment\"");
+				}
+				if(result instanceof CashAmountEnteredEvent){
+					//TODO Calculate (new due amount or) change amount
+					printInfoLog("Calculate (new due amount or) change amount");
+					getServiceProvided().sendChangeAmountCalculatedEvent(0);
+				}
+				if(result instanceof CashBoxClosedEvent){
+					//TODO Update inventory and register sale
+					printInfoLog("Update inventory and register sale");
+					getServiceProvided().sendSaleSuccessEvent();
+					getServiceProvided().sendAccountSaleEvent(null);
+					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+				}
+				if(result instanceof CreditCardScannedEvent){
+					//TODO Store credit card info and wait for CreditCardPinEnteredEvent
+					printInfoLog("Store credit card info and wait for CreditCardPinEnteredEvent");
+				}
+				if(result instanceof CreditCardPinEnteredEvent){
+					//TODO valdiateCard (How to realize the Bank?)
+					printInfoLog("validate Card");
+					//If Card is invalid, send InvalidCreditCardEvent()
+					//getServiceProvided().sendInvalidCardEvent(null);
+					//else
+					printInfoLog("if Card is valid, finish payment process successfully");
+					getServiceProvided().sendSaleSuccessEvent();
+					getServiceProvided().sendAccountSaleEvent(null);
+					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+				}
+				
 			}
-			if(result instanceof PaymentModeSelectedEvent){
-				//TODO Start process "Cash Payment" or "Card Payment"
-				printInfoLog("Start process \"Cash Payment\" or \"Card Payment\"");
+			
+			@Override
+			public void finished() {
+				printInfoLog("IntermediateFuture finished");
+				
 			}
-			if(result instanceof CashAmountEnteredEvent){
-				//TODO Calculate (new due amount or) change amount
-				printInfoLog("Calculate (new due amount or) change amount");
-				getServiceProvided().sendChangeAmountCalculatedEvent(0);
-			}
-			if(result instanceof CashBoxClosedEvent){
-				//TODO Update inventory and register sale
-				printInfoLog("Update inventory and register sale");
-				getServiceProvided().sendSaleSuccessEvent();
-				getServiceProvided().sendAccountSaleEvent(null);
-				getServiceProvided().sendSaleRegisteredEvent(null, null, null);
-			}
-			if(result instanceof CreditCardScannedEvent){
-				//TODO Store credit card info and wait for CreditCardPinEnteredEvent
-				printInfoLog("Store credit card info and wait for CreditCardPinEnteredEvent");
-			}
-			if(result instanceof CreditCardPinEnteredEvent){
-				//TODO valdiateCard (How to realise the Bank?)
-				printInfoLog("validate Card");
-				//If Card is invalid, send InvalidCreditCardEvent()
-				//getServiceProvided().sendInvalidCardEvent(null);
-				//else
-				printInfoLog("if Card is valid, finish payment process successfully");
-				getServiceProvided().sendSaleSuccessEvent();
-				getServiceProvided().sendAccountSaleEvent(null);
-				getServiceProvided().sendSaleRegisteredEvent(null, null, null);
-			}
-		}
+		});
 	}
 	
 	/**

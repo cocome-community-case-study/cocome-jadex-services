@@ -3,13 +3,11 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
-import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.annotation.ServiceComponent;
-import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 
 /**
@@ -45,7 +43,7 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 
 	@Override
 	public IFuture<Void> sendCashAmountEnteredEvent(double amount, boolean finalInput) {
-		//TODO finalInput is included  in CAEEvent in the UseCase 1 specification. Don't know if this is really necessary
+		//TODO final Input is included  in CAEEvent in the UseCase 1 specification. Don't know if this is really necessary
 		return component.publishEvent(new CashAmountEnteredEvent(amount, finalInput));
 	}
 

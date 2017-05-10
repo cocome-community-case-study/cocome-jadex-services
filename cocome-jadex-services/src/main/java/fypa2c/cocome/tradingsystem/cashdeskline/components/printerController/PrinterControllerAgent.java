@@ -1,8 +1,8 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.printerController;
 
 import java.util.Collection;
+
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cardReaderController.ICardReaderControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
@@ -13,10 +13,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
 import jadex.bridge.IInternalAccess;
-import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
-import jadex.bridge.service.component.IRequiredServicesFeature;
-import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
@@ -26,13 +23,9 @@ import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
-import jadex.micro.annotation.AgentFeature;
-import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
-import jadex.micro.annotation.RequiredService;
-import jadex.micro.annotation.RequiredServices;
 
 /**
  * This agent represents the printer of a cash desk in the trading system.
@@ -106,37 +99,60 @@ public class PrinterControllerAgent extends EventAgent
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
 		//waiting for Events
-		while(sifuture.hasNextIntermediateResult()){
-			IEvent result = sifuture.getNextIntermediateResult();
-			printInfoLog("Received "+result.getClass().getName());
-			if(result instanceof SaleStartedEvent){
-				//TODO Start printing process
-				printInfoLog("Start printing process");
+		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
+			
+			@Override
+			public void exceptionOccurred(Exception exception) {
+				printInfoLog("Exception occurred");
+				exception.printStackTrace();
+				
 			}
-			if(result instanceof RunningTotalChangedEvent){
-				//TODO print changes
-				printInfoLog("Print changes");
+			
+			@Override
+			public void resultAvailable(Collection<IEvent> result) {
+				printInfoLog("Received IEvent collection");
+				
 			}
-			if(result instanceof SaleFinishedEvent){
-				//TODO Print total
-				printInfoLog("Print total");
+			
+			@Override
+			public void intermediateResultAvailable(IEvent result) {
+				printInfoLog("Received "+result.getClass().getName());
+				if(result instanceof SaleStartedEvent){
+					//TODO Start printing process
+					printInfoLog("Start printing process");
+				}
+				if(result instanceof RunningTotalChangedEvent){
+					//TODO print changes
+					printInfoLog("Print changes");
+				}
+				if(result instanceof SaleFinishedEvent){
+					//TODO Print total
+					printInfoLog("Print total");
+				}
+				if(result instanceof CashAmountEnteredEvent){
+					//TODO Print entered cash amount
+					printInfoLog("Print entered cash amount");
+				}
+				if(result instanceof ChangeAmountCalculatedEvent){
+					//TODO Print change amount
+					printInfoLog("Print change amount");
+				}
+				if(result instanceof CashBoxClosedEvent){
+					//do nothing and wait for SaleSuccessEvent
+				}
+				if(result instanceof SaleSuccessEvent){
+					//TODO Finish printing
+					printInfoLog("Finish printing");
+				}
+				
 			}
-			if(result instanceof CashAmountEnteredEvent){
-				//TODO Print entered cash amount
-				printInfoLog("Print entered cash amount");
+			
+			@Override
+			public void finished() {
+				printInfoLog("IntermediateFuture finished");
+				
 			}
-			if(result instanceof ChangeAmountCalculatedEvent){
-				//TODO Print change amount
-				printInfoLog("Print change amount");
-			}
-			if(result instanceof CashBoxClosedEvent){
-				//do nothing and wait for SaleSuccessEvent
-			}
-			if(result instanceof SaleSuccessEvent){
-				//TODO Finish printing
-				printInfoLog("Finish printing");
-			}
-		}
+		});
 	}
 	
 	/**

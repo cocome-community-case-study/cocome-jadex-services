@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
@@ -18,9 +16,8 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
-import jadex.bridge.service.RequiredServiceInfo;
+import jadex.bridge.SFuture;
 import jadex.bridge.service.component.IProvidedServicesFeature;
-import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
@@ -30,13 +27,9 @@ import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
-import jadex.micro.annotation.AgentKilled;
-import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
-import jadex.micro.annotation.RequiredService;
-import jadex.micro.annotation.RequiredServices;
 
 /**
  * This agent represents the CashBox of a cash desk in the trading system.
@@ -97,6 +90,7 @@ public class CashBoxControllerAgent extends EventAgent
 		//subscribe
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
+		SFuture.avoidCallTimeouts((Future<?>) sifuture, agent);
 		
 		//waiting for Events
 		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
@@ -104,6 +98,7 @@ public class CashBoxControllerAgent extends EventAgent
 			@Override
 			public void exceptionOccurred(Exception exception) {
 				printInfoLog("Exception occurred");
+				exception.printStackTrace();
 			}
 			
 			@Override
@@ -128,23 +123,6 @@ public class CashBoxControllerAgent extends EventAgent
 				printInfoLog("IntermediateResult finished");
 			}
 		});
-//		try{
-//			while(sifuture.hasNextIntermediateResult()){
-//				IEvent result = sifuture.getNextIntermediateResult();
-//				System.out.println("CashBoxControllerAgent received "+result.getClass().getName());
-//				if (result instanceof ChangeAmountCalculatedEvent) {
-//					//TODO open CashBox
-//					System.out.println("CashBoxController: Open CashBox");
-//				} else {
-//					//if more Events are added to the filter, describe here what the agent should do if it receives the event
-//				}
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			
-//		}
-		
-		
 	}
 	
 	
@@ -242,7 +220,6 @@ public class CashBoxControllerAgent extends EventAgent
 		try {
 			Thread.sleep(4000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		agent.getExternalAccess().scheduleStep(step);
