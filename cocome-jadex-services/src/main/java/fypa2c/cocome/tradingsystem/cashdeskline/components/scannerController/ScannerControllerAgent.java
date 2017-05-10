@@ -32,7 +32,7 @@ import jadex.micro.annotation.ProvidedServices;
  */
 @Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
-	@ProvidedService(type=IScannerControllerService.class, implementation=@Implementation(ScannerControllerService.class))//,
+	@ProvidedService(name="scannerController",type=IScannerControllerService.class, implementation=@Implementation(ScannerControllerService.class))//,
 })
 public class ScannerControllerAgent extends EventAgent
 {
@@ -132,6 +132,6 @@ public class ScannerControllerAgent extends EventAgent
 	 */
 	private IScannerControllerService getServiceProvided()
 	{
-		return (IScannerControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("CardReaderController");
+		return (IScannerControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("scannerController");
 	}
 }

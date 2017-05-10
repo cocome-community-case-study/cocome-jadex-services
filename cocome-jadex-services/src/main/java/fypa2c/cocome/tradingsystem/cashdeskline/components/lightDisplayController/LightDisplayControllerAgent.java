@@ -28,7 +28,7 @@ import jadex.micro.annotation.ProvidedServices;
  */
 @Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
-	@ProvidedService(type=ILightDisplayControllerService.class, implementation=@Implementation(LightDisplayControllerService.class))//,
+	@ProvidedService(name="lightDisplayController", type=ILightDisplayControllerService.class, implementation=@Implementation(LightDisplayControllerService.class))//,
 })
 public class LightDisplayControllerAgent extends EventAgent
 {
@@ -105,7 +105,7 @@ public class LightDisplayControllerAgent extends EventAgent
 	 */
 	private ILightDisplayControllerService getServiceProvided()
 	{
-		return (ILightDisplayControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("CardReaderController");
+		return (ILightDisplayControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("lightDisplayController");
 	}
 
 }

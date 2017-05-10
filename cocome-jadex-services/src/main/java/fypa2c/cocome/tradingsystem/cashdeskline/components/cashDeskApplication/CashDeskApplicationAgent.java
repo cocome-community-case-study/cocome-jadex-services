@@ -257,6 +257,6 @@ public class CashDeskApplicationAgent extends EventAgent {
 	 */
 	private ICashDeskApplicationService getServiceProvided()
 	{
-		return (ICashDeskApplicationService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
+		return (ICashDeskApplicationService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashDeskApplication");
 	}
 }

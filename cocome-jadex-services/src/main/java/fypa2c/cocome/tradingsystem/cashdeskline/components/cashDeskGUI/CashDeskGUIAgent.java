@@ -32,7 +32,7 @@ import jadex.micro.annotation.ProvidedServices;
  */
 @Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
-	@ProvidedService(type=ICashDeskGUIService.class, implementation=@Implementation(CashDeskGUIService.class))//,
+	@ProvidedService(name="cashDeskGUI",type=ICashDeskGUIService.class, implementation=@Implementation(CashDeskGUIService.class))//,
 })
 public class CashDeskGUIAgent extends EventAgent
 {
@@ -144,7 +144,7 @@ public class CashDeskGUIAgent extends EventAgent
 	 */
 	private ICashDeskGUIService getServiceProvided()
 	{
-		return (ICashDeskGUIService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
+		return (ICashDeskGUIService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashDeskGUI");
 	}
 
 }

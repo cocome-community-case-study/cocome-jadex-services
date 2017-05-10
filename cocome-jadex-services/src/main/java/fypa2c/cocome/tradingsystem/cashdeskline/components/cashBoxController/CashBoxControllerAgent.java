@@ -190,41 +190,4 @@ public class CashBoxControllerAgent extends EventAgent
 	{
 		return (ICashBoxControllerService)agent.getComponentFeature(IProvidedServicesFeature.class).getProvidedService("cashBoxController");
 	}
-	
-//---------------------------------------Test Methods-------------------------------
-	
-	public void startButtonPressed()
-	{
-		getServiceProvided().sendSaleStartedEvent();
-	}
-	
-	/*
-	 * This method is only for testing the system during development.
-	 * It simulates a sale process.
-	 */
-	public void testRun()
-	{
-		System.out.println("testRun() called");
-		IComponentStep<Void> step =  new IComponentStep<Void>() {
-
-			@Override
-			public IFuture<Void> execute(IInternalAccess ia) {
-				
-				startButtonPressed();
-				System.out.println("startButton pressed");
-				return Future.DONE;
-			}
-		};
-		
-		
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		agent.getExternalAccess().scheduleStep(step);
-		System.out.println("testRun() finished");
-		startButtonPressed();
-	}
-	
 }
