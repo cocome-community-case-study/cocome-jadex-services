@@ -17,6 +17,7 @@ import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
+import jadex.commons.future.IntermediateFuture;
 import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.commons.future.TerminationCommand;
 import jadex.micro.annotation.Component;
@@ -75,7 +76,7 @@ public class EventBusService implements IEventBusService{
 	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvents(IFilter<IEvent> filter) {
 		System.out.println("EventBus subscription service recieved an subscription");
 		//new SubscriptionIntermediateFuture for an event
-		final SubscriptionIntermediateFuture<IEvent> sifuture = new SubscriptionIntermediateFuture<IEvent>();
+		SubscriptionIntermediateFuture<IEvent> sifuture = new SubscriptionIntermediateFuture<IEvent>();
 		
 		//Add the subscriber to the subscription list
 		SubscriptionEntry entry = new SubscriptionEntry(filter, sifuture);

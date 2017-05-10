@@ -52,6 +52,8 @@ public class PrinterControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		setLog("PrinterControllerAgent");
+		
 		return Future.DONE;
 	}
 	
@@ -106,33 +108,33 @@ public class PrinterControllerAgent extends EventAgent
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
 			IEvent result = sifuture.getNextIntermediateResult();
-			System.out.println("PrinterControllerAgent received "+result.getClass().getName());
+			printInfoLog("Received "+result.getClass().getName());
 			if(result instanceof SaleStartedEvent){
 				//TODO Start printing process
-				System.out.println("PronterController: Start printing process");
+				printInfoLog("Start printing process");
 			}
 			if(result instanceof RunningTotalChangedEvent){
 				//TODO print changes
-				System.out.println("PrinterController: Print changes");
+				printInfoLog("Print changes");
 			}
 			if(result instanceof SaleFinishedEvent){
 				//TODO Print total
-				System.out.println("PrinterController: Print total");
+				printInfoLog("Print total");
 			}
 			if(result instanceof CashAmountEnteredEvent){
 				//TODO Print entered cash amount
-				System.out.println("PrinterController: Print entered cash amount");
+				printInfoLog("Print entered cash amount");
 			}
 			if(result instanceof ChangeAmountCalculatedEvent){
 				//TODO Print change amount
-				System.out.println("PrinterController: Print change amount");
+				printInfoLog("Print change amount");
 			}
 			if(result instanceof CashBoxClosedEvent){
 				//do nothing and wait for SaleSuccessEvent
 			}
 			if(result instanceof SaleSuccessEvent){
 				//TODO Finish printing
-				System.out.println("PrinterController: Finish printing");
+				printInfoLog("Finish printing");
 			}
 		}
 	}

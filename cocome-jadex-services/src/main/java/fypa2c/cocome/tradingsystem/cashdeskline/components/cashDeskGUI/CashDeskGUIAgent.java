@@ -50,6 +50,8 @@ public class CashDeskGUIAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		setLog("CashDeskGUIAgent");
+		
 		return Future.DONE;
 	}
 	
@@ -98,26 +100,26 @@ public class CashDeskGUIAgent extends EventAgent
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
 			IEvent result = sifuture.getNextIntermediateResult();
-			System.out.println("CashDeskGUIAgent received "+result.getClass().getName());
+			printInfoLog("Received "+result.getClass().getName());
 			if(result instanceof SaleStartedEvent){
 				//TODO Start GUI "Sale"
-				System.out.println("CashDeskGUI: Satrt GUI \"Sale\"");
+				printInfoLog("Satrt GUI \"Sale\"");
 			}
 			if(result instanceof RunningTotalChangedEvent){
 				//TODO Update GUI with selected product information
-				System.out.println("CashDeskGUI: Update GUI with selected product information");
+				printInfoLog("Update GUI with selected product information");
 			}
 			if(result instanceof CashAmountEnteredEvent){
 				//TODO Update GUI with entered cash amount
-				System.out.println("CashDeskGUI: Update GUI with with entered cash amount");
+				printInfoLog("Update GUI with with entered cash amount");
 			}
 			if(result instanceof SaleSuccessEvent){
 				//TODO Exit GUI "Sale"
-				System.out.println("CashDeskGUI: Exit GUI \"Sale\"");
+				printInfoLog("Exit GUI \"Sale\"");
 			}
 			if(result instanceof InvalidCreditCardEvent){
 				//TODO Udate GUI, invalid credit card
-				System.out.println("CashDeskGUI: Udate GUI, invalid credit card");
+				printInfoLog("Udate GUI, invalid credit card");
 			}
 		}
 	}

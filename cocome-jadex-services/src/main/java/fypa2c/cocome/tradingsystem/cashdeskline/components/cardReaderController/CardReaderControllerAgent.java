@@ -55,6 +55,7 @@ public class CardReaderControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		setLog("CardReaderControllerAgent");
 		
 		return Future.DONE;
 	}
@@ -87,10 +88,27 @@ public class CardReaderControllerAgent extends EventAgent
 		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
 		
 		//waiting for Events
-		while(sifuture.hasNextIntermediateResult()){
-			IEvent result = sifuture.getNextIntermediateResult();
-			System.out.println("CardReaderController received "+result.getClass().getName());
-		}
+		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
+			
+			@Override
+			public void exceptionOccurred(Exception exception) {}
+			
+			@Override
+			public void resultAvailable(Collection<IEvent> result) {}
+			
+			@Override
+			public void intermediateResultAvailable(IEvent result) {
+				printInfoLog("Received "+result.getClass().getName());
+				
+			}
+			
+			@Override
+			public void finished() {}
+		});
+//		while(sifuture.hasNextIntermediateResult()){
+//			IEvent result = sifuture.getNextIntermediateResult();
+//			System.out.println("CardReaderController received "+result.getClass().getName());
+//		}
 	}
 	
 	/**

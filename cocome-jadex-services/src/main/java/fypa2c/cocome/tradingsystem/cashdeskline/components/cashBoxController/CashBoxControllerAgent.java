@@ -3,8 +3,8 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
+import org.apache.commons.logging.Log;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
@@ -12,39 +12,26 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusSer
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
-import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardPinEnteredEvent;
-import fypa2c.cocome.tradingsystem.cashdeskline.events.CreditCardScannedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.IComponentStep;
 import jadex.bridge.IInternalAccess;
-import jadex.bridge.SFuture;
-import jadex.bridge.component.IExecutionFeature;
 import jadex.bridge.service.RequiredServiceInfo;
-import jadex.bridge.service.annotation.Timeout;
 import jadex.bridge.service.component.IProvidedServicesFeature;
-import jadex.bridge.service.component.IRequiredServicesFeature;
-import jadex.bridge.service.types.cms.IComponentDescription;
 import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IIntermediateResultListener;
-import jadex.commons.future.IResultListener;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
-import jadex.commons.future.IntermediateFuture;
-import jadex.commons.future.SubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
-import jadex.micro.annotation.AgentFeature;
 import jadex.micro.annotation.AgentKilled;
-import jadex.micro.annotation.AgentService;
 import jadex.micro.annotation.Binding;
-import jadex.micro.annotation.Feature;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
@@ -68,7 +55,8 @@ public class CashBoxControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
-
+		setLog("CashBoxControllerAgent");
+		
 		return Future.DONE;
 	}
 	
@@ -83,25 +71,9 @@ public class CashBoxControllerAgent extends EventAgent
 		subscribeToEvents();
 				
 		//testRun();
-		System.out.println("Body ended");
+		printInfoLog("Body ended");
 		
 	}
-	
-	/**
-	 * This method is called before the deletion of the agent. 
-	 */
-	@AgentKilled
-	public IFuture<Void> kill(){
-		
-		System.out.println("Agent killed");
-		
-		return Future.DONE;
-	}
-	
-	
-	
-	
-	
 	
 	
 	/**
@@ -127,21 +99,50 @@ public class CashBoxControllerAgent extends EventAgent
 		
 		
 		//waiting for Events
-		try{
-			while(sifuture.hasNextIntermediateResult()){
-				IEvent result = sifuture.getNextIntermediateResult();
-				System.out.println("CashBoxControllerAgent received "+result.getClass().getName());
+		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
+			
+			@Override
+			public void exceptionOccurred(Exception exception) {
+				printInfoLog("Exception occurred");
+			}
+			
+			@Override
+			public void resultAvailable(Collection<IEvent> result) {
+				printInfoLog("Received IEvent collection");
+			}
+			
+			@Override
+			public void intermediateResultAvailable(IEvent result) {
+				printInfoLog("Received "+result.getClass().getName());
 				if (result instanceof ChangeAmountCalculatedEvent) {
 					//TODO open CashBox
-					System.out.println("CashBoxController: Open CashBox");
+					printInfoLog("Open CashBox");
 				} else {
 					//if more Events are added to the filter, describe here what the agent should do if it receives the event
 				}
+				
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 			
-		}
+			@Override
+			public void finished() {
+				printInfoLog("IntermediateResult finished");
+			}
+		});
+//		try{
+//			while(sifuture.hasNextIntermediateResult()){
+//				IEvent result = sifuture.getNextIntermediateResult();
+//				System.out.println("CashBoxControllerAgent received "+result.getClass().getName());
+//				if (result instanceof ChangeAmountCalculatedEvent) {
+//					//TODO open CashBox
+//					System.out.println("CashBoxController: Open CashBox");
+//				} else {
+//					//if more Events are added to the filter, describe here what the agent should do if it receives the event
+//				}
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			
+//		}
 		
 		
 	}

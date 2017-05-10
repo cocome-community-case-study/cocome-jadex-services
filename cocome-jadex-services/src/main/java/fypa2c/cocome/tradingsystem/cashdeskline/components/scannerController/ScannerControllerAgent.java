@@ -49,6 +49,7 @@ public class ScannerControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		setLog("ScannerControllerAgent");
 		
 		return Future.DONE;
 	}
@@ -86,7 +87,7 @@ public class ScannerControllerAgent extends EventAgent
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
 			IEvent result = sifuture.getNextIntermediateResult();
-			System.out.println("ScannerControllerAgent received "+result.getClass().getName());
+			printInfoLog("Received "+result.getClass().getName());
 		}
 	}
 	

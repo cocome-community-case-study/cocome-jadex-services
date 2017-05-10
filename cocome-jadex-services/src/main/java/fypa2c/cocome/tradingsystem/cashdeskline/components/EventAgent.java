@@ -19,6 +19,7 @@ import jadex.commons.future.IFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentFeature;
+import jadex.micro.annotation.AgentKilled;
 import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.RequiredService;
 import jadex.micro.annotation.RequiredServices;
@@ -36,9 +37,21 @@ import jadex.micro.annotation.RequiredServices;
 })
 public class EventAgent {
 	
+	private String log;
 
 	@AgentFeature
 	protected IRequiredServicesFeature requiredServicesFeature;
+
+	/**
+	 * This method is called before the deletion of the agent. 
+	 */
+	@AgentKilled
+	public IFuture<Void> kill(){
+		
+		System.out.println(log+": Agent killed");
+		
+		return Future.DONE;
+	}
 	
 	/**
 	 * Publish an event on the EventBus in the cash desk channel.
@@ -50,7 +63,22 @@ public class EventAgent {
 		return Future.DONE;
 	}
 	
+	/**
+	 * Sets the log name of this class.
+	 * The log name is used to identify log messages in the console.
+	 * @param log: name of the class, printed in the console
+	 */
+	protected void setLog(String log){
+		this.log = log;
+	}
 	
+	/**
+	 * Prints a log message in the console identified by the log name of the class.
+	 * @param message
+	 */
+	protected void printInfoLog(String message){
+		System.out.println(log+": "+message);
+	}
 	
 
 }

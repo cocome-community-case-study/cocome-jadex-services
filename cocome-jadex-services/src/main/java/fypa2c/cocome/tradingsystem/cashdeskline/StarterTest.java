@@ -23,14 +23,14 @@ public class StarterTest {
 		
 		config.addComponent(EventBusAgent.class);
 		config.addComponent(CashBoxControllerAgent.class);
-		config.setDebugFutures(true);
-		config.addComponent(CashDeskApplicationAgent.class);
+//		config.addComponent(CashDeskApplicationAgent.class);
 		config.addComponent(CardReaderControllerAgent.class);
-		config.addComponent(CashDeskGUIAgent.class);
-		config.addComponent(LightDisplayControllerAgent.class);
-		config.addComponent(PrinterControllerAgent.class);
-		config.addComponent(ScannerControllerAgent.class);
+//		config.addComponent(CashDeskGUIAgent.class);
+//		config.addComponent(LightDisplayControllerAgent.class);
+//		config.addComponent(PrinterControllerAgent.class);
+//		config.addComponent(ScannerControllerAgent.class);
 		Starter.createPlatform(config).get();
+		config.setDebugFutures(true);
 		//TODO Components are killed after 30 sec, don't know, how to avoid this
 	}
 

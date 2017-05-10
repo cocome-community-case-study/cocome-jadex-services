@@ -46,6 +46,8 @@ public class LightDisplayControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		setLog("LightDisplayControllerAgent");
+		
 		return Future.DONE;
 	}
 	
@@ -78,7 +80,7 @@ public class LightDisplayControllerAgent extends EventAgent
 		//waiting for Events
 		while(sifuture.hasNextIntermediateResult()){
 			IEvent result = sifuture.getNextIntermediateResult();
-			System.out.println("LightDisplayController received "+result.getClass().getName());
+			printInfoLog("Received "+result.getClass().getName());
 		}
 	}
 	
