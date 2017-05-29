@@ -23,6 +23,13 @@ public class TestGUI{
 	
 	private JPanel gridPanel;
 	
+	/**
+	 * Constructor of the TestGUI
+	 * 
+	 * @param title : The title of the GUI displayed to the user.
+	 * @param events : An array of events, for each event a button 
+	 * is displayed at the test GUI.
+	 */
 	public TestGUI(String title, IEvent[] events){
 		frame = new JFrame(title);
 		int wigth = 300;
@@ -40,6 +47,14 @@ public class TestGUI{
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Call this method to get the auto created buttons, 
+	 * so that you can add an action listener to them
+	 * 
+	 * @return an array with all buttons in the order 
+	 * of the events array you set at the creation of 
+	 * this object in the constructor..
+	 */
 	public JButton[] getButtons(){
 		return buttons;
 	}
