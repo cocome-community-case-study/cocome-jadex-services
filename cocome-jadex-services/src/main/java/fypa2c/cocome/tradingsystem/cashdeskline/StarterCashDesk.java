@@ -8,6 +8,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.EventBusAgen
 import fypa2c.cocome.tradingsystem.cashdeskline.components.lightDisplayController.LightDisplayControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.printerController.PrinterControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.ScannerControllerAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.simulationController.SimulationControllerAgent;
 import jadex.base.PlatformConfiguration;
 import jadex.base.Starter;
 
@@ -16,7 +17,7 @@ import jadex.base.Starter;
  * @author Flo
  *
  */
-public class StarterTest {
+public class StarterCashDesk {
 
 	public static void main(String[] args) {
 		PlatformConfiguration config = PlatformConfiguration.getDefault();
@@ -29,6 +30,7 @@ public class StarterTest {
 		config.addComponent(LightDisplayControllerAgent.class);
 		config.addComponent(PrinterControllerAgent.class);
 		config.addComponent(ScannerControllerAgent.class);
+		config.addComponent(SimulationControllerAgent.class);
 		Starter.createPlatform(config).get();
 		config.setDebugFutures(true);
 	}

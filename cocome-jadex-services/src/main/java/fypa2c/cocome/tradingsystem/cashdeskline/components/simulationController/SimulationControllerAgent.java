@@ -1,5 +1,7 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.simulationController;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
@@ -58,7 +60,25 @@ public class SimulationControllerAgent extends EventAgent {
 	public void initializeSimulationGUI() {
 		SimulationGUI gui = new SimulationGUI();
 		
-		// TODO create Simulation GUI
+		gui.getStartButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				printInfoLog("Start simulation");
+				// TODO Start simulation
+				
+			}
+		});
+		
+		gui.getStopButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				printInfoLog("Stop simulation");
+				// TODO Stop simulation
+				
+			}
+		});
 		
 	}
 
