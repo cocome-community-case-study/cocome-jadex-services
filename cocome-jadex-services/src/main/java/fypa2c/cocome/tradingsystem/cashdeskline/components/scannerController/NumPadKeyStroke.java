@@ -35,7 +35,8 @@ public enum NumPadKeyStroke {
 	EIGHT("8"),
 	NINE("9"),
 	COMMA("."),
-	ENTER("ENTER");
+	ENTER("ENTER"),
+	DELETE("DELETE");
 
 	//
 

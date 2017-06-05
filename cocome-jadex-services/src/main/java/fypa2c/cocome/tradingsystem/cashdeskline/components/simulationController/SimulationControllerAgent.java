@@ -106,6 +106,7 @@ public class SimulationControllerAgent extends EventAgent {
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
 				printInfoLog("Received "+result.getClass().getName());
+				//TODO collect statistics
 			}
 			
 			@Override

@@ -39,6 +39,9 @@ public class CashDeskGUIAgent extends EventAgent
 	@Agent
 	protected IInternalAccess agent;
 	
+	//CashDeskGUI
+	CashDeskGUI gui;
+	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
@@ -109,7 +112,15 @@ public class CashDeskGUIAgent extends EventAgent
 			public void intermediateResultAvailable(IEvent result) {
 				printInfoLog("Received "+result.getClass().getName());
 				if(result instanceof SaleStartedEvent){
-					//TODO Start GUI "Sale"
+					if(gui != null){
+						if(!gui.isVisible()){
+							gui.showGUI();
+						}
+					}
+					else{
+						//TODO set CashDeskNumber
+						gui = new CashDeskGUI(1);
+					}
 					printInfoLog("Start GUI \"Sale\"");
 				}
 				if(result instanceof RunningTotalChangedEvent){
