@@ -39,6 +39,9 @@ public class CashDeskGUIAgent extends EventAgent
 	@Agent
 	protected IInternalAccess agent;
 	
+	//Counter of running CashDesks
+	public static volatile int cashdesknumber = 0;
+	
 	//CashDeskGUI
 	CashDeskGUI gui;
 	
@@ -55,11 +58,28 @@ public class CashDeskGUIAgent extends EventAgent
 	 */
 	@AgentBody
 	public void body(){
+		initializeGUI();
 		
 		subscribeToEvents();
 		
 	}
-	 
+	
+	/**
+	 * Creates the Gui of the CashDesk
+	 */
+	private void initializeGUI() {
+		if(gui != null){
+			if(!gui.isVisible()){
+				gui.showGUI();
+			}
+		}
+		else{
+			cashdesknumber++;
+			gui = new CashDeskGUI(cashdesknumber);
+		}
+		
+	}
+
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
@@ -118,8 +138,8 @@ public class CashDeskGUIAgent extends EventAgent
 						}
 					}
 					else{
-						//TODO set CashDeskNumber
-						gui = new CashDeskGUI(1);
+						cashdesknumber++;
+						gui = new CashDeskGUI(cashdesknumber);
 					}
 					printInfoLog("Start GUI \"Sale\"");
 				}

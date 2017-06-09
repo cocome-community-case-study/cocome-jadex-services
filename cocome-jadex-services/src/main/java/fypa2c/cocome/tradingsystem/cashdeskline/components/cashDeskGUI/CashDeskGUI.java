@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.NumPadKeyStroke;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
@@ -31,12 +32,20 @@ public class CashDeskGUI {
 	};
 	
 	//The number pad buttons
-		private JButton[][] buttons = {
-				{new JButton(NumPadKeyStroke.ONE.label()), new JButton(NumPadKeyStroke.TWO.label()), new JButton(NumPadKeyStroke.THREE.label())},
-				{new JButton(NumPadKeyStroke.FOUR.label()), new JButton(NumPadKeyStroke.FIVE.label()), new JButton(NumPadKeyStroke.SIX.label())},
-				{new JButton(NumPadKeyStroke.SEVEN.label()), new JButton(NumPadKeyStroke.EIGHT.label()), new JButton(NumPadKeyStroke.NINE.label())},
-				{new JButton(NumPadKeyStroke.DELETE.label()), new JButton(NumPadKeyStroke.COMMA.label()), new JButton(NumPadKeyStroke.ENTER.label())}
-		};
+	private JButton[][] buttons = {
+			{new JButton(NumPadKeyStroke.ONE.label()), new JButton(NumPadKeyStroke.TWO.label()), new JButton(NumPadKeyStroke.THREE.label())},
+			{new JButton(NumPadKeyStroke.FOUR.label()), new JButton(NumPadKeyStroke.FIVE.label()), new JButton(NumPadKeyStroke.SIX.label())},
+			{new JButton(NumPadKeyStroke.SEVEN.label()), new JButton(NumPadKeyStroke.EIGHT.label()), new JButton(NumPadKeyStroke.NINE.label())},
+			{new JButton(NumPadKeyStroke.DELETE.label()), new JButton(NumPadKeyStroke.COMMA.label()), new JButton(NumPadKeyStroke.ENTER.label())}
+	};
+	
+	//Barcode textfield panel
+	private JPanel barCodeTextFieldPanel = new JPanel();
+	
+	//TODO Use JFormattedTextField with formatter
+	//TextField for barcode input
+	private JTextField barCodeTextField = new JTextField();
+	
 	
 	
 	
@@ -60,9 +69,13 @@ public class CashDeskGUI {
 			}
 			mainPanel.add(rows[row]);
 		}
-		
-		
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		
+		//Set barcode textfield
+		barCodeTextFieldPanel.setLayout(new GridLayout(1, 1));
+		barCodeTextFieldPanel.add(barCodeTextField);
+		frame.getContentPane().add(barCodeTextFieldPanel, BorderLayout.NORTH);		
+		
 		frame.setVisible(true);
 	}
 
