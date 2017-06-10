@@ -39,7 +39,7 @@ public class CashDeskGUI {
 			{new JButton(NumPadKeyStroke.ONE.label()), new JButton(NumPadKeyStroke.TWO.label()), new JButton(NumPadKeyStroke.THREE.label())},
 			{new JButton(NumPadKeyStroke.FOUR.label()), new JButton(NumPadKeyStroke.FIVE.label()), new JButton(NumPadKeyStroke.SIX.label())},
 			{new JButton(NumPadKeyStroke.SEVEN.label()), new JButton(NumPadKeyStroke.EIGHT.label()), new JButton(NumPadKeyStroke.NINE.label())},
-			{new JButton(NumPadKeyStroke.DELETE.label()), new JButton(NumPadKeyStroke.COMMA.label()), new JButton(NumPadKeyStroke.ENTER.label())}
+			{new JButton(NumPadKeyStroke.DELETE.label()), new JButton(NumPadKeyStroke.ZERO.label()), new JButton(NumPadKeyStroke.ENTER.label())}
 	};
 	
 	//Barcode textfield panel
@@ -90,6 +90,15 @@ public class CashDeskGUI {
 	 */
 	public JButton[][] getButtons() {
 		return buttons;
+	}
+	
+	/**
+	 * Call this method to get the BarCodeTextField for input and output 
+	 * 
+	 * @return
+	 */
+	public JFormattedTextField getBarCodeTextField(){
+		return barCodeTextField;
 	}
 	
 	/**
