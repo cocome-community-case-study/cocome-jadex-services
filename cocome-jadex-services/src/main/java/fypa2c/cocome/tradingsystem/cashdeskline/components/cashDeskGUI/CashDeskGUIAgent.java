@@ -48,6 +48,8 @@ public class CashDeskGUIAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("CashDeskGUIAgent");
 		
 		return Future.DONE;

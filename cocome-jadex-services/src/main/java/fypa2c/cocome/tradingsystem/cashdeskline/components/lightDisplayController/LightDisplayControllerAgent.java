@@ -38,6 +38,8 @@ public class LightDisplayControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("LightDisplayControllerAgent");
 		
 		return Future.DONE;

@@ -48,6 +48,8 @@ public class CashBoxControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("CashBoxControllerAgent");
 		
 		return Future.DONE;
@@ -59,7 +61,9 @@ public class CashBoxControllerAgent extends EventAgent
 	@AgentBody
 	public void body(){
 		
-		initializeTestGUI();
+		if(isTestON()){
+			initializeTestGUI();
+		}
 		
 		subscribeToEvents();
 				

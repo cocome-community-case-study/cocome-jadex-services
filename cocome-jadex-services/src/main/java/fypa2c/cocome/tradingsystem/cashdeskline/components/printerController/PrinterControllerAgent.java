@@ -45,6 +45,8 @@ public class PrinterControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("PrinterControllerAgent");
 		
 		return Future.DONE;

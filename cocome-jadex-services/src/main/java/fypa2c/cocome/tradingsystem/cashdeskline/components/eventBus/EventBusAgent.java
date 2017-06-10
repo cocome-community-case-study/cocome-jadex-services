@@ -25,6 +25,8 @@ public class EventBusAgent extends EventAgent {
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("EventBusAgent");
 		
 		return Future.DONE;

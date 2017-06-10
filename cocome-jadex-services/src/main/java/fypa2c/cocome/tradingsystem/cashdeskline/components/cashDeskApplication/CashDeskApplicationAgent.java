@@ -54,6 +54,8 @@ public class CashDeskApplicationAgent extends EventAgent {
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("CashDeskApplicationAgent");
 		
 		return Future.DONE;
@@ -65,7 +67,9 @@ public class CashDeskApplicationAgent extends EventAgent {
 	@AgentBody
 	public void body(){
 		
-		initializeTestGUI();
+		if(isTestON()){
+			initializeTestGUI();
+		}
 		
 		subscribeToEvents();
 		

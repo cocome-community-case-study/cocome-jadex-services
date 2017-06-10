@@ -42,6 +42,8 @@ public class ScannerControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("ScannerControllerAgent");
 		
 		return Future.DONE;
@@ -52,7 +54,9 @@ public class ScannerControllerAgent extends EventAgent
 	 */
 	@AgentBody
 	public void body(){
-		initializeTestGUI();
+		if(isTestON()){
+			initializeTestGUI();
+		}
 		
 		subscribeToEvents();
 		

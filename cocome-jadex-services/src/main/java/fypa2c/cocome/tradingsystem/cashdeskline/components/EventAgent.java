@@ -1,6 +1,12 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.simulationController.SimulationControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IRequiredServicesFeature;
@@ -9,6 +15,7 @@ import jadex.commons.Boolean3;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentCreated;
 import jadex.micro.annotation.AgentFeature;
 import jadex.micro.annotation.AgentKilled;
 import jadex.micro.annotation.Binding;
@@ -28,10 +35,40 @@ import jadex.micro.annotation.RequiredServices;
 })
 public class EventAgent {
 	
+	//Log name of the agent
 	private String log;
+	
+	//properties value of testON
+	private boolean testON = false;
 
 	@AgentFeature
 	protected IRequiredServicesFeature requiredServicesFeature;
+	
+	@AgentCreated
+	public IFuture<Void> creation()
+	{
+		//set testON value from properties, testGUI's of Agents only start if this value is true
+		final Properties properties = new Properties();
+		ClassLoader loader = ClassLoader.getSystemClassLoader();
+		try{
+			File file = new File("properties.xml");
+			final FileInputStream in = new FileInputStream(file.getAbsolutePath());
+			properties.loadFromXML(in);
+	        in.close();
+	        if(properties.getProperty("testON").equals("true")){
+				testON=true;
+			}
+	        else{
+	        	testON=false;
+	        }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("properties.xml not found, couldn't load simulationOn value - simulation component is not started yet");
+		}
+		
+		return Future.DONE;
+	}
 
 	/**
 	 * This method is called before the deletion of the agent. 
@@ -69,6 +106,14 @@ public class EventAgent {
 	 */
 	public void printInfoLog(String message){
 		System.out.println(log+": "+message);
+	}
+	
+	/**
+	 * Specific if the test mode is running
+	 * @return true if the test mode is running
+	 */
+	public boolean isTestON(){
+		return testON;
 	}
 	
 

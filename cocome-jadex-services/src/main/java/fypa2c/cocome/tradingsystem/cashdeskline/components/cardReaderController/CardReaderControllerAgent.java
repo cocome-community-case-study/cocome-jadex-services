@@ -44,6 +44,8 @@ public class CardReaderControllerAgent extends EventAgent
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
+		super.creation();
+		
 		setLog("CardReaderControllerAgent");
 		
 		return Future.DONE;
@@ -51,7 +53,9 @@ public class CardReaderControllerAgent extends EventAgent
 	
 	@AgentBody
 	public void body(){
-		initializeTestGUI();
+		if(isTestON()){
+			initializeTestGUI();
+		}
 		
 		subscribeToEvents();
 		

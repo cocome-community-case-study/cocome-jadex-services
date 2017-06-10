@@ -2,8 +2,11 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -42,9 +45,8 @@ public class CashDeskGUI {
 	//Barcode textfield panel
 	private JPanel barCodeTextFieldPanel = new JPanel();
 	
-	//TODO Use JFormattedTextField with formatter
 	//TextField for barcode input
-	private JTextField barCodeTextField = new JTextField();
+	private JFormattedTextField barCodeTextField = new JFormattedTextField(NumberFormat.getIntegerInstance(new Locale("de")));
 	
 	
 	
