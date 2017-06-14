@@ -19,6 +19,8 @@ package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.exceptions.NoSuchProductException;
+
 /**
  * Provides remote access to the store inventory. This interface is used by a
  * cash desk to retrieve product descriptions for a given barcode.

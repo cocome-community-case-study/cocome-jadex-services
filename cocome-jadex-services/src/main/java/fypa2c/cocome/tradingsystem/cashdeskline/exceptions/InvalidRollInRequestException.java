@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
+package fypa2c.cocome.tradingsystem.cashdeskline.exceptions;
 
 /**
  * Exception thrown by the store inventory trying to roll in invalid product

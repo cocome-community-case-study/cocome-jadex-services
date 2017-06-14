@@ -6,9 +6,13 @@ import java.util.Collection;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.CashDeskGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.DummyScanner.DummyScanner;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.commons.Boolean3;
@@ -39,6 +43,9 @@ public class ScannerControllerAgent extends EventAgent
 	@Agent
 	protected IInternalAccess agent;
 	
+	//The Scanner, actual its a dummy scanner but it could replaced by an hardware scanner later
+	private IScanner scanner = new DummyScanner();
+	
 	@AgentCreated
 	public IFuture<Void> creation()
 	{
@@ -58,10 +65,26 @@ public class ScannerControllerAgent extends EventAgent
 			initializeTestGUI();
 		}
 		
+		initializeScanner();
+		
 		subscribeToEvents();
 		
 	}
 	
+	private void initializeScanner() {
+		scanner.setActionListenerBarCodeScanned(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int barcode = scanner.getScannedBarCode();
+				if(barcode > -1){
+					getServiceProvided().sendProductBarCodeScannedEvent(barcode);
+				}
+			}
+		});
+		
+	}
+
 	/**
 	 * The agent subscribes to all events, it wants to listen by the event bus.
 	 */
@@ -72,8 +95,12 @@ public class ScannerControllerAgent extends EventAgent
 			
 			@Override
 			public boolean filter(IEvent obj) {
-				//This Agent listen to nothing
-				//If it should listen to an event, add an instanceof test here
+				if (obj instanceof SaleStartedEvent) {
+					return true;
+				}
+				if (obj instanceof SaleFinishedEvent){
+					return true;
+				}
 				return false;
 			}
 		};
@@ -100,7 +127,12 @@ public class ScannerControllerAgent extends EventAgent
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
 				printInfoLog("Received "+result.getClass().getName());
-				
+				if (result instanceof SaleStartedEvent) {
+					scanner.startScanProcess();
+				}
+				if (result instanceof SaleFinishedEvent){
+					scanner.stopScanProcess();
+				}
 			}
 			
 			@Override

@@ -2,6 +2,6 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>Properties for the StartUp of the cashdesk</comment>
-<entry key="testON">false</entry>
+<entry key="testON">true</entry>
 <entry key="simulationON">false</entry>
 </properties>

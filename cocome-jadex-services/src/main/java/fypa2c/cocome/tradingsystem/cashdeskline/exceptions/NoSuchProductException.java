@@ -14,16 +14,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package fypa2c.cocome.tradingsystem.cashdeskline.transferObjects;
+package fypa2c.cocome.tradingsystem.cashdeskline.exceptions;
 
-public final class ProductNotAvailableException extends RuntimeException {
+/**
+ * This exception is thrown if there is no product for a specific barcode in the
+ * database
+ * 
+ * @author Yannick Welsch
+ */
+public final class NoSuchProductException extends Exception {
 
-	private static final long serialVersionUID = 1824378243L;
+	private static final long serialVersionUID = -6026652539932418410L;
 
 	//
 
-	public ProductNotAvailableException(final String message) {
+	public NoSuchProductException() {
+		super();
+	}
+
+	public NoSuchProductException(final String message) {
 		super(message);
+	}
+
+	public NoSuchProductException(final Throwable cause) {
+		super(cause);
+	}
+
+	public NoSuchProductException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 
 }

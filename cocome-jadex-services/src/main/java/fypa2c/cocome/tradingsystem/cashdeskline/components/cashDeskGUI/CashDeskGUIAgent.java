@@ -49,9 +49,6 @@ import jadex.micro.annotation.RequiredServices;
 @ProvidedServices({
 		@ProvidedService(name = "cashDeskGUI", type = ICashDeskGUIService.class, implementation = @Implementation(CashDeskGUIService.class))// ,
 })
-@RequiredServices({
-		@RequiredService(name = "scannerController", type = IScannerControllerService.class, binding = @Binding(scope = RequiredServiceInfo.SCOPE_PLATFORM))// ,
-})
 public class CashDeskGUIAgent extends EventAgent {
 	@Agent
 	protected IInternalAccess agent;
@@ -133,7 +130,9 @@ public class CashDeskGUIAgent extends EventAgent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String content = barCodeTextField.getText();
-				barCodeTextField.setText(content.substring(0, content.length() - 1));
+				if(!content.equals("")){
+					barCodeTextField.setText(content.substring(0, content.length() - 1));
+				}
 
 			}
 		});
@@ -141,8 +140,6 @@ public class CashDeskGUIAgent extends EventAgent {
 		buttons[3][2].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((IScannerControllerService) requiredServicesFeature.getRequiredService("scannerController").get())
-						.sendProductBarCodeScannedEvent(Integer.parseInt(barCodeTextField.getText()));
 				barCodeTextField.setText("");
 
 			}
@@ -214,14 +211,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			public void intermediateResultAvailable(IEvent result) {
 				printInfoLog("Received " + result.getClass().getName());
 				if (result instanceof SaleStartedEvent) {
-					if (gui != null) {
-						if (!gui.isVisible()) {
-							gui.showGUI();
-						}
-					} else {
-						cashdesknumber++;
-						gui = new CashDeskGUI(cashdesknumber);
-					}
+					//TODO Start GUI Sale
 					printInfoLog("Start GUI \"Sale\"");
 				}
 				if (result instanceof RunningTotalChangedEvent) {
