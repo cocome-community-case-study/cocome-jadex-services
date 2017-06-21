@@ -10,6 +10,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.NumPadKeyStroke;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
@@ -60,7 +61,9 @@ public class CashDeskGUI {
 	public CashDeskGUI(int cashDeskNumber) {
 		frame = new JFrame("CashDesk "+cashDeskNumber);
 		frame.setSize(300, 200);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		frame.getContentPane().setLayout(new BorderLayout());		
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(4, 1));
 		

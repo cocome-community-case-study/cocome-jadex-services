@@ -14,6 +14,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.InvalidCreditCardEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.RunningTotalChangedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
 import jadex.bridge.IInternalAccess;
@@ -71,7 +72,7 @@ public class CashDeskGUIAgent extends EventAgent {
 
 		setLog("CashDeskGUIAgent");
 
-		// Set my cashDeskNuber and increase the counter
+		// Set my cashDeskNumber and increase the counter
 		myCashDeskNumber = ++cashdesknumber;
 
 		return Future.DONE;
@@ -93,13 +94,7 @@ public class CashDeskGUIAgent extends EventAgent {
 	 * Creates the Gui of the CashDesk
 	 */
 	private void initializeGUI() {
-		if (gui != null) {
-			if (!gui.isVisible()) {
-				gui.showGUI();
-			}
-		} else {
-			gui = new CashDeskGUI(myCashDeskNumber);
-		}
+		gui = new CashDeskGUI(myCashDeskNumber);
 
 		// set ActionListener of the Buttons 1 to 9
 		JFormattedTextField barCodeTextField = gui.getBarCodeTextField();
@@ -171,6 +166,9 @@ public class CashDeskGUIAgent extends EventAgent {
 				if (obj instanceof SaleStartedEvent) {
 					return true;
 				}
+				if (obj instanceof SaleFinishedEvent) {
+					return true;
+				}
 				if (obj instanceof RunningTotalChangedEvent) {
 					return true;
 				}
@@ -211,8 +209,12 @@ public class CashDeskGUIAgent extends EventAgent {
 			public void intermediateResultAvailable(IEvent result) {
 				printInfoLog("Received " + result.getClass().getName());
 				if (result instanceof SaleStartedEvent) {
-					//TODO Start GUI Sale
-					printInfoLog("Start GUI \"Sale\"");
+					// TODO Show sale GUI
+					printInfoLog("Show sale GUI");
+				}
+				if (result instanceof SaleFinishedEvent) {
+					// TODO Switch from sale GUI to pay GUI
+					printInfoLog("Switch from sale GUI to pay GUI");
 				}
 				if (result instanceof RunningTotalChangedEvent) {
 					// TODO Update GUI with selected product information
@@ -249,5 +251,4 @@ public class CashDeskGUIAgent extends EventAgent {
 		return (ICashDeskGUIService) agent.getComponentFeature(IProvidedServicesFeature.class)
 				.getProvidedService("cashDeskGUI");
 	}
-
 }

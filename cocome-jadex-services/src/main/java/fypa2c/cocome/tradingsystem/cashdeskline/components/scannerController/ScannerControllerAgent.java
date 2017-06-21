@@ -43,7 +43,7 @@ public class ScannerControllerAgent extends EventAgent
 	@Agent
 	protected IInternalAccess agent;
 	
-	//The Scanner, actual its a dummy scanner but it could replaced by an hardware scanner later
+	//The Scanner, actual its a dummy software scanner but it could replaced by an hardware scanner later
 	private IScanner scanner = new DummyScanner();
 	
 	@AgentCreated
