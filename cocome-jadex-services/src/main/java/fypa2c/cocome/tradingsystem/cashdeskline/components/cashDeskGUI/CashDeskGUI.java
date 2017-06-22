@@ -1,15 +1,20 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.NumPadKeyStroke;
@@ -24,33 +29,28 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 public class CashDeskGUI {
 
 	private JFrame frame;
-
-	private JPanel mainPanel;
 	
-	//Rows of the number pad
-	private JPanel[] rows = {
-			new JPanel(new GridLayout(1, 3)),
-			new JPanel(new GridLayout(1, 3)),
-			new JPanel(new GridLayout(1, 3)),
-			new JPanel(new GridLayout(1, 3)),
-	};
+	//ListPanel with JList in a ScrollPane
+	private JPanel productListPanel;
+	private JList<ProductItem> list;
+	private JScrollPane scrollPane;
+	private ProductItem[] productItemList;
 	
-	//The number pad buttons
-	private JButton[][] buttons = {
-			{new JButton(NumPadKeyStroke.ONE.label()), new JButton(NumPadKeyStroke.TWO.label()), new JButton(NumPadKeyStroke.THREE.label())},
-			{new JButton(NumPadKeyStroke.FOUR.label()), new JButton(NumPadKeyStroke.FIVE.label()), new JButton(NumPadKeyStroke.SIX.label())},
-			{new JButton(NumPadKeyStroke.SEVEN.label()), new JButton(NumPadKeyStroke.EIGHT.label()), new JButton(NumPadKeyStroke.NINE.label())},
-			{new JButton(NumPadKeyStroke.DELETE.label()), new JButton(NumPadKeyStroke.ZERO.label()), new JButton(NumPadKeyStroke.ENTER.label())}
-	};
-	
-	//Barcode textfield panel
-	private JPanel barCodeTextFieldPanel = new JPanel();
-	
-	//TextField for barcode input
-	private JFormattedTextField barCodeTextField = new JFormattedTextField(NumberFormat.getIntegerInstance(new Locale("de")));
+	//ButtonPanel with actual product, +1Button, -1 Button, start sale button, card payment button (SaleFinished), cash payment button (SaleFinished)
+	private JPanel buttonPanelSale;
+	private JTextField actualProduct;
+	//FirstButtonSubPanel
+	private JPanel buttonSubPanelOne;
+	private JButton plusOneButton;
+	private JButton minusOneButton;
+	//SecondButtonSubPanel
+	private JPanel buttonSubPanelTwo;
+	private JButton startSaleButton;
+	private JButton cashPaymentButton;
+	private JButton cardPaymentButton;
 	
 	
-	
+		
 	
 	/**
 	 * Constructor of the CashDeskGUI
@@ -64,60 +64,58 @@ public class CashDeskGUI {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		frame.getContentPane().setLayout(new BorderLayout());		
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(4, 1));
 		
-		//Set buttons of NumPad rows
-		for(int row=0; row<4; row++){
-			for(int button=0; button<3; button++){
-				rows[row].add(buttons[row][button]);
-			}
-			mainPanel.add(rows[row]);
-		}
-		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		//LsitPanel
+		productListPanel = new JPanel(new BorderLayout());
+		productItemList = new ProductItem[0];
+		list = new JList<ProductItem>();
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane = new JScrollPane(list);
+		productListPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		//Set barcode textfield
-		barCodeTextFieldPanel.setLayout(new GridLayout(1, 1));
-		barCodeTextFieldPanel.add(barCodeTextField);
-		frame.getContentPane().add(barCodeTextFieldPanel, BorderLayout.NORTH);		
+		//ButtonPanel
+		buttonPanelSale = new JPanel(new GridLayout(3, 1));
+		actualProduct = new JTextField();
+		actualProduct.setEditable(false);
+		buttonPanelSale.add(actualProduct);
+		buttonSubPanelOne = new JPanel(new GridLayout(1, 2));
+		plusOneButton = new JButton("+1");
+		plusOneButton.setFont(new Font("Arial", Font.PLAIN, 40));
+		buttonSubPanelOne.add(plusOneButton);
+		minusOneButton = new JButton("-1");
+		minusOneButton.setFont(new Font("Arial", Font.PLAIN, 40));
+		buttonSubPanelOne.add(minusOneButton);
+		buttonPanelSale.add(buttonSubPanelOne);
+		buttonSubPanelTwo = new JPanel(new GridLayout(1,3));
+		startSaleButton = new JButton("Start a Sale");
+		startSaleButton.setFont(new Font("Arial", Font.PLAIN, 40));
+		buttonSubPanelTwo.add(startSaleButton);
+		cashPaymentButton = new JButton("Pay with cash");
+		cashPaymentButton.setFont(new Font("Arial", Font.PLAIN, 40));
+		buttonSubPanelTwo.add(cashPaymentButton);
+		cardPaymentButton = new JButton("Pay with Card");
+		cardPaymentButton.setFont(new Font("Arial", Font.PLAIN, 40));
+		buttonSubPanelTwo.add(cardPaymentButton);
+		buttonPanelSale.add(buttonSubPanelTwo);
+		
+		//Add components to frame
+		frame.getContentPane().add(productListPanel, BorderLayout.WEST);
+		frame.getContentPane().add(buttonPanelSale, BorderLayout.CENTER);		
 		
 		frame.setVisible(true);
 	}
-
-	/**
-	 * Call this method to get the auto created buttons, so that you can add an
-	 * action listener to them
-	 * 
-	 * @return an array with all buttons in the order of the events array you
-	 *         set at the creation of this object in the constructor..
-	 */
-	public JButton[][] getButtons() {
-		return buttons;
-	}
 	
-	/**
-	 * Call this method to get the BarCodeTextField for input and output 
-	 * 
-	 * @return
-	 */
-	public JFormattedTextField getBarCodeTextField(){
-		return barCodeTextField;
-	}
-	
-	/**
-	 * Is the CashDeskGui frame visible
-	 * 
-	 * @return true, if it's visible
-	 */
-	public boolean isVisible(){
-		return frame.isVisible();
-	}
 	
 	/**
 	 * Shows the GUI to the user
 	 */
 	public void showGUI(){
 		frame.setVisible(true);
+	}
+	
+	public void setProductItemList(ProductItem[] productItemList){
+		this.productItemList = productItemList.clone();
+		//TODO Is a propagation of the array to the JList necessary?
 	}
 
 }
