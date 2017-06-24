@@ -8,6 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.CashDeskGUI;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.SaleProcessModes;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
@@ -49,6 +53,9 @@ import jadex.micro.annotation.RequiredServices;
 @Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 		@ProvidedService(name = "cashDeskGUI", type = ICashDeskGUIService.class, implementation = @Implementation(CashDeskGUIService.class))// ,
+})
+@RequiredServices({
+	@RequiredService(name="cashBoxController", type=ICashBoxControllerService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM))//,
 })
 public class CashDeskGUIAgent extends EventAgent {
 	@Agent
@@ -96,8 +103,52 @@ public class CashDeskGUIAgent extends EventAgent {
 	private void initializeGUI() {
 		gui = new CashDeskGUI(myCashDeskNumber);
 
-		//TODO set ActionListener of graphical components
+		gui.getCardPaymentButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();
+				gui.setMode(SaleProcessModes.PAYMENT_CARD);	
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(PaymentMode.CREDIT_CARD);
+			}
+		});
+		
+		gui.getCashPaymentButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();
+				gui.setMode(SaleProcessModes.PAYMENT_CASH);				
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(PaymentMode.CASH);
+			}
+		});
+		
+		gui.getMinusOneButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO remove last Product from product list
+				
+			}
+		});
 
+		gui.getPlusOneButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO add another product of the last chosen product to the product list
+				
+			}
+		});
+		
+		gui.getStartSaleButton().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleStartedEvent();
+				gui.setMode(SaleProcessModes.SALE_PRODUCT_SELECTION);
+			}
+		});
 	}
 
 	/**

@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
-import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.CashDeskGUI;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.CashDeskGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScanner;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
 

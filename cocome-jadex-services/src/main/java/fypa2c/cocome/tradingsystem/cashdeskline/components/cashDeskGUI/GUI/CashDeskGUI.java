@@ -1,4 +1,4 @@
-package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI;
+package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -27,6 +27,9 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
  * @author Florian Abt
  */
 public class CashDeskGUI {
+	
+	//actual sale process mode, default is SALE_NOT_STARTED at start up of the CashDesk
+	private SaleProcessModes mode = SaleProcessModes.SALE_NOT_STARTED;
 
 	private JFrame frame;
 	
@@ -102,6 +105,7 @@ public class CashDeskGUI {
 		frame.getContentPane().add(productListPanel, BorderLayout.WEST);
 		frame.getContentPane().add(buttonPanelSale, BorderLayout.CENTER);		
 		
+		setMode(SaleProcessModes.SALE_NOT_STARTED);
 		frame.setVisible(true);
 	}
 	
@@ -113,9 +117,97 @@ public class CashDeskGUI {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Sets the product list, which is displayed on the CashDeskGUI
+	 * 
+	 * @param productItemList
+	 */
 	public void setProductItemList(ProductItem[] productItemList){
 		this.productItemList = productItemList.clone();
 		//TODO Is a propagation of the array to the JList necessary?
 	}
+	
+	/**
+	 * Getter for adding an ActionListener
+	 * @return the button
+	 */
+	public JButton getPlusOneButton() {
+		return plusOneButton;
+	}
 
+	/**
+	 * Getter for adding an ActionListener
+	 * @return the button
+	 */
+	public JButton getMinusOneButton() {
+		return minusOneButton;
+	}
+
+	/**
+	 * Getter for adding an ActionListener
+	 * @return the button
+	 */
+	public JButton getStartSaleButton() {
+		return startSaleButton;
+	}
+
+	/**
+	 * Getter for adding an ActionListener
+	 * @return the button
+	 */
+	public JButton getCashPaymentButton() {
+		return cashPaymentButton;
+	}
+
+	/**
+	 * Getter for adding an ActionListener
+	 * @return the button
+	 */
+	public JButton getCardPaymentButton() {
+		return cardPaymentButton;
+	}
+
+	/**
+	 * Set the mode of the GUI
+	 * @param mode
+	 */
+	public void setMode(SaleProcessModes mode) {
+		this.mode = mode;
+		switch (mode.label()) {
+		case 0:
+			//Sale_not_started
+			plusOneButton.setEnabled(false);
+			minusOneButton.setEnabled(false);
+			cashPaymentButton.setEnabled(false);
+			cardPaymentButton.setEnabled(false);
+			startSaleButton.setEnabled(true);
+			break;
+		case 1:
+			//Product selection
+			plusOneButton.setEnabled(true);
+			minusOneButton.setEnabled(true);
+			cashPaymentButton.setEnabled(true);
+			cardPaymentButton.setEnabled(true);
+			startSaleButton.setEnabled(false);
+			break;
+		case 2:
+			//Payment_card
+			//TODO new elements required
+			plusOneButton.setEnabled(false);
+			minusOneButton.setEnabled(false);
+			cashPaymentButton.setEnabled(false);
+			cardPaymentButton.setEnabled(false);
+			startSaleButton.setEnabled(false);
+			break;
+		case 3:
+			//Payment_cash
+			//TODO new elements required
+			plusOneButton.setEnabled(false);
+			minusOneButton.setEnabled(false);
+			cashPaymentButton.setEnabled(false);
+			cardPaymentButton.setEnabled(false);
+			startSaleButton.setEnabled(false);
+			break;
+		}
+	}
 }
