@@ -81,10 +81,10 @@ public class DummyScanner implements IScanner {
 	}
 
 	@Override
-	public int getScannedBarCode() {
+	public long getScannedBarCode() {
 		if(!barCodeTextField.getText().equals("")){
 			try{
-				int barcode = Integer.parseInt(barCodeTextField.getText());
+				long barcode = Long.parseLong(barCodeTextField.getText());
 				barCodeTextField.setText("");
 				return barcode;
 			}

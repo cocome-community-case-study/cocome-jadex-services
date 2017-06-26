@@ -12,7 +12,7 @@ public interface IScannerControllerService {
 	/**
 	 * Publish an ProductBarCodeScannedEvent to all subscriber.
 	 */
-	public IFuture<Void> sendProductBarCodeScannedEvent(int barcode);
+	public IFuture<Void> sendProductBarCodeScannedEvent(long barcode);
 	
 	
 }

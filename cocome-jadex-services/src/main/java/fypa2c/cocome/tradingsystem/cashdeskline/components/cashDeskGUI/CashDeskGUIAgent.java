@@ -98,7 +98,8 @@ public class CashDeskGUIAgent extends EventAgent {
 	}
 
 	/**
-	 * Creates the Gui of the CashDesk
+	 * Creates the Gui of the CashDesk.
+	 * In general the ActionListener of the buttons are set here.
 	 */
 	private void initializeGUI() {
 		gui = new CashDeskGUI(myCashDeskNumber);

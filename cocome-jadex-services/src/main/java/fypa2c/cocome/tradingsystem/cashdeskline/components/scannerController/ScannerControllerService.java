@@ -20,7 +20,7 @@ public class ScannerControllerService extends EventService implements IScannerCo
 	protected ScannerControllerAgent component;
 
 	@Override
-	public IFuture<Void> sendProductBarCodeScannedEvent(int barcode) {
+	public IFuture<Void> sendProductBarCodeScannedEvent(long barcode) {
 		return component.publishEvent(new ProductBarcodeScannedEvent(barcode));
 	}
 }

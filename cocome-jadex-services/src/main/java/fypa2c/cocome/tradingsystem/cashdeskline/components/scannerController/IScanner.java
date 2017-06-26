@@ -36,6 +36,6 @@ public interface IScanner {
 	 * Call this if an AcitonEvent occurs via the ActionListener to get the scanned barcode.
 	 * @return the barcode which was scanned, of -1 if nothing was scanned.
 	 */
-	public int getScannedBarCode();
+	public long getScannedBarCode();
 	
 }

@@ -76,7 +76,7 @@ public class ScannerControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int barcode = scanner.getScannedBarCode();
+				long barcode = scanner.getScannedBarCode();
 				if(barcode > -1){
 					getServiceProvided().sendProductBarCodeScannedEvent(barcode);
 				}

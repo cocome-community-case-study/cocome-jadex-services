@@ -3,6 +3,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
@@ -22,6 +23,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleRegisteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.ProductTO;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.component.IProvidedServicesFeature;
 import jadex.commons.Boolean3;
@@ -47,7 +49,11 @@ import jadex.micro.annotation.ProvidedServices;
 	@ProvidedService(name="cashDeskApplication", type=ICashDeskApplicationService.class, implementation=@Implementation(CashDeskApplicationService.class))//,
 })
 public class CashDeskApplicationAgent extends EventAgent {
-
+	
+	//Shopping card represented by a LinkList
+	private ShoppingCard shoppingCard = new ShoppingCard();
+	
+	
 	@Agent
 	protected IInternalAccess agent;
 	
@@ -140,9 +146,18 @@ public class CashDeskApplicationAgent extends EventAgent {
 					printInfoLog("Start process \"Product Selection\"");
 				}
 				if(result instanceof ProductBarcodeScannedEvent){
-					//TODO Add product to shopping cart if it is in stock (getProductWithStockItem)
-					printInfoLog("Add product to shopping cart if it's in stock");
-					getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
+					long barcode = ((ProductBarcodeScannedEvent) result).getBarcode();
+					//TODO check, if product is in stock (this is how to get the name, price and running total)
+					
+					//for testing 
+					ProductTO product = new ProductTO();
+					product.setBarcode(barcode);
+					product.setId(1);
+					product.setName("ExampleProduct");
+					product.setPurchasePrice(10.5);
+					
+					shoppingCard.addProduct(product);
+					getServiceProvided().sendRunningTotalChangedEvent(product.getName(), product.getPurchasePrice(), shoppingCard.getRunningTotal());
 				}
 				if(result instanceof SaleFinishedEvent){
 					//TODO Finish process "Product Selection"
