@@ -156,6 +156,8 @@ public class CashDeskApplicationAgent extends EventAgent {
 					product.setName("ExampleProduct");
 					product.setPurchasePrice(10.5);
 					
+					System.out.println(product.getName()+"\t"+product.getPurchasePrice());
+					
 					shoppingCard.addProduct(product);
 					getServiceProvided().sendRunningTotalChangedEvent(product.getName(), product.getPurchasePrice(), shoppingCard.getRunningTotal());
 				}

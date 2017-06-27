@@ -29,6 +29,7 @@ public class CashDeskApplicationService extends EventService implements ICashDes
 
 	@Override
 	public IFuture<Void> sendRunningTotalChangedEvent(String productName, double productPrice, double runningTotal) {
+		System.out.println(productName+"\t"+productPrice);
 		return component.publishEvent(new RunningTotalChangedEvent(productName, productPrice, runningTotal));
 	}
 

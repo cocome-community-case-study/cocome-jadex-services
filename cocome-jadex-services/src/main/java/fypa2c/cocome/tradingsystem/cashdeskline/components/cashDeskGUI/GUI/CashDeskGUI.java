@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
@@ -35,9 +37,9 @@ public class CashDeskGUI {
 	
 	//ListPanel with JList in a ScrollPane
 	private JPanel productListPanel;
-	private JList<ProductItem> list;
+	private JList<String> list;
 	private JScrollPane scrollPane;
-	private ProductItem[] productItemList;
+	private ArrayList<ProductItem> productItemList;
 	
 	//ButtonPanel with actual product, +1Button, -1 Button, start sale button, card payment button (SaleFinished), cash payment button (SaleFinished)
 	private JPanel buttonPanelSale;
@@ -70,9 +72,11 @@ public class CashDeskGUI {
 		
 		//LsitPanel
 		productListPanel = new JPanel(new BorderLayout());
-		productItemList = new ProductItem[0];
-		list = new JList<ProductItem>();
+		productItemList = new ArrayList<ProductItem>();
+		list = new JList<String>();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setLayoutOrientation(JList.VERTICAL);
+		list.setVisibleRowCount(-1);
 		scrollPane = new JScrollPane(list);
 		productListPanel.add(scrollPane, BorderLayout.CENTER);
 		
@@ -122,10 +126,16 @@ public class CashDeskGUI {
 	 * 
 	 * @param productItemList
 	 */
-	public void setProductItemList(ProductItem[] productItemList){
-		this.productItemList = productItemList.clone();
-		//TODO Is a propagation of the array to the JList necessary?
+	public void addProductItemList(ProductItem productItem){
+		productItemList.add(productItem);
+		//TODO How to say what should be displayed if i use productItem instead of string in productItemList?
+		
+		DefaultListModel<String> listModel = new DefaultListModel();
+		productItemList.forEach((item) -> listModel.addElement(item.getProductName()+"\t\t"+item.getProductPrice()));
+		list.setModel(listModel);
 	}
+	
+	//TODO removeProduct and clearProductList
 	
 	/**
 	 * Getter for adding an ActionListener

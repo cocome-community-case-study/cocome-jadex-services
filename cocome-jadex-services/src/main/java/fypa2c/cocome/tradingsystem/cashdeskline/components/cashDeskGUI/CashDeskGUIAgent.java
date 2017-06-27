@@ -11,6 +11,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.CashDeskGUI;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.ProductItem;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.SaleProcessModes;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
@@ -227,8 +228,7 @@ public class CashDeskGUIAgent extends EventAgent {
 					printInfoLog("Switch from sale GUI to pay GUI");
 				}
 				if (result instanceof RunningTotalChangedEvent) {
-					// TODO Update GUI with selected product information
-					printInfoLog("Update GUI with selected product information");
+					gui.addProductItemList(new ProductItem(((RunningTotalChangedEvent) result).getProductName(), ((RunningTotalChangedEvent) result).getProductPrice()));
 				}
 				if (result instanceof CashAmountEnteredEvent) {
 					// TODO Update GUI with entered cash amount
