@@ -26,24 +26,29 @@ import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.SaleTO;
  * should be registered in the inventory. It contains details of the sale so
  * that it can be accounted for in the inventory system.
  * 
- * @author Yannick Welsch
+ * @author Yannick Welsch, Florian Abt
  */
-public final class AccountSaleEvent implements IEvent, Serializable {
+public final class AccountSaleEvent implements IEvent {
 
-	private static final long serialVersionUID = -5441935251526952790L;
-
-	//
-
-	private final SaleTO __sale;
 
 	//
 
+	private  SaleTO sale;
+
+	//
+
+	public AccountSaleEvent(){}
+	
 	public AccountSaleEvent(final SaleTO sale) {
-		__sale = sale;
+		this.sale = sale;
 	}
 
 	public SaleTO getSale() {
-		return __sale;
+		return sale;
+	}
+	
+	public void setSale(SaleTO sale){
+		this.sale = sale;
 	}
 
 }

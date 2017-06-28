@@ -156,10 +156,8 @@ public class CashDeskApplicationAgent extends EventAgent {
 					product.setName("ExampleProduct");
 					product.setPurchasePrice(10.5);
 					
-					System.out.println(product.getName()+"\t"+product.getPurchasePrice());
-					
 					shoppingCard.addProduct(product);
-					getServiceProvided().sendRunningTotalChangedEvent(product.getName(), product.getPurchasePrice(), shoppingCard.getRunningTotal());
+					getServiceProvided().sendRunningTotalChangedEvent(product.getBarcode(), product.getName(), product.getPurchasePrice(), shoppingCard.getRunningTotal());
 				}
 				if(result instanceof SaleFinishedEvent){
 					//TODO Finish process "Product Selection"
@@ -213,7 +211,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 	 */
 	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[6];
-		events[0] = new RunningTotalChangedEvent(null, 0, 0);
+		events[0] = new RunningTotalChangedEvent(0,null, 0, 0);
 		events[1] = new ChangeAmountCalculatedEvent(0);
 		events[2] = new SaleSuccessEvent();
 		events[3] = new AccountSaleEvent(null);
@@ -226,7 +224,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendRunningTotalChangedEvent(null, 0, 0);
+				getServiceProvided().sendRunningTotalChangedEvent(0, null, 0, 0);
 			}
 		});
 		

@@ -25,39 +25,52 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * been registered in the inventory. It contains statistical information about
  * the sale (number of items, mode of payment) intended for the cash desk line
  * coordinator.
+ * 
+ * @author Florian Abt
  */
-public final class SaleRegisteredEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = 6202472706841986582L;
+public final class SaleRegisteredEvent implements IEvent {
 
 	//
 
-	private final int __itemCount;
+	private int itemCount;
 
-	private final PaymentMode __paymentMode;
+	private PaymentMode paymentMode;
 
-	private final String __cashDesk;
+	private String cashDesk;
 
 	//
+	public SaleRegisteredEvent(){}
 
 	public SaleRegisteredEvent(
-			final String cashDesk,
-			final int saleItemCount, final PaymentMode paymentMode) {
-		__itemCount = saleItemCount;
-		__paymentMode = paymentMode;
-		__cashDesk = cashDesk;
+			 String cashDesk,
+			 int itemCount,  PaymentMode paymentMode) {
+		this.itemCount = itemCount;
+		this.paymentMode = paymentMode;
+		this.cashDesk = cashDesk;
 	}
 
 	public int getItemCount() {
-		return __itemCount;
+		return itemCount;
 	}
 
 	public PaymentMode getPaymentMode() {
-		return __paymentMode;
+		return paymentMode;
 	}
 
 	public String getCashDesk() {
-		return __cashDesk;
+		return cashDesk;
+	}
+	
+	public void setItemCount(int itemCount) {
+		this.itemCount = itemCount;
+	}
+
+	public void setPaymentMode(PaymentMode paymentMode) {
+		this.paymentMode = paymentMode;
+	}
+
+	public void setCashDesk(String cashDesk) {
+		this.cashDesk = cashDesk;
 	}
 
 }

@@ -22,31 +22,35 @@ import java.io.Serializable;
  * Event emitted by the cash box after a valid cash amount has been entered and
  * confirmed by the cashier by pressing the ENTER key.
  * 
- * @author Lubomir Bulej
+ * @author Lubomir Bulej, Florian Abt
  */
-public final class CashAmountEnteredEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = -5441935251526952790L;
+public final class CashAmountEnteredEvent implements IEvent {
 
 	//
 
-	private final double __amount;
+	private double cashAmount;
 	
-	private final boolean __finalInput;
+	private boolean finalInput;
 
 	//
 
-	public CashAmountEnteredEvent(final double amount, final boolean finalInput) {
-		__amount = amount;
-		__finalInput = finalInput;
+	public CashAmountEnteredEvent(){}
+	
+	public CashAmountEnteredEvent(double cashAmount, boolean finalInput) {
+		this.cashAmount = cashAmount;
+		this.finalInput = finalInput;
 	}
 
 	public double getCashAmount() {
-		return __amount;
+		return cashAmount;
 	}
 	
 	public boolean isFinalinput(){
-		return __finalInput;
+		return finalInput;
+	}
+	
+	public void setCashAmount(double cashAmount){
+		this.cashAmount = cashAmount;
 	}
 
 }

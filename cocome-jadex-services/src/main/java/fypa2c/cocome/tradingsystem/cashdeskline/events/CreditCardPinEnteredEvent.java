@@ -22,24 +22,28 @@ import java.io.Serializable;
 /**
  * Event emitted by the credit card reader after entering a credit card PIN.
  * 
- * @see CardReaderModel
+ * @author Florian Abt
  */
-public final class CreditCardPinEnteredEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = 89778823632347027L;
+public final class CreditCardPinEnteredEvent implements IEvent {
 
 	//
 
-	private final int __pin;
+	private int pin;
 
 	//
+	
+	public CreditCardPinEnteredEvent(){}
 
-	public CreditCardPinEnteredEvent(final int pin) {
-		__pin = pin;
+	public CreditCardPinEnteredEvent(int pin) {
+		this.pin = pin;
 	}
 
 	public int getPIN() {
-		return __pin;
+		return pin;
+	}
+	
+	public void setPIN(int pin){
+		this.pin = pin;
 	}
 
 }

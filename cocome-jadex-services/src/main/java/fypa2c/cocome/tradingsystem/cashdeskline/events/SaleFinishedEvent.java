@@ -24,10 +24,10 @@ import java.io.Serializable;
  * that all items in the sale have been scanned.
  * 
  * @see CashBoxModel
+ * 
+ * @author Florian Abt
  */
-public final class SaleFinishedEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = -1198744791703155060L;
+public final class SaleFinishedEvent implements IEvent {
 
 	//
 

@@ -23,21 +23,19 @@ import java.io.Serializable;
  * a particular cash desk into express mode. If a cash desk changes its mode,
  * the event is reposted by the cash desk on the cash desk topic.
  * 
- * @author Sebastian Herold
- * @author Lubomir Bulej
+ * @author Sebastian Herold, Lubomir Bulej, Florian Abt
  */
-public final class ExpressModeEnabledEvent implements IEvent, Serializable {
+public final class ExpressModeEnabledEvent implements IEvent {
 
-	private static final long serialVersionUID = -6894844300001277997L;
-
-	//
-
-	private final String __cashDesk;
+	
+	private String cashDesk;
 
 	//
+	
+	public ExpressModeEnabledEvent(){}
 
-	public ExpressModeEnabledEvent(final String cashdesk) {
-		__cashDesk = cashdesk;
+	public ExpressModeEnabledEvent( String cashDesk) {
+		this.cashDesk = cashDesk;
 	}
 
 	/**
@@ -47,7 +45,11 @@ public final class ExpressModeEnabledEvent implements IEvent, Serializable {
 	 *         cash desk (channel) name
 	 */
 	public String getCashDesk() {
-		return __cashDesk;
+		return cashDesk;
+	}
+	
+	public void setCashDesk(String cashDesk){
+		this.cashDesk = cashDesk;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.SFuture;
 import jadex.bridge.service.annotation.Service;
@@ -75,6 +76,7 @@ public class EventBusService implements IEventBusService{
 				entry.sifuture.addIntermediateResultIfUndone(event);
 			}
 		}
+		
 		
 		return Future.DONE;
 	}

@@ -8,6 +8,7 @@ import java.util.Properties;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.simulationController.SimulationControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IRequiredServicesFeature;
 import jadex.bridge.service.types.cms.IComponentManagementService;
@@ -87,7 +88,7 @@ public class EventAgent {
 	 */
 	public IFuture<Void> publishEvent(IEvent event){
 		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).publishEvent(event);
-		
+
 		return Future.DONE;
 	}
 	

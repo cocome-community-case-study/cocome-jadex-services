@@ -22,26 +22,28 @@ import java.io.Serializable;
  * Event emitted by the bar code scanner after it recognized and scanned a
  * barcode.
  * 
- * @see BarcodeScannerModel
  * 
- * @author Sebastian Herold
+ * @author Sebastian Herold, Florian Abt
  */
-public final class ProductBarcodeScannedEvent implements IEvent, Serializable {
+public final class ProductBarcodeScannedEvent implements IEvent {
 
-	private static final long serialVersionUID = -1603344911255933167L;
 
-	//
-
-	private final long __barcode;
+	private long barcode;
 
 	//
 
-	public ProductBarcodeScannedEvent(final long barcode) {
-		__barcode = barcode;
+	public ProductBarcodeScannedEvent(){}
+	
+	public ProductBarcodeScannedEvent(long barcode) {
+		this.barcode = barcode;
 	}
 
 	public long getBarcode() {
-		return __barcode;
+		return barcode;
+	}
+	
+	public void setBarcode(long barcode){
+		this.barcode = barcode;
 	}
 
 }

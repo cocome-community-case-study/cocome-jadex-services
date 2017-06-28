@@ -22,39 +22,64 @@ import java.io.Serializable;
  * Event emitted by the cash desk after an item has been added to the current
  * sale in response to a barcode scan. It contains information about the current
  * item, its price and the running total.
+ * 
+ * @author Florian Abt
  */
-public final class RunningTotalChangedEvent implements IEvent, Serializable {
+public final class RunningTotalChangedEvent implements IEvent {
 
-	private static final long serialVersionUID = -300914931510566066L;
-
-	//
-
-	private final String __productName;
-
-	private final double __productPrice;
-
-	private final double __runningTotal;
 
 	//
+	private long barcode;
 
-	public RunningTotalChangedEvent(
-			final String productName, final double productPrice,
-			final double runningTotal) {
-		__productName = productName;
-		__productPrice = productPrice;
-		__runningTotal = runningTotal;
+	private  String productName;
+
+	private  double productPrice;
+
+	private  double runningTotal;
+
+	//
+	
+	public RunningTotalChangedEvent(){}
+
+	public RunningTotalChangedEvent(long barcode, String productName,  double productPrice, double runningTotal) {
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.runningTotal = runningTotal;
+		this.barcode = barcode;
 	}
 
 	public String getProductName() {
-		return __productName;
+		return productName;
 	}
 
 	public double getProductPrice() {
-		return __productPrice;
+		return productPrice;
 	}
 
 	public double getRunningTotal() {
-		return __runningTotal;
+		return runningTotal;
+	}
+	
+	public long getBarcode(){
+		return barcode;
+	}
+	
+	//setter for the Jadex Bean transmission
+	
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public void setProductPrice(double productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public void setRunningTotal(double runningTotal) {
+		this.runningTotal = runningTotal;
+	}
+	
+	public void setBarcode(long barcode){
+		this.barcode = barcode;
 	}
 
 	//
@@ -62,8 +87,8 @@ public final class RunningTotalChangedEvent implements IEvent, Serializable {
 	@Override
 	public String toString() {
 		return String.format(
-				"RunningTotalChangedEvent(%s, %s, %s)",
-				__productName, __productPrice, __runningTotal
+				"RunningTotalChangedEvent(%s, %s, %s, %s)",
+				barcode, productName, productPrice, runningTotal
 				);
 	}
 

@@ -15,7 +15,7 @@ public interface ICashDeskApplicationService {
 	/**
 	 * Publish an RunningTotalChangedEvent to all subscriber.
 	 */
-	public IFuture<Void> sendRunningTotalChangedEvent(String productName, double productPrice, double runningTotal);
+	public IFuture<Void> sendRunningTotalChangedEvent(long productBarcode, String productName, double productPrice, double runningTotal);
 	
 	/**
 	 * Publish an ChangeAmountCalculatedEvent to all subscriber.

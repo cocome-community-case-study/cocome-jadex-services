@@ -23,11 +23,10 @@ import java.io.Serializable;
  * 
  * @see CardReaderModel
  * 
- * @author Sebastian Herold
+ * @author Sebastian Herold, Florian Abt
  */
-public final class CreditCardScanFailedEvent implements IEvent, Serializable {
+public final class CreditCardScanFailedEvent implements IEvent {
 
-	private static final long serialVersionUID = 2407849186409109443L;
 
 	//
 

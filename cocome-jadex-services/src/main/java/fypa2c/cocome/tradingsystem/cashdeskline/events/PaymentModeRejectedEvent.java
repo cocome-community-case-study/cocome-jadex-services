@@ -25,31 +25,39 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * 
  * @see CashBoxModel
  * 
- * @author Lubomir Bulej
+ * @author Lubomir Bulej, Florian Abt
  */
-public final class PaymentModeRejectedEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = -7349265927547423726L;
+public final class PaymentModeRejectedEvent implements IEvent {
 
 	//
 
-	private final PaymentMode __mode;
+	private PaymentMode mode;
 
-	private final String __reason;
+	private String reason;
 
 	//
+	
+	public PaymentModeRejectedEvent(){}
 
-	public PaymentModeRejectedEvent(final PaymentMode mode, final String reason) {
-		__mode = mode;
-		__reason = reason;
+	public PaymentModeRejectedEvent( PaymentMode mode,  String reason) {
+		this.mode = mode;
+		this.reason = reason;
 	}
 
 	public PaymentMode getMode() {
-		return __mode;
+		return mode;
 	}
 
 	public String getReason() {
-		return __reason;
+		return reason;
+	}
+	
+	public void setMode(PaymentMode mode){
+		this.mode = mode;
+	}
+	
+	public void setReason(String reason){
+		this.reason = reason;
 	}
 
 }

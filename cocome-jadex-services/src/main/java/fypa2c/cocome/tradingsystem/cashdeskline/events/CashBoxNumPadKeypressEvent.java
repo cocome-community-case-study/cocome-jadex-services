@@ -24,24 +24,28 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.Num
  * Event emitted by the cash box after every numeric pad keystroke when the
  * cashier is entering the cash amount handed over by the customer.
  * 
- * @author Lubomir Bulej
+ * @author Lubomir Bulej, Florian Abt
  */
-public final class CashBoxNumPadKeypressEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = -5441935355616952790L;
+public final class CashBoxNumPadKeypressEvent implements IEvent {
 
 	//
 
-	private NumPadKeyStroke __keystroke;
+	private NumPadKeyStroke keystroke;
 
 	//
 
-	public CashBoxNumPadKeypressEvent(final NumPadKeyStroke keystroke) {
-		__keystroke = keystroke;
+	public CashBoxNumPadKeypressEvent(){}
+	
+	public CashBoxNumPadKeypressEvent( NumPadKeyStroke keystroke) {
+		this.keystroke = keystroke;
 	}
 
 	public NumPadKeyStroke getKeyStroke() {
-		return __keystroke;
+		return keystroke;
+	}
+	
+	public void setKeyStroke(NumPadKeyStroke keystroke){
+		this.keystroke = keystroke;
 	}
 
 }

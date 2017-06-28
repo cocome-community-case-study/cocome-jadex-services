@@ -25,12 +25,11 @@ import java.io.Serializable;
  * the current sale and start a new one.
  * 
  * @see CashBoxModel
+ * 
+ * @author Florian Abt
  */
-public final class SaleStartedEvent implements IEvent, Serializable {
+public final class SaleStartedEvent implements IEvent {
 
-	private static final long serialVersionUID = 2961207092223934936L;
-
-	//
 
 	public SaleStartedEvent() { /* empty */}
 

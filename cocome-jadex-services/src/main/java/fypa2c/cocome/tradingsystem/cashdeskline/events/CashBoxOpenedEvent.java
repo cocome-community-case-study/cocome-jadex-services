@@ -21,13 +21,11 @@ import java.io.Serializable;
 /**
  * Event emitted by the cash box after opening the cash box.
  * 
- * @see CashBoxModel
  * 
- * @author Lubomir Bulej
+ * @author Lubomir Bulej, Florian Abt
  */
-public final class CashBoxOpenedEvent implements IEvent, Serializable {
+public final class CashBoxOpenedEvent implements IEvent {
 
-	private static final long serialVersionUID = -5029546123444960504L;
 
 	//
 

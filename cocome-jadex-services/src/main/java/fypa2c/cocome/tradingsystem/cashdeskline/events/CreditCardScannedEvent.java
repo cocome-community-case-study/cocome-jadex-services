@@ -28,22 +28,26 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold
  */
-public final class CreditCardScannedEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = 5143156662313299874L;
+public final class CreditCardScannedEvent implements IEvent {
 
 	//
 
-	private final String __creditCardInformation;
+	private String creditCardInformation;
 
 	//
+	
+	public CreditCardScannedEvent(){}
 
-	public CreditCardScannedEvent(final String creditCardInformation) {
-		__creditCardInformation = creditCardInformation;
+	public CreditCardScannedEvent(String creditCardInformation) {
+		this.creditCardInformation = creditCardInformation;
 	}
 
 	public String getCreditCardInformation() {
-		return __creditCardInformation;
+		return creditCardInformation;
+	}
+	
+	public void setCreditCardInformation(String creditCardInformation){
+		this.creditCardInformation = creditCardInformation;
 	}
 
 }

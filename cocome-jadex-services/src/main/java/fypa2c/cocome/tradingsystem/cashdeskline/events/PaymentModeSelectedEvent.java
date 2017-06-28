@@ -26,22 +26,23 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * 
  * @see CashBoxModel
  */
-public final class PaymentModeSelectedEvent implements IEvent, Serializable {
+public final class PaymentModeSelectedEvent implements IEvent {
 
-	private static final long serialVersionUID = -7394495671841623726L;
-
-	//
-
-	private final PaymentMode mode;
+	private  PaymentMode mode;
 
 	//
+	public PaymentModeSelectedEvent(){}
 
-	public PaymentModeSelectedEvent(final PaymentMode mode) {
+	public PaymentModeSelectedEvent( PaymentMode mode) {
 		this.mode = mode;
 	}
 
 	public PaymentMode getMode() {
 		return this.mode;
+	}
+	
+	public void setMode(PaymentMode mode){
+		this.mode = mode;
 	}
 
 }

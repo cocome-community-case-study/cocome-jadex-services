@@ -18,26 +18,33 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
 
 import java.io.Serializable;
 
+import org.omg.CORBA.DynAnyPackage.Invalid;
+
 /**
  * Event emitted by the cash desk if there is no product associated with the
  * scanned product bar code.
+ * 
+ * @author Florian Abt
  */
-public final class InvalidProductBarcodeEvent implements IEvent, Serializable {
+public final class InvalidProductBarcodeEvent implements IEvent {
 
-	private static final long serialVersionUID = -354692220702852330L;
 
-	//
-
-	private final long __invalidBarcode;
+	private long invalidBarcode;
 
 	//
 
-	public InvalidProductBarcodeEvent(final long invalidBarcode) {
-		__invalidBarcode = invalidBarcode;
+	public InvalidProductBarcodeEvent(){}
+	
+	public InvalidProductBarcodeEvent( long invalidBarcode) {
+		this.invalidBarcode = invalidBarcode;
 	}
 
 	public long getBarcode() {
-		return __invalidBarcode;
+		return invalidBarcode;
+	}
+	
+	public void setBarcode(long invalidBarcode){
+		this.invalidBarcode = invalidBarcode;
 	}
 
 }

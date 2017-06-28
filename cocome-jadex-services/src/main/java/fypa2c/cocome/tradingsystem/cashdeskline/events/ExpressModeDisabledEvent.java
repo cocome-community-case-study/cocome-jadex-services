@@ -23,10 +23,11 @@ import java.io.Serializable;
  * disable cash desk express mode.
  * 
  * @see CashBoxModel
+ * 
+ * @author Florian Abt
  */
-public final class ExpressModeDisabledEvent implements IEvent, Serializable {
+public final class ExpressModeDisabledEvent implements IEvent {
 
-	private static final long serialVersionUID = -5349475990603060795L;
 
 	//
 

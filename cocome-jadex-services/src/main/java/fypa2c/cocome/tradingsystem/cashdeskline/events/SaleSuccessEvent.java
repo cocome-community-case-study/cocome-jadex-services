@@ -22,13 +22,9 @@ import java.io.Serializable;
  * Event emitted by the cash desk after a sale has been accounted for in the
  * store inventory to indicate that a sale has been successful.
  * 
- * @author Yannick Welsch
+ * @author Yannick Welsch, Florian Abt
  */
-public final class SaleSuccessEvent implements IEvent, Serializable {
-
-	private static final long serialVersionUID = 7349719632069989665L;
-
-	//
+public final class SaleSuccessEvent implements IEvent {
 
 	public SaleSuccessEvent() { /* empty */}
 
