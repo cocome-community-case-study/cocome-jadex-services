@@ -40,10 +40,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ProductWithStockItem", propOrder = { "__stockItemTO" })
 public class ProductWithStockItemTO extends ProductTO implements IStockItemTOAccessor {
 
-	private static final long serialVersionUID = 3541228255270656771L;
-
 	@XmlElement(name="StockItem")
 	private StockItemTO stockItemTO;
+	
+	public ProductWithStockItemTO() {}
 
 	/*
 	 * @see StockItemTOAccessor#getStockItemTO()

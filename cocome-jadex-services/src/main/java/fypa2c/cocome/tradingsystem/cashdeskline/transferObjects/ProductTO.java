@@ -41,9 +41,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "Product")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Product", propOrder = { "__id", "__barcode","__purchasePrice","__name"})
-public class ProductTO implements Serializable {
+public class ProductTO {
 
-	private static final long serialVersionUID = -4566375052296560384L;
 
 	@XmlElement(name="Id")
 	private long __id;
@@ -53,6 +52,8 @@ public class ProductTO implements Serializable {
 	private double __purchasePrice;
 	@XmlElement(name="Name")
 	private String __name;
+	
+	public ProductTO() {}
 
 	/**
 	 * Gets id.

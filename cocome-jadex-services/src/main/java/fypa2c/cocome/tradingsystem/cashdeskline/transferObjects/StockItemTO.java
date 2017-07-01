@@ -42,9 +42,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "StockItem", propOrder = { "__id", "__salesPrice", "__amount",
 	"__minStock", "__maxStock" })
-public class StockItemTO implements Serializable {
-
-	private static final long serialVersionUID = 5874806761123366899L;
+public class StockItemTO {
 
 	@XmlElement(name = "Id")
 	private long id;
@@ -60,6 +58,8 @@ public class StockItemTO implements Serializable {
 
 	@XmlElement(name = "MaxStock")
 	private long maxStock;
+	
+	public StockItemTO() {}
 
 	/**
 	 * Returns the unique identifier of the {@link StockItem} entity.
