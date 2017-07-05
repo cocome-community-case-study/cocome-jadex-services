@@ -10,5 +10,12 @@ import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.StockItemTO;
  */
 public interface IInventoryDB {
 
+	/**
+	 * Call to get a stock item (product) by ID. 
+	 * If no product with this barcode exists 
+	 * 
+	 * @param barcode
+	 * @return
+	 */
 	public StockItemTO getStockItemByBarcode(long barcode);
 }
