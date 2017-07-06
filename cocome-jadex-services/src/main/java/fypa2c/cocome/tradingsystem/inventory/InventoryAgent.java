@@ -51,66 +51,8 @@ public class InventoryAgent extends EventAgent {
 	@AgentBody 
 	public void body(){
 		
-		subscribeToEvents();
-		
 	}
 	 
-	/**
-	 * The agent subscribes to all events, it wants to listen by the event bus.
-	 */
-	public void subscribeToEvents(){
-		
-		//Create filter for specific events
-		IFilter<IEvent> filter = new IFilter<IEvent>() {
-			
-			@Override
-			public boolean filter(IEvent obj) {
-				/*
-				if(obj instanceof SaleStartedEvent){
-					return true;
-				}
-				*/
-				return false;
-			}
-		};
-		
-		//subscribe
-		ISubscriptionIntermediateFuture<IEvent> sifuture = ((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).subscribeToEvents(filter);
-		
-		//waiting for Events
-		sifuture.addIntermediateResultListener(new IIntermediateResultListener<IEvent>() {
-			
-			@Override
-			public void exceptionOccurred(Exception exception) {
-				printInfoLog("Exception occurred");
-				exception.printStackTrace();
-				
-			}
-			
-			@Override
-			public void resultAvailable(Collection<IEvent> result) {
-				printInfoLog("Received IEvent collection");
-				
-			}
-			
-			@Override
-			public void intermediateResultAvailable(IEvent result) {
-				printInfoLog("Received "+result.getClass().getName());
-				/*
-				if(result instanceof SaleStartedEvent){
-					
-				}
-				*/
-				
-			}
-			
-			@Override
-			public void finished() {
-				printInfoLog("IntermediateFuture finished");
-				
-			}
-		});
-	}
 	
 	/**
 	 * to get the Service of this agent for access to all provided services

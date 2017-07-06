@@ -23,21 +23,30 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleRegisteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleSuccessEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.exceptions.NoSuchProductException;
 import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.ProductTO;
+import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.ProductWithStockItemTO;
+import fypa2c.cocome.tradingsystem.inventory.IInventoryService;
 import jadex.bridge.IInternalAccess;
+import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.component.IProvidedServicesFeature;
+import jadex.bridge.service.types.cms.IComponentManagementService;
 import jadex.commons.Boolean3;
 import jadex.commons.IFilter;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IIntermediateResultListener;
+import jadex.commons.future.IResultListener;
 import jadex.commons.future.ISubscriptionIntermediateFuture;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 import jadex.micro.annotation.AgentCreated;
+import jadex.micro.annotation.Binding;
 import jadex.micro.annotation.Implementation;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
+import jadex.micro.annotation.RequiredService;
+import jadex.micro.annotation.RequiredServices;
 
 /**
  * This agent represents the cash desk application.  
@@ -47,6 +56,9 @@ import jadex.micro.annotation.ProvidedServices;
 @Agent(keepalive = Boolean3.TRUE)
 @ProvidedServices({
 	@ProvidedService(name="cashDeskApplication", type=ICashDeskApplicationService.class, implementation=@Implementation(CashDeskApplicationService.class))//,
+})
+@RequiredServices({
+	@RequiredService(name="inventory", type=IInventoryService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_GLOBAL))
 })
 public class CashDeskApplicationAgent extends EventAgent {
 	
@@ -147,17 +159,26 @@ public class CashDeskApplicationAgent extends EventAgent {
 				}
 				if(result instanceof ProductBarcodeScannedEvent){
 					long barcode = ((ProductBarcodeScannedEvent) result).getBarcode();
-					//TODO check, if product is in stock (this is how to get the name, price and running total)
-					
-					//for testing 
-					ProductTO product = new ProductTO();
-					product.setBarcode(barcode);
-					product.setId(1);
-					product.setName("ExampleProduct");
-					product.setPurchasePrice(10.5);
-					
-					shoppingCard.addProduct(product);
-					getServiceProvided().sendRunningTotalChangedEvent(product.getBarcode(), product.getName(), product.getPurchasePrice(), shoppingCard.getRunningTotal());
+					try {
+						IFuture<ProductWithStockItemTO> future = ((IInventoryService)requiredServicesFeature.getRequiredService("inventory").get()).getProductWithStockItemTO(barcode);
+						future.addResultListener(new IResultListener<ProductWithStockItemTO>() {
+							
+							@Override
+							public void exceptionOccurred(Exception exception) {
+								exception.printStackTrace();
+								
+							}
+							
+							@Override
+							public void resultAvailable(ProductWithStockItemTO result) {
+								shoppingCard.addProduct(result);
+								getServiceProvided().sendRunningTotalChangedEvent(result.getBarcode(), result.getName(), result.getPurchasePrice(), shoppingCard.getRunningTotal());
+							}
+						});
+					} catch (NoSuchProductException e) {
+						
+						e.printStackTrace();
+					}
 				}
 				if(result instanceof SaleFinishedEvent){
 					//TODO Finish process "Product Selection"

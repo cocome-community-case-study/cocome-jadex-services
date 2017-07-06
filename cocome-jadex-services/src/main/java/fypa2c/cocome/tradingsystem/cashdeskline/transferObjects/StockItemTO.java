@@ -44,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 	"__minStock", "__maxStock" })
 public class StockItemTO {
 
+	//this is the barcode
 	@XmlElement(name = "Id")
 	private long id;
 
@@ -59,7 +60,18 @@ public class StockItemTO {
 	@XmlElement(name = "MaxStock")
 	private long maxStock;
 	
+	private String productName;
+	
 	public StockItemTO() {}
+	
+	public StockItemTO(long barcode, String productName, double salesPrice, long amount, long minStock, long maxStock) {
+		id = barcode;
+		this.productName = productName;
+		this.salesPrice = salesPrice;
+		this.amount = amount;
+		this.minStock = minStock;
+		this.maxStock = maxStock;
+	}
 
 	/**
 	 * Returns the unique identifier of the {@link StockItem} entity.
@@ -159,6 +171,26 @@ public class StockItemTO {
 	 */
 	public void setSalesPrice(final double salesPrice) {
 		this.salesPrice = salesPrice;
+	}
+
+	/**
+	 * Returns the name of the represented product.
+	 * 
+	 * @return productName
+	 * 				name of the product
+	 */
+	public String getProductName() {
+		return productName;
+	}
+
+	/**
+	 * Sets the name of the represented product.
+	 * 
+	 * @param productName
+	 * 				name of the product
+	 */
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 }

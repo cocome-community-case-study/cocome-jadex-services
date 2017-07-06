@@ -1,5 +1,6 @@
 package fypa2c.cocome.tradingsystem.inventory;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.exceptions.NoSuchProductException;
 import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.ProductWithStockItemTO;
 import jadex.commons.future.IFuture;
 
@@ -11,5 +12,13 @@ import jadex.commons.future.IFuture;
  */
 public interface IInventoryService {
 
-	public IFuture<ProductWithStockItemTO> getProductWithStockItemTO(long barcode);
+	/**
+	 * Returns a ProductWithStockItemTO with the product with the given barcode. 
+	 * Throws NoSuchProductException if no there is no product with the given barcode.
+	 * 
+	 * @throws NoSuchProductException
+	 * @param barcode
+	 * @return
+	 */
+	public IFuture<ProductWithStockItemTO> getProductWithStockItemTO(long barcode) throws NoSuchProductException;
 }
