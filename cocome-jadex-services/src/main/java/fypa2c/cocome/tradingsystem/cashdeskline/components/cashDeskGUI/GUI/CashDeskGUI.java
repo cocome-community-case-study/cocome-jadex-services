@@ -39,9 +39,10 @@ public class CashDeskGUI {
 	private JPanel productListPanel;
 	private JList<String> list;
 	private JScrollPane scrollPane;
+	//After adding the first item to this list, the last entry of the list should ever be the running total as a productItem with no name and bar code.
 	private ArrayList<ProductItem> productItemList;
 	
-	//ButtonPanel with actual product, +1Button, -1 Button, start sale button, card payment button (SaleFinished), cash payment button (SaleFinished)
+	//ButtonPanel with actual product (JTextField), +1Button, -1 Button, start sale button, card payment button (SaleFinished), cash payment button (SaleFinished)
 	private JPanel buttonPanelSale;
 	private JTextField actualProduct;
 	//FirstButtonSubPanel
@@ -77,6 +78,7 @@ public class CashDeskGUI {
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setVisibleRowCount(-1);
+		list.setFont(new Font("Arial", Font.PLAIN, 15));
 		scrollPane = new JScrollPane(list);
 		productListPanel.add(scrollPane, BorderLayout.CENTER);
 		
@@ -84,6 +86,7 @@ public class CashDeskGUI {
 		buttonPanelSale = new JPanel(new GridLayout(3, 1));
 		actualProduct = new JTextField();
 		actualProduct.setEditable(false);
+		actualProduct.setFont(new Font("Arial", Font.PLAIN, 20));
 		buttonPanelSale.add(actualProduct);
 		buttonSubPanelOne = new JPanel(new GridLayout(1, 2));
 		plusOneButton = new JButton("+1");
@@ -106,8 +109,8 @@ public class CashDeskGUI {
 		buttonPanelSale.add(buttonSubPanelTwo);
 		
 		//Add components to frame
-		frame.getContentPane().add(productListPanel, BorderLayout.WEST);
-		frame.getContentPane().add(buttonPanelSale, BorderLayout.CENTER);		
+		frame.getContentPane().add(productListPanel, BorderLayout.CENTER);
+		frame.getContentPane().add(buttonPanelSale, BorderLayout.EAST);	
 		
 		setMode(SaleProcessModes.SALE_NOT_STARTED);
 		frame.setVisible(true);
@@ -122,13 +125,21 @@ public class CashDeskGUI {
 	}
 	
 	/**
-	 * Sets the product list, which is displayed on the CashDeskGUI
+	 * Sets the product list, which is displayed on the CashDeskGUI.
 	 * 
-	 * @param productItemList
+	 * @param productItem: the product to add to the displayed shopping card
+	 * @param runningTotal: the new running total
 	 */
-	public void addProductItemList(ProductItem productItem){
+	public void addProductItemList(ProductItem productItem, double runningTotal){
+		//remove the totalRunning as last entry, if it exists
+		if(!productItemList.isEmpty()) {
+			productItemList.remove(productItemList.size()-1);
+		}
 		productItemList.add(productItem);
-		//TODO How to say what should be displayed if i use productItem instead of string in productItemList?
+		//TODO How to say what should be displayed if I use productItem instead of string in productItemList?
+		
+		//Add the totalRunning as a productItem
+		productItemList.add(new ProductItem(0, "Running Total:", runningTotal));
 		
 		DefaultListModel<String> listModel = new DefaultListModel();
 		productItemList.forEach((item) -> listModel.addElement(item.getProductName()+"\t\t"+item.getProductPrice()));
@@ -176,6 +187,16 @@ public class CashDeskGUI {
 	public JButton getCardPaymentButton() {
 		return cardPaymentButton;
 	}
+	
+	/**
+	 * Sets the the text of the TextField actualProduct. 
+	 * 
+	 * @param product: the product item
+	 */
+	public void setTextActualProductTextField(ProductItem product) {
+		actualProduct.setText(product.getBarcode()+"\t"+product.getProductName()+"\t"+product.getProductPrice()+"€");
+	}
+	
 
 	/**
 	 * Set the mode of the GUI

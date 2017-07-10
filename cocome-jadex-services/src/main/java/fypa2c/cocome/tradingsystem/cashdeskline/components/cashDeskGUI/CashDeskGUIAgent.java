@@ -228,7 +228,9 @@ public class CashDeskGUIAgent extends EventAgent {
 					printInfoLog("Switch from sale GUI to pay GUI");
 				}
 				if (result instanceof RunningTotalChangedEvent) {
-					gui.addProductItemList(new ProductItem(((RunningTotalChangedEvent) result).getProductName(), ((RunningTotalChangedEvent) result).getProductPrice()));
+					ProductItem product = new ProductItem(((RunningTotalChangedEvent) result).getBarcode(),((RunningTotalChangedEvent) result).getProductName(), ((RunningTotalChangedEvent) result).getProductPrice());
+					gui.addProductItemList(product, ((RunningTotalChangedEvent) result).getRunningTotal());
+					gui.setTextActualProductTextField(product);
 				}
 				if (result instanceof CashAmountEnteredEvent) {
 					// TODO Update GUI with entered cash amount
