@@ -7,8 +7,11 @@ import java.util.LinkedList;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.ICashDeskGUIService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.AccountSaleEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.AddLastScannedProductAgainEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashBoxClosedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
@@ -58,7 +61,8 @@ import jadex.micro.annotation.RequiredServices;
 	@ProvidedService(name="cashDeskApplication", type=ICashDeskApplicationService.class, implementation=@Implementation(CashDeskApplicationService.class))//,
 })
 @RequiredServices({
-	@RequiredService(name="inventory", type=IInventoryService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_GLOBAL))
+	@RequiredService(name="inventory", type=IInventoryService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_GLOBAL)),
+	@RequiredService(name="scannerController", type=IScannerControllerService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM))
 })
 public class CashDeskApplicationAgent extends EventAgent {
 	
@@ -125,6 +129,9 @@ public class CashDeskApplicationAgent extends EventAgent {
 					return true;
 				}
 				if(obj instanceof CreditCardPinEnteredEvent){
+					return true;
+				}
+				if(obj instanceof AddLastScannedProductAgainEvent) {
 					return true;
 				}
 				return false;
@@ -214,6 +221,10 @@ public class CashDeskApplicationAgent extends EventAgent {
 					getServiceProvided().sendSaleSuccessEvent();
 					getServiceProvided().sendAccountSaleEvent(null);
 					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+				}
+				if(result instanceof AddLastScannedProductAgainEvent) {
+					LinkedList<ProductTO> actualList = shoppingCard.getActualShoppingCard();
+					((IScannerControllerService)requiredServicesFeature.getRequiredService("scannerController").get()).sendProductBarCodeScannedEvent(actualList.get(actualList.size()-1).getBarcode());
 				}
 				
 			}

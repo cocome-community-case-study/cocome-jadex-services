@@ -138,7 +138,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO add another product of the last chosen product to the product list
+				getServiceProvided().sendAddLastScannedProductAgainEvent();
 				
 			}
 		});
