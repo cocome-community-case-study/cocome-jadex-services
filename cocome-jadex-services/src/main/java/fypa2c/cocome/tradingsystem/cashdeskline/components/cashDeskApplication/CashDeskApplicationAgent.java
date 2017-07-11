@@ -227,9 +227,13 @@ public class CashDeskApplicationAgent extends EventAgent {
 					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
 				}
 				if(result instanceof AddLastScannedProductAgainEvent) {
-					//TODO Check if list is empty, if all elements of the list were removed but the user presses the +1 button
 					LinkedList<ProductTO> actualList = shoppingCard.getActualShoppingCard();
-					((IScannerControllerService)requiredServicesFeature.getRequiredService("scannerController").get()).sendProductBarCodeScannedEvent(actualList.get(actualList.size()-1).getBarcode());
+					if(!actualList.isEmpty()) {
+						((IScannerControllerService)requiredServicesFeature.getRequiredService("scannerController").get()).sendProductBarCodeScannedEvent(actualList.get(actualList.size()-1).getBarcode());
+					}
+					else {
+						printInfoLog("The shopping card is empty, I have no product to add again, sorry!");
+					}
 				}
 				if(result instanceof RemoveLastScannedProductEvent) {
 					ProductTO removedProduct = shoppingCard.removeLastProduct();

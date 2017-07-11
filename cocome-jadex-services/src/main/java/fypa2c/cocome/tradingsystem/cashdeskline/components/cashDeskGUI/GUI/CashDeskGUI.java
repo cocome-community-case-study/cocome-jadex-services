@@ -103,7 +103,7 @@ public class CashDeskGUI {
 		cashPaymentButton = new JButton("Pay with cash");
 		cashPaymentButton.setFont(new Font("Arial", Font.PLAIN, 40));
 		buttonSubPanelTwo.add(cashPaymentButton);
-		cardPaymentButton = new JButton("Pay with Card");
+		cardPaymentButton = new JButton("Pay with card");
 		cardPaymentButton.setFont(new Font("Arial", Font.PLAIN, 40));
 		buttonSubPanelTwo.add(cardPaymentButton);
 		buttonPanelSale.add(buttonSubPanelTwo);
