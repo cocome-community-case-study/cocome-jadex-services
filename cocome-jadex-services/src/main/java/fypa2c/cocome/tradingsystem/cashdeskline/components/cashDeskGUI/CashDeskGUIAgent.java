@@ -129,7 +129,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO remove last Product from product list
+				getServiceProvided().sendRemoveLastScannedProductEvent();
 				
 			}
 		});
@@ -229,8 +229,16 @@ public class CashDeskGUIAgent extends EventAgent {
 				}
 				if (result instanceof RunningTotalChangedEvent) {
 					ProductItem product = new ProductItem(((RunningTotalChangedEvent) result).getBarcode(),((RunningTotalChangedEvent) result).getProductName(), ((RunningTotalChangedEvent) result).getProductPrice());
-					gui.addProductItemList(product, ((RunningTotalChangedEvent) result).getRunningTotal());
-					gui.setTextActualProductTextField(product);
+					//check if this event indicates the adding or the removal of a product
+					if(product.getBarcode() != -1) {
+						//add new product to shopping card
+						gui.addProductItemToList(product, ((RunningTotalChangedEvent) result).getRunningTotal());
+						gui.setTextActualProductTextField(product);
+					}
+					else {
+						//remove last product in shopping card
+						gui.removeLastProductItemFromList(((RunningTotalChangedEvent) result).getRunningTotal());
+					}
 				}
 				if (result instanceof CashAmountEnteredEvent) {
 					// TODO Update GUI with entered cash amount

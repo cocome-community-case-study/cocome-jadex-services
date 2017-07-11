@@ -21,6 +21,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.InvalidCreditCardEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.RemoveLastScannedProductEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.RunningTotalChangedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleRegisteredEvent;
@@ -134,6 +135,9 @@ public class CashDeskApplicationAgent extends EventAgent {
 				if(obj instanceof AddLastScannedProductAgainEvent) {
 					return true;
 				}
+				if(obj instanceof RemoveLastScannedProductEvent) {
+					return true;
+				}
 				return false;
 			}
 		};
@@ -223,8 +227,18 @@ public class CashDeskApplicationAgent extends EventAgent {
 					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
 				}
 				if(result instanceof AddLastScannedProductAgainEvent) {
+					//TODO Check if list is empty, if all elements of the list were removed but the user presses the +1 button
 					LinkedList<ProductTO> actualList = shoppingCard.getActualShoppingCard();
 					((IScannerControllerService)requiredServicesFeature.getRequiredService("scannerController").get()).sendProductBarCodeScannedEvent(actualList.get(actualList.size()-1).getBarcode());
+				}
+				if(result instanceof RemoveLastScannedProductEvent) {
+					ProductTO removedProduct = shoppingCard.removeLastProduct();
+					if(removedProduct != null) {
+						getServiceProvided().sendRunningTotalChangedEvent(-1, "cancel last product", removedProduct.getPurchasePrice() * -1, shoppingCard.getRunningTotal());
+					}
+					else {
+						printInfoLog("Trying to remove a product from an empty shopping card... Check your code!");
+					}
 				}
 				
 			}

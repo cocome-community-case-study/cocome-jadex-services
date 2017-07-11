@@ -22,13 +22,15 @@ import java.io.Serializable;
  * Event emitted by the cash desk after an item has been added to the current
  * sale in response to a barcode scan. It contains information about the current
  * item, its price and the running total.
+ * If the barcode equals the value -1 this event indicates the removal of the 
+ * last product in the shopping card.
  * 
  * @author Florian Abt
  */
 public final class RunningTotalChangedEvent implements IEvent {
 
 
-	//
+	//-1 indicates the removal of the last product in the shopping card.
 	private long barcode;
 
 	private  String productName;

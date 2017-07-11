@@ -70,21 +70,22 @@ public class ShoppingCard {
 		
 	}
 	
+	
 	/**
 	 * Removes the last added product from the shopping card.
 	 * An UNDO of this is not possible.
 	 * 
-	 * @return true: if there is an element to remove
-	 * 		   false: otherwise 
+	 * @return removedProduct: returns the removed product if there is a product to remove
+	 * 		   null: if the shopping card is empty 
 	 */
-	public boolean removeProduct(){
+	public ProductTO removeLastProduct(){
 		if(shoppingCard.isEmpty()){
-			return false;
+			return null;
 		}
 		else{
 			ProductTO removedProduct =  shoppingCard.removeLast();
 			runningTotal = runningTotal - removedProduct.getPurchasePrice();
-			return true;
+			return removedProduct;
 		}
 	}
 	

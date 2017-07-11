@@ -15,5 +15,12 @@ public interface ICashDeskGUIService {
 	 * to the shopping card again.
 	 */
 	public IFuture<Void> sendAddLastScannedProductAgainEvent();
+	
+	/**
+	 * To send a RemoveLastScannedProductEvent 
+	 * if the last selected product should be 
+	 * removed from the shopping card.
+	 */
+	public IFuture<Void> sendRemoveLastScannedProductEvent();
 
 }

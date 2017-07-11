@@ -125,12 +125,12 @@ public class CashDeskGUI {
 	}
 	
 	/**
-	 * Sets the product list, which is displayed on the CashDeskGUI.
+	 * Adds a product to the list, which is displayed on the CashDeskGUI.
 	 * 
 	 * @param productItem: the product to add to the displayed shopping card
 	 * @param runningTotal: the new running total
 	 */
-	public void addProductItemList(ProductItem productItem, double runningTotal){
+	public void addProductItemToList(ProductItem productItem, double runningTotal){
 		//remove the totalRunning as last entry, if it exists
 		if(!productItemList.isEmpty()) {
 			productItemList.remove(productItemList.size()-1);
@@ -142,11 +142,33 @@ public class CashDeskGUI {
 		productItemList.add(new ProductItem(0, "Running Total:", runningTotal));
 		
 		DefaultListModel<String> listModel = new DefaultListModel();
-		productItemList.forEach((item) -> listModel.addElement(item.getProductName()+"\t\t"+item.getProductPrice()));
+		productItemList.forEach((item) -> listModel.addElement(item.getProductName()+"   "+item.getProductPrice()+"€"));
 		list.setModel(listModel);
 	}
 	
-	//TODO removeProduct and clearProductList
+	/**
+	 * Removes the last product from the displayed list.
+	 * 
+	 * @param runningTotal : the new running total
+	 */
+	public void removeLastProductItemFromList(double runningTotal) {
+		//remove the totalRunning as last entry, if it exists
+		if(!productItemList.isEmpty()) {
+			productItemList.remove(productItemList.size()-1);
+		}
+		//remove the last product, if it exists
+		if(!productItemList.isEmpty()) {
+			productItemList.remove(productItemList.size()-1);
+		}
+		//Add the totalRunning as a productItem
+		productItemList.add(new ProductItem(0, "Running Total:", runningTotal));
+		
+		DefaultListModel<String> listModel = new DefaultListModel();
+		productItemList.forEach((item) -> listModel.addElement(item.getProductName()+"   "+item.getProductPrice()+"€"));
+		list.setModel(listModel);
+	}
+	
+	//TODO clearProductList
 	
 	/**
 	 * Getter for adding an ActionListener
