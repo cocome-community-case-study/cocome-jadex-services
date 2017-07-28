@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.TestGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.ICashDeskGUIService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
@@ -196,8 +197,13 @@ public class CashDeskApplicationAgent extends EventAgent {
 					printInfoLog("Finish process \"Product Selection\"");
 				}
 				if(result instanceof PaymentModeSelectedEvent){
-					//TODO Start process "Cash Payment" or "Card Payment"
-					printInfoLog("Start process \"Cash Payment\" or \"Card Payment\"");
+					if(((PaymentModeSelectedEvent)result).getMode().equals(PaymentMode.CASH)) {
+						printInfoLog("Start process \"Cash Payment\"");		
+					}
+					else if(((PaymentModeSelectedEvent)result).getMode().equals(PaymentMode.CREDIT_CARD)) {
+						printInfoLog("Start process \"Card Payment\"");
+					}
+					
 				}
 				if(result instanceof CashAmountEnteredEvent){
 					//TODO Calculate (new due amount or) change amount

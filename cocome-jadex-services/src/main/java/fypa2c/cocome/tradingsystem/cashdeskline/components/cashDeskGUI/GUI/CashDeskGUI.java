@@ -19,7 +19,7 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
-import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.NumPadKeyStroke;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.NumPadKeyStroke;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 
 /**

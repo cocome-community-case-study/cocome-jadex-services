@@ -1,4 +1,4 @@
-package fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController;
+package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
 /***************************************************************************
  * Copyright 2013 DFG SPP 1593 (http://dfg-spp1593.de)
@@ -18,7 +18,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController;
 
 
 /**
- * Enumerates the keys that can be pressed on the cash box keyboard.
+ * Enumerates the keys that can be pressed on the cash box keyboard (and the scannerDummy).
  * 
  * @author Yannick Welsch
  * @author Lubomir Bulej
@@ -36,7 +36,7 @@ public enum NumPadKeyStroke {
 	NINE("9"),
 	COMMA("."),
 	ENTER("ENTER"),
-	SCAN("SCAN"),
+	SCAN("SCAN"),//just used by the scanner
 	DELETE("DELETE");
 
 	//
