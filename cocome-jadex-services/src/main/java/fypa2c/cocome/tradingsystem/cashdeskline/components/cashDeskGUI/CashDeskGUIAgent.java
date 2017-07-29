@@ -8,16 +8,21 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.EventAgent;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.CashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.ICashBoxControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.PaymentMode;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication.CashDeskApplicationService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskApplication.ICashDeskApplicationService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.CashDeskGUI;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.ProductItem;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.SaleProcessModes;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.InvalidCreditCardEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.RunningTotalChangedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
@@ -56,7 +61,8 @@ import jadex.micro.annotation.RequiredServices;
 		@ProvidedService(name = "cashDeskGUI", type = ICashDeskGUIService.class, implementation = @Implementation(CashDeskGUIService.class))// ,
 })
 @RequiredServices({
-	@RequiredService(name="cashBoxController", type=ICashBoxControllerService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM))//,
+	@RequiredService(name="cashBoxController", type=ICashBoxControllerService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM)),
+	@RequiredService(name="cashDeskApplication", type=ICashDeskApplicationService.class, binding=@Binding(scope=RequiredServiceInfo.SCOPE_PLATFORM))//,
 })
 public class CashDeskGUIAgent extends EventAgent {
 	@Agent
@@ -70,6 +76,9 @@ public class CashDeskGUIAgent extends EventAgent {
 
 	// Number of this CashDesk;
 	private int myCashDeskNumber;
+	
+	//The Actual totalRunning
+	private double runningTotal = 0;
 
 	// CashDeskGUI
 	CashDeskGUI gui;
@@ -110,7 +119,6 @@ public class CashDeskGUIAgent extends EventAgent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();
-				gui.setMode(SaleProcessModes.PAYMENT_CARD);	
 				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(PaymentMode.CREDIT_CARD);
 			}
 		});
@@ -119,8 +127,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();
-				gui.setMode(SaleProcessModes.PAYMENT_CASH);				
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();	
 				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(PaymentMode.CASH);
 			}
 		});
@@ -148,7 +155,24 @@ public class CashDeskGUIAgent extends EventAgent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleStartedEvent();
-				gui.setMode(SaleProcessModes.SALE_PRODUCT_SELECTION);
+			}
+		});
+		
+		gui.setActionListenerPayment(new ActionListener() {
+			
+			//Enter button
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				double amount = gui.getTextCashAmountTextField();
+				runningTotal = runningTotal - amount;
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendCashAmountEnteredEvent(amount, runningTotal <= 0);
+			}
+		}, new ActionListener() {
+			
+			//PaymentFinished button
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((ICashDeskApplicationService)requiredServicesFeature.getRequiredService("cashDeskApplication").get()).sendSaleSuccessEvent();
 			}
 		});
 	}
@@ -192,6 +216,12 @@ public class CashDeskGUIAgent extends EventAgent {
 				if (obj instanceof InvalidCreditCardEvent) {
 					return true;
 				}
+				if (obj instanceof PaymentModeSelectedEvent) {
+					return true;
+				}
+				if (obj instanceof ChangeAmountCalculatedEvent) {
+					return true;
+				}
 				return false;
 			}
 		};
@@ -220,7 +250,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			public void intermediateResultAvailable(IEvent result) {
 				printInfoLog("Received " + result.getClass().getName());
 				if (result instanceof SaleStartedEvent) {
-					// TODO Show sale GUI
+					gui.setMode(SaleProcessModes.SALE_PRODUCT_SELECTION);
 					printInfoLog("Show sale GUI");
 				}
 				if (result instanceof SaleFinishedEvent) {
@@ -239,18 +269,37 @@ public class CashDeskGUIAgent extends EventAgent {
 						//remove last product in shopping card
 						gui.removeLastProductItemFromList(((RunningTotalChangedEvent) result).getRunningTotal());
 					}
+					runningTotal = ((RunningTotalChangedEvent) result).getRunningTotal();
 				}
 				if (result instanceof CashAmountEnteredEvent) {
-					// TODO Update GUI with entered cash amount
 					printInfoLog("Update GUI with with entered cash amount");
+					if(runningTotal<=0) {
+						gui.setMode(SaleProcessModes.PAYMENT_FINISHED);
+						gui.setTextChangeAmount("Change Amount: "+(runningTotal*-1)+"€");
+					}
+					else {
+						gui.setTextChangeAmount("Amount to pay: "+runningTotal+"€");
+					}
+					
 				}
 				if (result instanceof SaleSuccessEvent) {
-					// TODO Exit GUI "Sale"
-					printInfoLog("Exit GUI \"Sale\"");
+					runningTotal = 0;
+					gui.setMode(SaleProcessModes.SALE_NOT_STARTED);
 				}
 				if (result instanceof InvalidCreditCardEvent) {
-					// TODO Udate GUI, invalid credit card
+					// TODO Update GUI, invalid credit card
 					printInfoLog("Udate GUI, invalid credit card");
+				}
+				if (result instanceof PaymentModeSelectedEvent) {
+					if(((PaymentModeSelectedEvent)result).getMode() == PaymentMode.CREDIT_CARD) {
+						//TODO implement real Card payment
+						gui.setMode(SaleProcessModes.PAYMENT_FINISHED);	
+						gui.setTextChangeAmount("Card payment successful!");
+					}
+					else if(((PaymentModeSelectedEvent)result).getMode() == PaymentMode.CASH) {
+						gui.setMode(SaleProcessModes.PAYMENT_CASH);
+						gui.setTextChangeAmount("Amount to pay: "+runningTotal+"€");
+					}
 				}
 			}
 

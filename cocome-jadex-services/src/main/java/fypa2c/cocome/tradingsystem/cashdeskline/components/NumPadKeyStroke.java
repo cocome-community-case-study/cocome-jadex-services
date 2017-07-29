@@ -37,7 +37,8 @@ public enum NumPadKeyStroke {
 	COMMA("."),
 	ENTER("ENTER"),
 	SCAN("SCAN"),//just used by the scanner
-	DELETE("DELETE");
+	DELETE("DELETE"),
+	FINISHSALE("Finish Sale");
 
 	//
 

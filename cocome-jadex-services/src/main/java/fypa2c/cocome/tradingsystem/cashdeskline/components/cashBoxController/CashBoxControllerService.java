@@ -43,7 +43,6 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 
 	@Override
 	public IFuture<Void> sendCashAmountEnteredEvent(double amount, boolean finalInput) {
-		//TODO final Input is included  in CAEEvent in the UseCase 1 specification. Don't know if this is really necessary
 		return component.publishEvent(new CashAmountEnteredEvent(amount, finalInput));
 	}
 

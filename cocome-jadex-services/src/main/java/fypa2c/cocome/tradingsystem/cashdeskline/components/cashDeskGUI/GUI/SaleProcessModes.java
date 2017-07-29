@@ -9,7 +9,7 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI;
 public enum SaleProcessModes {
 	SALE_NOT_STARTED(0),
 	SALE_PRODUCT_SELECTION(1),
-	PAYMENT_CARD(2),
+	PAYMENT_FINISHED(2),
 	PAYMENT_CASH(3);
 	
 	//

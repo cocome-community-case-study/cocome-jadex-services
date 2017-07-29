@@ -16,8 +16,8 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.NumPadKeyStroke;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 
 /**
- * The CashDeskGUI for the cashier to use the cash desk.
- * It contains a number pad, a display and a status line.
+ * The DummyScannerGUI for the cashier to use the DummyScanner.
+ * It contains a number pad to enter the barcode.
  *
  * @author Florian Abt
  */

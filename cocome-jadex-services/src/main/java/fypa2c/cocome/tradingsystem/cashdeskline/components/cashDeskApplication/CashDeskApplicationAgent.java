@@ -71,6 +71,8 @@ public class CashDeskApplicationAgent extends EventAgent {
 	//Shopping card represented by a LinkList
 	private ShoppingCard shoppingCard = new ShoppingCard();
 	
+	private double runningTotal = 0;
+	
 	
 	@Agent
 	protected IInternalAccess agent;
@@ -198,22 +200,28 @@ public class CashDeskApplicationAgent extends EventAgent {
 				}
 				if(result instanceof PaymentModeSelectedEvent){
 					if(((PaymentModeSelectedEvent)result).getMode().equals(PaymentMode.CASH)) {
-						printInfoLog("Start process \"Cash Payment\"");		
+						printInfoLog("Start process \"Cash Payment\"");	
+						runningTotal = shoppingCard.getRunningTotal();
+						shoppingCard.checkOut();
 					}
 					else if(((PaymentModeSelectedEvent)result).getMode().equals(PaymentMode.CREDIT_CARD)) {
 						printInfoLog("Start process \"Card Payment\"");
+						shoppingCard.checkOut();
 					}
 					
 				}
 				if(result instanceof CashAmountEnteredEvent){
-					//TODO Calculate (new due amount or) change amount
 					printInfoLog("Calculate (new due amount or) change amount");
-					getServiceProvided().sendChangeAmountCalculatedEvent(0);
+					runningTotal = runningTotal - ((CashAmountEnteredEvent)result).getCashAmount();
+					if(((CashAmountEnteredEvent)result).isFinalinput()) {
+						getServiceProvided().sendChangeAmountCalculatedEvent(runningTotal*-1);
+						runningTotal = 0;
+					}
 				}
 				if(result instanceof CashBoxClosedEvent){
 					//TODO Update inventory and register sale
 					printInfoLog("Update inventory and register sale");
-					getServiceProvided().sendSaleSuccessEvent();
+					//getServiceProvided().sendSaleSuccessEvent();
 					getServiceProvided().sendAccountSaleEvent(null);
 					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
 				}
