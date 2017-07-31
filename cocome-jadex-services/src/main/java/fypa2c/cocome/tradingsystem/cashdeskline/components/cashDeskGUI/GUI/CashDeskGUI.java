@@ -145,20 +145,24 @@ public class CashDeskGUI {
 		NumberFormat format = NumberFormat.getCurrencyInstance();
 		format.setGroupingUsed(false);
 		cashAmountTextField  = new JFormattedTextField(format);
+		cashAmountTextField.setFont(new Font("Arial", Font.PLAIN, 30));
 		changeAmountTextField = new JTextField();
 		changeAmountTextField.setEditable(false);
-		changeAmountTextField.setFont(new Font("Arial", Font.PLAIN, 20));
+		changeAmountTextField.setFont(new Font("Arial", Font.PLAIN, 30));
 		paymentButtonPanel.add(changeAmountTextField);
 		paymentButtonPanel.add(cashAmountTextField);
 		//Set buttons of NumPad rows
 		for(int row=0; row<4; row++){
 			for(int button=0; button<3; button++){
 				rows[row].add(buttons[row][button]);
+				buttons[row][button].setFont(new Font("Arial", Font.PLAIN, 30));
 			}
 			paymentButtonPanel.add(rows[row]);
 		}
 		rows[4].add(buttons[4][0]);
+		buttons[4][0].setFont(new Font("Arial", Font.PLAIN, 30));
 		rows[4].add(buttons[4][1]);
+		buttons[4][1].setFont(new Font("Arial", Font.PLAIN, 30));
 		paymentButtonPanel.add(rows[4]);
 		
 		
@@ -403,7 +407,7 @@ public class CashDeskGUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String content = cashAmountTextField.getText();
-				if(!content.equals("")){
+				if(!content.equals("0")){
 					cashAmountTextField.setText(content + 0);
 				}
 			}
