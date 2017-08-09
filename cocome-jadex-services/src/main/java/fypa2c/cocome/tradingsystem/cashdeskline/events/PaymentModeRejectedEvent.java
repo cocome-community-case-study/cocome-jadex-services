@@ -27,7 +27,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * 
  * @author Lubomir Bulej, Florian Abt
  */
-public final class PaymentModeRejectedEvent implements IEvent {
+public final class PaymentModeRejectedEvent extends Event {
 
 	//
 
@@ -37,9 +37,13 @@ public final class PaymentModeRejectedEvent implements IEvent {
 
 	//
 	
-	public PaymentModeRejectedEvent(){}
+	public PaymentModeRejectedEvent(){
+		super();
+	}
 
-	public PaymentModeRejectedEvent( PaymentMode mode,  String reason) {
+	public PaymentModeRejectedEvent( PaymentMode mode,  String reason, String creator) {
+		super(creator);
+		
 		this.mode = mode;
 		this.reason = reason;
 	}

@@ -118,6 +118,7 @@ public class PrinterControllerAgent extends EventAgent
 			
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result, getLog());
 				printInfoLog("Received "+result.getClass().getName());
 				if(result instanceof SaleStartedEvent){
 					//TODO Start printing process

@@ -26,14 +26,18 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * 
  * @see CashBoxModel
  */
-public final class PaymentModeSelectedEvent implements IEvent {
+public final class PaymentModeSelectedEvent extends Event {
 
 	private  PaymentMode mode;
 
 	//
-	public PaymentModeSelectedEvent(){}
+	public PaymentModeSelectedEvent(){
+		super();
+	}
 
-	public PaymentModeSelectedEvent( PaymentMode mode) {
+	public PaymentModeSelectedEvent( PaymentMode mode, String creator) {
+		super(creator);
+		
 		this.mode = mode;
 	}
 

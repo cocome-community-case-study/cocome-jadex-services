@@ -2,10 +2,19 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Properties;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.logging.LogEntry;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.logging.LogWriter;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.simulationController.SimulationControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
@@ -50,7 +59,6 @@ public class EventAgent {
 	{
 		//set testON value from properties, testGUI's of Agents only start if this value is true
 		final Properties properties = new Properties();
-		ClassLoader loader = ClassLoader.getSystemClassLoader();
 		try{
 			File file = new File("properties.xml");
 			final FileInputStream in = new FileInputStream(file.getAbsolutePath());
@@ -67,6 +75,9 @@ public class EventAgent {
 			e.printStackTrace();
 			System.out.println("properties.xml not found, couldn't load simulationOn value - simulation component is not started yet");
 		}
+		
+		
+		
 		
 		return Future.DONE;
 	}
@@ -87,6 +98,9 @@ public class EventAgent {
 	 * @param event : The event to publish
 	 */
 	public IFuture<Void> publishEvent(IEvent event){
+		event.setGunner(getLog());
+		logEvent(event, null);
+		
 		((IEventBusService)requiredServicesFeature.getRequiredService("eventBus").get()).publishEvent(event);
 
 		return Future.DONE;
@@ -102,6 +116,15 @@ public class EventAgent {
 	}
 	
 	/**
+	 * Returns the log (in general the name) of this component.
+	 * 
+	 * @return log
+	 */
+	protected String getLog() {
+		return log;
+	}
+	
+	/**
 	 * Prints a log message in the console identified by the log name of the class.
 	 * @param message
 	 */
@@ -109,13 +132,27 @@ public class EventAgent {
 		System.out.println(log+": "+message);
 	}
 	
+	
+	
 	/**
 	 * Specific if the test mode is running
 	 * @return true if the test mode is running
 	 */
-	public boolean isTestON(){
+	protected boolean isTestON(){
 		return testON;
 	}
 	
+	/**
+	 * Logs an Event
+	 * 
+	 * @param event: the event
+	 * @param receiverName: the name of the component which receives the event, null is actual no component received
+	 */
+	protected void logEvent(IEvent event, String receiverName) {
+		//to get the names of the calling component (number 3 in the stackTrace from behind)
+		Exception e = new Exception();
+		StackTraceElement element = e.getStackTrace()[3];
+		LogWriter.writeLog(new LogEntry(event.getEventID(), event.getClass().getSimpleName(), event.getGunner(), event.getCreator(), event.getCreatorMethod(), receiverName, event.getDate()),getLog());
+	}
 
 }

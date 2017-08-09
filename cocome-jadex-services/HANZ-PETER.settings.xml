@@ -170,9 +170,14 @@
 		<p0:property __ID="135" type="autocreate">true</p0:property>
 		<p0:property __ID="136" type="autodelete">true</p0:property>
 	</p0:properties>
-	<p0:properties __ID="137" type="StarterServicePanel">
-		<p0:properties __ID="138" type="mpanel">
-			<p0:property __ID="139" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+	<p0:properties __ID="137" type="awa@HANZ-PETER_aec">
+		<p0:property __ID="138" type="fast">false</p0:property>
+		<p0:property __ID="139" type="autocreate">true</p0:property>
+		<p0:property __ID="140" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="141" type="StarterServicePanel">
+		<p0:properties __ID="142" type="mpanel">
+			<p0:property __ID="143" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <p0:TreeProperties xmlns:p0="typeinfo:jadex.base.gui.filetree" __ID="0">
 	<expandedNodes>
 		<p0:NodePath__1 __ID="1" __len="0"></p0:NodePath__1>
@@ -186,32 +191,27 @@
 	</rootPathEntries>
 </p0:TreeProperties>
 ]]></p0:property>
-			<p0:properties __ID="140" type="mic">
-				<p0:property __ID="141" type="Micro Agent">true</p0:property>
+			<p0:properties __ID="144" type="mic">
+				<p0:property __ID="145" type="Micro Agent">true</p0:property>
 			</p0:properties>
 		</p0:properties>
-		<p0:properties __ID="142" type="spanel">
-			<p0:property __ID="143" type="startsuspended">false</p0:property>
-			<p0:property __ID="144" type="autogenerate">false</p0:property>
-			<p0:property __ID="145" type="number">1</p0:property>
-			<p0:property __ID="146" type="name"></p0:property>
+		<p0:properties __ID="146" type="spanel">
+			<p0:property __ID="147" type="startsuspended">false</p0:property>
+			<p0:property __ID="148" type="autogenerate">false</p0:property>
+			<p0:property __ID="149" type="number">1</p0:property>
+			<p0:property __ID="150" type="name"></p0:property>
 		</p0:properties>
 	</p0:properties>
-	<p0:properties __ID="147" type="clockservice">
-		<p0:property __ID="148" type="type">system</p0:property>
-		<p0:property __ID="149" type="delta">100</p0:property>
-		<p0:property __ID="150" type="dilation">1.0</p0:property>
+	<p0:properties __ID="151" type="clockservice">
+		<p0:property __ID="152" type="type">system</p0:property>
+		<p0:property __ID="153" type="delta">100</p0:property>
+		<p0:property __ID="154" type="dilation">1.0</p0:property>
 	</p0:properties>
-	<p0:properties __ID="151" type="simulationservice">
-		<p0:property __ID="152" type="executing">true</p0:property>
+	<p0:properties __ID="155" type="simulationservice">
+		<p0:property __ID="156" type="executing">true</p0:property>
 	</p0:properties>
-	<p0:properties __ID="153" type="chat">
-		<p0:property __ID="154" type="nickname">user_8d5</p0:property>
-	</p0:properties>
-	<p0:properties __ID="155" type="awa@HANZ-PETER_aec">
-		<p0:property __ID="156" type="fast">false</p0:property>
-		<p0:property __ID="157" type="autocreate">true</p0:property>
-		<p0:property __ID="158" type="autodelete">true</p0:property>
+	<p0:properties __ID="157" type="chat">
+		<p0:property __ID="158" type="nickname">user_8d5</p0:property>
 	</p0:properties>
 	<p0:properties __ID="159" type="securityservice">
 		<p0:property __ID="160" type="validityduration">327680</p0:property>
@@ -229,5 +229,10 @@
 		<p0:properties __ID="171" type="TTPAcquisitionMechanism">
 			<p0:property __ID="172" type="verify">true</p0:property>
 		</p0:properties>
+	</p0:properties>
+	<p0:properties __ID="173" type="awa@HANZ-PETER_6f1">
+		<p0:property __ID="174" type="fast">false</p0:property>
+		<p0:property __ID="175" type="autocreate">true</p0:property>
+		<p0:property __ID="176" type="autodelete">true</p0:property>
 	</p0:properties>
 </p0:properties>

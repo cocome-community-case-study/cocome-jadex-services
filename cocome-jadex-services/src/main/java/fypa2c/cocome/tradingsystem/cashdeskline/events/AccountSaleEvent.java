@@ -28,7 +28,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.transferObjects.SaleTO;
  * 
  * @author Yannick Welsch, Florian Abt
  */
-public final class AccountSaleEvent implements IEvent {
+public final class AccountSaleEvent extends Event {
 
 
 	//
@@ -37,9 +37,12 @@ public final class AccountSaleEvent implements IEvent {
 
 	//
 
-	public AccountSaleEvent(){}
+	public AccountSaleEvent(){
+		super();
+	}
 	
-	public AccountSaleEvent(final SaleTO sale) {
+	public AccountSaleEvent(final SaleTO sale, String creator) {
+		super(creator);
 		this.sale = sale;
 	}
 

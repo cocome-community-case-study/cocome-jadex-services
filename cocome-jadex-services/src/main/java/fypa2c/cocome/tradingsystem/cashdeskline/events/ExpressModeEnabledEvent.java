@@ -25,16 +25,20 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold, Lubomir Bulej, Florian Abt
  */
-public final class ExpressModeEnabledEvent implements IEvent {
+public final class ExpressModeEnabledEvent extends Event {
 
 	
 	private String cashDesk;
 
 	//
 	
-	public ExpressModeEnabledEvent(){}
+	public ExpressModeEnabledEvent(){
+		super();
+	}
 
-	public ExpressModeEnabledEvent( String cashDesk) {
+	public ExpressModeEnabledEvent( String cashDesk, String creator) {
+		super(creator);
+		
 		this.cashDesk = cashDesk;
 	}
 

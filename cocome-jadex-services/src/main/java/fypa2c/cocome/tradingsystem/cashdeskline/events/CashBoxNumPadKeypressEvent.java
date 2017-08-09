@@ -26,7 +26,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.NumPadKeyStroke;
  * 
  * @author Lubomir Bulej, Florian Abt
  */
-public final class CashBoxNumPadKeypressEvent implements IEvent {
+public final class CashBoxNumPadKeypressEvent extends Event {
 
 	//
 
@@ -34,9 +34,13 @@ public final class CashBoxNumPadKeypressEvent implements IEvent {
 
 	//
 
-	public CashBoxNumPadKeypressEvent(){}
+	public CashBoxNumPadKeypressEvent(){
+		super();
+	}
 	
-	public CashBoxNumPadKeypressEvent( NumPadKeyStroke keystroke) {
+	public CashBoxNumPadKeypressEvent( NumPadKeyStroke keystroke, String creator) {
+		super(creator);
+		
 		this.keystroke = keystroke;
 	}
 

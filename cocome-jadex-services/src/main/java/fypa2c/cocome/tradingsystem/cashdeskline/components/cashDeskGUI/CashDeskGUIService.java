@@ -18,12 +18,12 @@ public class CashDeskGUIService implements ICashDeskGUIService
 	protected CashDeskGUIAgent component;
 
 	@Override
-	public IFuture<Void> sendAddLastScannedProductAgainEvent() {
-		return component.publishEvent(new AddLastScannedProductAgainEvent());
+	public IFuture<Void> sendAddLastScannedProductAgainEvent(AddLastScannedProductAgainEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendRemoveLastScannedProductEvent() {
-		return component.publishEvent(new RemoveLastScannedProductEvent());
+	public IFuture<Void> sendRemoveLastScannedProductEvent(RemoveLastScannedProductEvent event) {
+		return component.publishEvent(event);
 	}
 }

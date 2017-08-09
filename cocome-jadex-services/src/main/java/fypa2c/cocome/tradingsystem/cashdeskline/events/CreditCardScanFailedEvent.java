@@ -25,11 +25,17 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold, Florian Abt
  */
-public final class CreditCardScanFailedEvent implements IEvent {
+public final class CreditCardScanFailedEvent extends Event {
 
 
 	//
 
-	public CreditCardScanFailedEvent() { /* empty */}
+	public CreditCardScanFailedEvent() {
+		super();
+	}
+	
+	public CreditCardScanFailedEvent(String creator) {
+		super(creator);
+	}
 
 }

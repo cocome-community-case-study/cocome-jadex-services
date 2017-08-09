@@ -6,8 +6,14 @@ package fypa2c.cocome.tradingsystem.cashdeskline.events;
  *
  * @author Florian Abt
  */
-public class RemoveLastScannedProductEvent implements IEvent {
+public class RemoveLastScannedProductEvent extends Event {
 
-	public RemoveLastScannedProductEvent() {}
+	public RemoveLastScannedProductEvent() {
+		super();
+	}
+	
+	public RemoveLastScannedProductEvent(String creator) {
+		super(creator);
+	}
 	
 }

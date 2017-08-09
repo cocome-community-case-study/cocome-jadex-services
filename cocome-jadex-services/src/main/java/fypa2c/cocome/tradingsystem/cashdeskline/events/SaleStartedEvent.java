@@ -28,9 +28,14 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class SaleStartedEvent implements IEvent {
+public final class SaleStartedEvent extends Event {
 
 
-	public SaleStartedEvent() { /* empty */}
+	public SaleStartedEvent() {
+		super();
+	}
 
+	public SaleStartedEvent(String creator) {
+		super(creator);
+	}
 }

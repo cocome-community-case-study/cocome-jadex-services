@@ -89,6 +89,7 @@ public class LightDisplayControllerAgent extends EventAgent
 			
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result, getLog());
 				printInfoLog("Received "+result.getClass().getName());
 				
 			}

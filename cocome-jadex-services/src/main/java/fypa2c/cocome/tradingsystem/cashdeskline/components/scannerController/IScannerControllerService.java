@@ -1,5 +1,6 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.events.ProductBarcodeScannedEvent;
 import jadex.commons.future.IFuture;
 
 /**
@@ -12,7 +13,7 @@ public interface IScannerControllerService {
 	/**
 	 * Publish an ProductBarCodeScannedEvent to all subscriber.
 	 */
-	public IFuture<Void> sendProductBarCodeScannedEvent(long barcode);
+	public IFuture<Void> sendProductBarCodeScannedEvent(ProductBarcodeScannedEvent event);
 	
 	
 }

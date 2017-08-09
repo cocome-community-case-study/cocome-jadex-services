@@ -166,6 +166,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result,getLog());
 				printInfoLog("Received "+result.getClass().getName());
 				if(result instanceof SaleStartedEvent){
 					//TODO Start process "Product Selection"
@@ -186,7 +187,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 							@Override
 							public void resultAvailable(ProductWithStockItemTO result) {
 								shoppingCard.addProduct(result);
-								getServiceProvided().sendRunningTotalChangedEvent(result.getBarcode(), result.getName(), result.getPurchasePrice(), shoppingCard.getRunningTotal());
+								getServiceProvided().sendRunningTotalChangedEvent(new RunningTotalChangedEvent(result.getBarcode(), result.getName(), result.getPurchasePrice(), shoppingCard.getRunningTotal(), getLog()));
 							}
 						});
 					} catch (NoSuchProductException e) {
@@ -214,7 +215,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 					printInfoLog("Calculate (new due amount or) change amount");
 					runningTotal = runningTotal - ((CashAmountEnteredEvent)result).getCashAmount();
 					if(((CashAmountEnteredEvent)result).isFinalinput()) {
-						getServiceProvided().sendChangeAmountCalculatedEvent(runningTotal*-1);
+						getServiceProvided().sendChangeAmountCalculatedEvent(new ChangeAmountCalculatedEvent(runningTotal*-1,getLog()));
 						runningTotal = 0;
 					}
 				}
@@ -222,8 +223,8 @@ public class CashDeskApplicationAgent extends EventAgent {
 					//TODO Update inventory and register sale
 					printInfoLog("Update inventory and register sale");
 					//getServiceProvided().sendSaleSuccessEvent();
-					getServiceProvided().sendAccountSaleEvent(null);
-					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+					getServiceProvided().sendAccountSaleEvent(new AccountSaleEvent(null,getLog()));
+					getServiceProvided().sendSaleRegisteredEvent(new SaleRegisteredEvent(null, 0, null,getLog()));
 				}
 				if(result instanceof CreditCardScannedEvent){
 					//TODO Store credit card info and wait for CreditCardPinEnteredEvent
@@ -236,14 +237,14 @@ public class CashDeskApplicationAgent extends EventAgent {
 					//getServiceProvided().sendInvalidCardEvent(null);
 					//else
 					printInfoLog("if Card is valid, finish payment process successfully");
-					getServiceProvided().sendSaleSuccessEvent();
-					getServiceProvided().sendAccountSaleEvent(null);
-					getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+					getServiceProvided().sendSaleSuccessEvent(new SaleSuccessEvent(getLog()));
+					getServiceProvided().sendAccountSaleEvent(new AccountSaleEvent(null,getLog()));
+					getServiceProvided().sendSaleRegisteredEvent(new SaleRegisteredEvent(null, 0, null,getLog()));
 				}
 				if(result instanceof AddLastScannedProductAgainEvent) {
 					LinkedList<ProductTO> actualList = shoppingCard.getActualShoppingCard();
 					if(!actualList.isEmpty()) {
-						((IScannerControllerService)requiredServicesFeature.getRequiredService("scannerController").get()).sendProductBarCodeScannedEvent(actualList.get(actualList.size()-1).getBarcode());
+						((IScannerControllerService)requiredServicesFeature.getRequiredService("scannerController").get()).sendProductBarCodeScannedEvent(new ProductBarcodeScannedEvent(actualList.get(actualList.size()-1).getBarcode(),getLog()));
 					}
 					else {
 						printInfoLog("The shopping card is empty, I have no product to add again, sorry!");
@@ -252,7 +253,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 				if(result instanceof RemoveLastScannedProductEvent) {
 					ProductTO removedProduct = shoppingCard.removeLastProduct();
 					if(removedProduct != null) {
-						getServiceProvided().sendRunningTotalChangedEvent(-1, "cancel last product", removedProduct.getPurchasePrice() * -1, shoppingCard.getRunningTotal());
+						getServiceProvided().sendRunningTotalChangedEvent(new RunningTotalChangedEvent(-1, "cancel last product", removedProduct.getPurchasePrice() * -1, shoppingCard.getRunningTotal(),getLog()));
 					}
 					else {
 						printInfoLog("Trying to remove a product from an empty shopping card... Check your code!");
@@ -275,12 +276,12 @@ public class CashDeskApplicationAgent extends EventAgent {
 	 */
 	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[6];
-		events[0] = new RunningTotalChangedEvent(0,null, 0, 0);
-		events[1] = new ChangeAmountCalculatedEvent(0);
-		events[2] = new SaleSuccessEvent();
-		events[3] = new AccountSaleEvent(null);
-		events[4] = new SaleRegisteredEvent(null, 0, null);
-		events[5] = new InvalidCreditCardEvent(null);
+		events[0] = new RunningTotalChangedEvent(0,null, 0, 0,getLog());
+		events[1] = new ChangeAmountCalculatedEvent(0,getLog());
+		events[2] = new SaleSuccessEvent(getLog());
+		events[3] = new AccountSaleEvent(null,getLog());
+		events[4] = new SaleRegisteredEvent(null, 0, null,getLog());
+		events[5] = new InvalidCreditCardEvent(null,getLog());
 		TestGUI gui= new TestGUI("CashDeskApplicationAgent", events);
 		
 		//Add ActionListener to Buttons
@@ -288,7 +289,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendRunningTotalChangedEvent(0, null, 0, 0);
+				getServiceProvided().sendRunningTotalChangedEvent(new RunningTotalChangedEvent(0, null, 0, 0,getLog()));
 			}
 		});
 		
@@ -296,7 +297,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendChangeAmountCalculatedEvent(0);
+				getServiceProvided().sendChangeAmountCalculatedEvent(new ChangeAmountCalculatedEvent(0,getLog()));
 			}
 		});
 		
@@ -304,7 +305,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendSaleSuccessEvent();
+				getServiceProvided().sendSaleSuccessEvent(new SaleSuccessEvent(getLog()));
 			}
 		});
 		
@@ -312,7 +313,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendAccountSaleEvent(null);
+				getServiceProvided().sendAccountSaleEvent(new AccountSaleEvent(null, getLog()));
 			}
 		});
 		
@@ -320,7 +321,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendSaleRegisteredEvent(null, null, null);
+				getServiceProvided().sendSaleRegisteredEvent(new SaleRegisteredEvent(null, 0, null,getLog()));
 			}
 		});
 		
@@ -328,7 +329,7 @@ public class CashDeskApplicationAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendInvalidCardEvent(null);
+				getServiceProvided().sendInvalidCardEvent(new InvalidCreditCardEvent(null, getLog()));
 			}
 		});
 	}

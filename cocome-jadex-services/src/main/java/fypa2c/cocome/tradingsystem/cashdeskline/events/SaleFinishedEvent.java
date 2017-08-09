@@ -27,10 +27,16 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class SaleFinishedEvent implements IEvent {
+public final class SaleFinishedEvent extends Event {
 
 	//
 
-	public SaleFinishedEvent() { /* empty */}
+	public SaleFinishedEvent() {
+		super();
+	}
+	
+	public SaleFinishedEvent(String creator) {
+		super(creator);
+	}
 
 }

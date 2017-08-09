@@ -28,33 +28,33 @@ public class CashDeskApplicationService extends EventService implements ICashDes
 	protected CashDeskApplicationAgent component;
 
 	@Override
-	public IFuture<Void> sendRunningTotalChangedEvent(long productBarcode, String productName, double productPrice, double runningTotal) {
-		return component.publishEvent(new RunningTotalChangedEvent(productBarcode, productName, productPrice, runningTotal));
+	public IFuture<Void> sendRunningTotalChangedEvent(RunningTotalChangedEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendChangeAmountCalculatedEvent(double changeAmount) {
-		return component.publishEvent(new ChangeAmountCalculatedEvent(changeAmount));
+	public IFuture<Void> sendChangeAmountCalculatedEvent(ChangeAmountCalculatedEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendSaleSuccessEvent() {
-		return component.publishEvent(new SaleSuccessEvent());
+	public IFuture<Void> sendSaleSuccessEvent(SaleSuccessEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendAccountSaleEvent(SaleTO transferSale) {
-		return component.publishEvent(new AccountSaleEvent(transferSale));
+	public IFuture<Void> sendAccountSaleEvent(AccountSaleEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendSaleRegisteredEvent(String topicName, ProductWithStockItemTO p, PaymentMode mode) {
+	public IFuture<Void> sendSaleRegisteredEvent(SaleRegisteredEvent event) {
 		//TODO calculate saleItemCount, 
-		return component.publishEvent(new SaleRegisteredEvent(topicName, 0, mode));
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendInvalidCardEvent(String cardInfo) {
-		return component.publishEvent(new InvalidCreditCardEvent(cardInfo));
+	public IFuture<Void> sendInvalidCardEvent(InvalidCreditCardEvent event) {
+		return component.publishEvent(event);
 	}
 }

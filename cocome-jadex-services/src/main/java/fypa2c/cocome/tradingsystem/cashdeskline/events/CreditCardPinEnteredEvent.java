@@ -24,17 +24,20 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class CreditCardPinEnteredEvent implements IEvent {
+public final class CreditCardPinEnteredEvent extends Event {
 
-	//
 
 	private int pin;
 
 	//
 	
-	public CreditCardPinEnteredEvent(){}
+	public CreditCardPinEnteredEvent(){
+		super();
+	}
 
-	public CreditCardPinEnteredEvent(int pin) {
+	public CreditCardPinEnteredEvent(int pin, String creator) {
+		super(creator);
+		
 		this.pin = pin;
 	}
 

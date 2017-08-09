@@ -24,11 +24,17 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class CashBoxClosedEvent implements IEvent {
+public final class CashBoxClosedEvent extends Event {
 
 
 	//
 
-	public CashBoxClosedEvent() { /* empty */}
+	public CashBoxClosedEvent() { 
+		super();
+	}
+	
+	public CashBoxClosedEvent(String creator) { 
+		super(creator);
+	}
 
 }

@@ -18,11 +18,13 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.Produ
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.SaleProcessModes;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.AddLastScannedProductAgainEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.IEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.InvalidCreditCardEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.PaymentModeSelectedEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.RemoveLastScannedProductEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.RunningTotalChangedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleFinishedEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.SaleStartedEvent;
@@ -118,8 +120,8 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(PaymentMode.CREDIT_CARD);
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent(new SaleFinishedEvent(getLog()));
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(new PaymentModeSelectedEvent(PaymentMode.CREDIT_CARD,getLog()));
 			}
 		});
 		
@@ -127,8 +129,8 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent();	
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(PaymentMode.CASH);
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleFinishedEvent(new SaleFinishedEvent(getLog()));
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendPaymentModeEvent(new PaymentModeSelectedEvent(PaymentMode.CASH,getLog()));
 			}
 		});
 		
@@ -136,7 +138,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendRemoveLastScannedProductEvent();
+				getServiceProvided().sendRemoveLastScannedProductEvent(new RemoveLastScannedProductEvent(getLog()));
 				
 			}
 		});
@@ -145,7 +147,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendAddLastScannedProductAgainEvent();
+				getServiceProvided().sendAddLastScannedProductAgainEvent(new AddLastScannedProductAgainEvent(getLog()));
 				
 			}
 		});
@@ -154,7 +156,7 @@ public class CashDeskGUIAgent extends EventAgent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleStartedEvent();
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendSaleStartedEvent(new SaleStartedEvent(getLog()));
 			}
 		});
 		
@@ -165,14 +167,14 @@ public class CashDeskGUIAgent extends EventAgent {
 			public void actionPerformed(ActionEvent e) {
 				double amount = gui.getTextCashAmountTextField();
 				runningTotal = runningTotal - amount;
-				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendCashAmountEnteredEvent(amount, runningTotal <= 0);
+				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendCashAmountEnteredEvent(new CashAmountEnteredEvent(amount, runningTotal <= 0,getLog()));
 			}
 		}, new ActionListener() {
 			
 			//PaymentFinished button
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((ICashDeskApplicationService)requiredServicesFeature.getRequiredService("cashDeskApplication").get()).sendSaleSuccessEvent();
+				((ICashDeskApplicationService)requiredServicesFeature.getRequiredService("cashDeskApplication").get()).sendSaleSuccessEvent(new SaleSuccessEvent(getLog()));
 			}
 		});
 	}
@@ -248,6 +250,7 @@ public class CashDeskGUIAgent extends EventAgent {
 
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result, getLog());
 				printInfoLog("Received " + result.getClass().getName());
 				if (result instanceof SaleStartedEvent) {
 					gui.setMode(SaleProcessModes.SALE_PRODUCT_SELECTION);

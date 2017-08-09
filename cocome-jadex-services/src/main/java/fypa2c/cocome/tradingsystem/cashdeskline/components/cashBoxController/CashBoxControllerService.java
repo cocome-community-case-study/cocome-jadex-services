@@ -25,30 +25,30 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 
 	
 	@Override
-	public IFuture<Void> sendSaleStartedEvent() {
+	public IFuture<Void> sendSaleStartedEvent(SaleStartedEvent event) {
 		System.out.println("sendSaleStartedEvent called");
-		return component.publishEvent(new SaleStartedEvent());
+		return component.publishEvent(event);
 	}
 
 
 	@Override
-	public IFuture<Void> sendSaleFinishedEvent() {
-		return component.publishEvent(new SaleFinishedEvent());
+	public IFuture<Void> sendSaleFinishedEvent(SaleFinishedEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendPaymentModeEvent(PaymentMode mode) {
-		return component.publishEvent(new PaymentModeSelectedEvent(mode));
+	public IFuture<Void> sendPaymentModeEvent(PaymentModeSelectedEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendCashAmountEnteredEvent(double amount, boolean finalInput) {
-		return component.publishEvent(new CashAmountEnteredEvent(amount, finalInput));
+	public IFuture<Void> sendCashAmountEnteredEvent(CashAmountEnteredEvent event) {
+		return component.publishEvent(event);
 	}
 
 	@Override
-	public IFuture<Void> sendCashBoxClosedEvent() {
-		return component.publishEvent(new CashBoxClosedEvent());
+	public IFuture<Void> sendCashBoxClosedEvent(CashBoxClosedEvent event) {
+		return component.publishEvent(event);
 	}
 
 	

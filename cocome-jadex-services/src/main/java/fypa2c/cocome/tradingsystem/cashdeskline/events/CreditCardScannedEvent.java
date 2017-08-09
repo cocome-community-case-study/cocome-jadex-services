@@ -28,7 +28,7 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold
  */
-public final class CreditCardScannedEvent implements IEvent {
+public final class CreditCardScannedEvent  extends Event {
 
 	//
 
@@ -36,9 +36,13 @@ public final class CreditCardScannedEvent implements IEvent {
 
 	//
 	
-	public CreditCardScannedEvent(){}
+	public CreditCardScannedEvent(){
+		super();
+	}
 
-	public CreditCardScannedEvent(String creditCardInformation) {
+	public CreditCardScannedEvent(String creditCardInformation, String creator) {
+		super(creator);
+		
 		this.creditCardInformation = creditCardInformation;
 	}
 

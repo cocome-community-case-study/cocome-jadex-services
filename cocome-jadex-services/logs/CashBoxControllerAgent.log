@@ -1,0 +1,4 @@
+1502249181446;CashBoxControllerAgent;CashDeskGUIAgent;actionPerformed;null;SaleStartedEvent;0
+1502249189688;CashBoxControllerAgent;CashDeskGUIAgent;actionPerformed;null;SaleFinishedEvent;15
+1502249189691;CashBoxControllerAgent;CashDeskGUIAgent;actionPerformed;null;PaymentModeSelectedEvent;16
+1502249191488;CashBoxControllerAgent;CashDeskGUIAgent;actionPerformed;null;CashAmountEnteredEvent;17

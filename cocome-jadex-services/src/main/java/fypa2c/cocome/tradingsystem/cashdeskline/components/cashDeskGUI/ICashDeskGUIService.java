@@ -1,5 +1,7 @@
 package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI;
 
+import fypa2c.cocome.tradingsystem.cashdeskline.events.AddLastScannedProductAgainEvent;
+import fypa2c.cocome.tradingsystem.cashdeskline.events.RemoveLastScannedProductEvent;
 import jadex.commons.future.IFuture;
 
 /**
@@ -14,13 +16,13 @@ public interface ICashDeskGUIService {
 	 * if the last selected product should be added 
 	 * to the shopping card again.
 	 */
-	public IFuture<Void> sendAddLastScannedProductAgainEvent();
+	public IFuture<Void> sendAddLastScannedProductAgainEvent(AddLastScannedProductAgainEvent event);
 	
 	/**
 	 * To send a RemoveLastScannedProductEvent 
 	 * if the last selected product should be 
 	 * removed from the shopping card.
 	 */
-	public IFuture<Void> sendRemoveLastScannedProductEvent();
+	public IFuture<Void> sendRemoveLastScannedProductEvent(RemoveLastScannedProductEvent event);
 
 }

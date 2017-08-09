@@ -112,6 +112,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result, getLog());
 				printInfoLog("Received "+result.getClass().getName());
 				if (result instanceof ChangeAmountCalculatedEvent) {
 					//TODO open CashBox
@@ -136,11 +137,11 @@ public class CashBoxControllerAgent extends EventAgent
 	 */
 	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[5];
-		events[0] = new SaleStartedEvent();
-		events[1] = new SaleFinishedEvent();
-		events[2] = new PaymentModeSelectedEvent(null);
-		events[3] = new CashAmountEnteredEvent(0, true);
-		events[4] = new CashBoxClosedEvent(); 
+		events[0] = new SaleStartedEvent(getLog());
+		events[1] = new SaleFinishedEvent(getLog());
+		events[2] = new PaymentModeSelectedEvent(null,getLog());
+		events[3] = new CashAmountEnteredEvent(0, true,getLog());
+		events[4] = new CashBoxClosedEvent(getLog()); 
 		TestGUI gui= new TestGUI("CashBoxControllerAgent", events);
 		
 		//Add ActionListener to Buttons
@@ -148,7 +149,7 @@ public class CashBoxControllerAgent extends EventAgent
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendSaleStartedEvent();
+				getServiceProvided().sendSaleStartedEvent(new SaleStartedEvent(getLog()));
 			}
 						
 		});
@@ -157,7 +158,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendSaleFinishedEvent();
+				getServiceProvided().sendSaleFinishedEvent(new SaleFinishedEvent(getLog()));
 			}
 		});
 		
@@ -165,7 +166,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendPaymentModeEvent(null);
+				getServiceProvided().sendPaymentModeEvent(new PaymentModeSelectedEvent(null, getLog()));
 			}
 		});
 		
@@ -173,7 +174,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendCashAmountEnteredEvent(0, true);
+				getServiceProvided().sendCashAmountEnteredEvent(new CashAmountEnteredEvent(0, true,getLog()));
 			}
 		});
 		
@@ -181,7 +182,7 @@ public class CashBoxControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendCashBoxClosedEvent();
+				getServiceProvided().sendCashBoxClosedEvent(new CashBoxClosedEvent(getLog()));
 			}
 		});
 	}

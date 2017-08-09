@@ -28,7 +28,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashBoxController.Pay
  * 
  * @author Florian Abt
  */
-public final class SaleRegisteredEvent implements IEvent {
+public final class SaleRegisteredEvent extends Event {
 
 	//
 
@@ -39,11 +39,15 @@ public final class SaleRegisteredEvent implements IEvent {
 	private String cashDesk;
 
 	//
-	public SaleRegisteredEvent(){}
+	public SaleRegisteredEvent(){
+		super();
+	}
 
 	public SaleRegisteredEvent(
 			 String cashDesk,
-			 int itemCount,  PaymentMode paymentMode) {
+			 int itemCount,  PaymentMode paymentMode, String creator) {
+		super(creator);
+		
 		this.itemCount = itemCount;
 		this.paymentMode = paymentMode;
 		this.cashDesk = cashDesk;

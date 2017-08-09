@@ -25,16 +25,20 @@ import java.io.Serializable;
  * 
  * @author Sebastian Herold, Florian Abt
  */
-public final class ProductBarcodeScannedEvent implements IEvent {
+public final class ProductBarcodeScannedEvent extends Event {
 
 
 	private long barcode;
 
 	//
 
-	public ProductBarcodeScannedEvent(){}
+	public ProductBarcodeScannedEvent(){
+		super();
+	}
 	
-	public ProductBarcodeScannedEvent(long barcode) {
+	public ProductBarcodeScannedEvent(long barcode, String creator) {
+		super(creator);
+		
 		this.barcode = barcode;
 	}
 

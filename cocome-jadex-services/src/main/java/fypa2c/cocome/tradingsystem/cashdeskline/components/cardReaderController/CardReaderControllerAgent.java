@@ -96,6 +96,7 @@ public class CardReaderControllerAgent extends EventAgent
 			
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result, getLog());
 				printInfoLog("Received "+result.getClass().getName());
 			}
 			
@@ -112,8 +113,8 @@ public class CardReaderControllerAgent extends EventAgent
 	 */
 	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[2];
-		events[0] = new CreditCardScannedEvent(null);
-		events[1] = new CreditCardPinEnteredEvent(0);
+		events[0] = new CreditCardScannedEvent(null,getLog());
+		events[1] = new CreditCardPinEnteredEvent(0, getLog());
 		TestGUI gui= new TestGUI("CardReaderControllerAgent", events);
 		
 		//Add ActionListener to Buttons
@@ -121,7 +122,7 @@ public class CardReaderControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendCreditCardScannedEvent(null);
+				getServiceProvided().sendCreditCardScannedEvent(new CreditCardScannedEvent(null, getLog()));
 			}
 		});
 		
@@ -129,7 +130,7 @@ public class CardReaderControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendPINEnteredEvent(0);
+				getServiceProvided().sendPINEnteredEvent(new CreditCardPinEnteredEvent(0, getLog()));
 			}
 		});
 	}

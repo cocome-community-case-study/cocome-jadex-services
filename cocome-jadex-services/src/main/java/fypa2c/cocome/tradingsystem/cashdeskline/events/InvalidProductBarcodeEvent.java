@@ -26,16 +26,20 @@ import org.omg.CORBA.DynAnyPackage.Invalid;
  * 
  * @author Florian Abt
  */
-public final class InvalidProductBarcodeEvent implements IEvent {
+public final class InvalidProductBarcodeEvent extends Event {
 
 
 	private long invalidBarcode;
 
 	//
 
-	public InvalidProductBarcodeEvent(){}
+	public InvalidProductBarcodeEvent(){
+		super();
+	}
 	
-	public InvalidProductBarcodeEvent( long invalidBarcode) {
+	public InvalidProductBarcodeEvent( long invalidBarcode, String creator) {
+		super(creator);
+		
 		this.invalidBarcode = invalidBarcode;
 	}
 

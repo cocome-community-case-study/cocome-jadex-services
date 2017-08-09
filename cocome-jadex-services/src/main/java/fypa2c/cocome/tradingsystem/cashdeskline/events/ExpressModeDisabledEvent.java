@@ -26,11 +26,17 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class ExpressModeDisabledEvent implements IEvent {
+public final class ExpressModeDisabledEvent  extends Event {
 
 
 	//
 
-	public ExpressModeDisabledEvent() { /* empty */}
+	public ExpressModeDisabledEvent() {
+		super();
+	}
+	
+	public ExpressModeDisabledEvent(String creator) {
+		super(creator);
+	}
 
 }

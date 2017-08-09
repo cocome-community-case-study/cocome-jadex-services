@@ -78,7 +78,7 @@ public class ScannerControllerAgent extends EventAgent
 			public void actionPerformed(ActionEvent e) {
 				long barcode = scanner.getScannedBarCode();
 				if(barcode > -1){
-					getServiceProvided().sendProductBarCodeScannedEvent(barcode);
+					getServiceProvided().sendProductBarCodeScannedEvent(new ProductBarcodeScannedEvent(barcode,getLog()));
 				}
 			}
 		});
@@ -126,6 +126,7 @@ public class ScannerControllerAgent extends EventAgent
 			
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
+				logEvent(result, getLog());
 				printInfoLog("Received "+result.getClass().getName());
 				if (result instanceof SaleStartedEvent) {
 					scanner.startScanProcess();
@@ -149,7 +150,7 @@ public class ScannerControllerAgent extends EventAgent
 	 */
 	public void initializeTestGUI(){
 		IEvent[] events = new IEvent[1];
-		events[0] = new ProductBarcodeScannedEvent(0);
+		events[0] = new ProductBarcodeScannedEvent(0,getLog());
 		TestGUI gui= new TestGUI("ScannerControllerAgent", events);
 		
 		//Add ActionListener to Buttons
@@ -157,7 +158,7 @@ public class ScannerControllerAgent extends EventAgent
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getServiceProvided().sendProductBarCodeScannedEvent(0);
+				getServiceProvided().sendProductBarCodeScannedEvent(new ProductBarcodeScannedEvent(0,getLog()));
 			}
 		});
 	}

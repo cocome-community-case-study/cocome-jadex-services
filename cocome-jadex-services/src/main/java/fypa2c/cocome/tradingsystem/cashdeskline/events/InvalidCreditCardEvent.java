@@ -24,15 +24,19 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class InvalidCreditCardEvent implements IEvent {
+public final class InvalidCreditCardEvent extends Event {
 
 	private String cardInfo;
 
 	//
 	
-	public InvalidCreditCardEvent(){}
+	public InvalidCreditCardEvent(){
+		super();
+	}
 
-	public InvalidCreditCardEvent( String cardInfo) {
+	public InvalidCreditCardEvent( String cardInfo, String creator) {
+		super(creator);
+		
 		this.cardInfo = cardInfo;
 	}
 

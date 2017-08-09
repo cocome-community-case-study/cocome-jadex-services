@@ -27,7 +27,7 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class RunningTotalChangedEvent implements IEvent {
+public final class RunningTotalChangedEvent extends Event {
 
 
 	//-1 indicates the removal of the last product in the shopping card.
@@ -41,9 +41,13 @@ public final class RunningTotalChangedEvent implements IEvent {
 
 	//
 	
-	public RunningTotalChangedEvent(){}
+	public RunningTotalChangedEvent(){
+		super();
+	}
 
-	public RunningTotalChangedEvent(long barcode, String productName,  double productPrice, double runningTotal) {
+	public RunningTotalChangedEvent(long barcode, String productName,  double productPrice, double runningTotal, String creator) {
+		super(creator);
+		
 		this.productName = productName;
 		this.productPrice = productPrice;
 		this.runningTotal = runningTotal;

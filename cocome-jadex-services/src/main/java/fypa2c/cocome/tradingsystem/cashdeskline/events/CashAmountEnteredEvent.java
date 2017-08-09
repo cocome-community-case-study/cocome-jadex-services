@@ -24,7 +24,7 @@ import java.io.Serializable;
  * 
  * @author Lubomir Bulej, Florian Abt
  */
-public final class CashAmountEnteredEvent implements IEvent {
+public final class CashAmountEnteredEvent extends Event {
 
 	//
 
@@ -34,9 +34,13 @@ public final class CashAmountEnteredEvent implements IEvent {
 
 	//
 
-	public CashAmountEnteredEvent(){}
+	public CashAmountEnteredEvent(){
+		super();
+	}
 	
-	public CashAmountEnteredEvent(double cashAmount, boolean finalInput) {
+	public CashAmountEnteredEvent(double cashAmount, boolean finalInput, String creator) {
+		super(creator);
+		
 		this.cashAmount = cashAmount;
 		this.finalInput = finalInput;
 	}

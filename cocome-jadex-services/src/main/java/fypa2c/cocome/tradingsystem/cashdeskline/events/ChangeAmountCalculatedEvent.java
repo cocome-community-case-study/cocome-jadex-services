@@ -24,7 +24,7 @@ import java.io.Serializable;
  * 
  * @author Florian Abt
  */
-public final class ChangeAmountCalculatedEvent implements IEvent {
+public final class ChangeAmountCalculatedEvent extends Event {
 
 	//
 
@@ -32,9 +32,13 @@ public final class ChangeAmountCalculatedEvent implements IEvent {
 
 	//
 	
-	public ChangeAmountCalculatedEvent(){}
+	public ChangeAmountCalculatedEvent(){
+		super();
+	}
 
-	public ChangeAmountCalculatedEvent(double changeAmount) {
+	public ChangeAmountCalculatedEvent(double changeAmount, String creator) {
+		super(creator);
+		
 		this.changeAmount = changeAmount;
 	}
 
