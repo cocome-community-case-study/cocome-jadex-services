@@ -50,6 +50,9 @@ public class EventAgent {
 	
 	//properties value of testON
 	private boolean testON = false;
+	
+	//properties value of logON
+	private boolean logON = false;
 
 	@AgentFeature
 	protected IRequiredServicesFeature requiredServicesFeature;
@@ -74,6 +77,24 @@ public class EventAgent {
 		catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("properties.xml not found, couldn't load simulationOn value - simulation component is not started yet");
+		}
+		
+		//set logON value from properties, logging of events only if this value is true
+		try{
+			File file = new File("properties.xml");
+			final FileInputStream in = new FileInputStream(file.getAbsolutePath());
+			properties.loadFromXML(in);
+	        in.close();
+	        if(properties.getProperty("logON").equals("true")){
+				logON=true;
+			}
+	        else{
+	        	logON=false;
+	        }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("properties.xml not found, couldn't load logOn value - Events aren't logged yet");
 		}
 		
 		
@@ -143,16 +164,15 @@ public class EventAgent {
 	}
 	
 	/**
-	 * Logs an Event
+	 * Logs an Event, if the logON value (properties) is set to true
 	 * 
 	 * @param event: the event
 	 * @param receiverName: the name of the component which receives the event, null is actual no component received
 	 */
 	protected void logEvent(IEvent event, String receiverName) {
-		//to get the names of the calling component (number 3 in the stackTrace from behind)
-		Exception e = new Exception();
-		StackTraceElement element = e.getStackTrace()[3];
-		LogWriter.writeLog(new LogEntry(event.getEventID(), event.getClass().getSimpleName(), event.getGunner(), event.getCreator(), event.getCreatorMethod(), receiverName, event.getDate()),getLog());
+		if(logON) {
+			LogWriter.writeLog(new LogEntry(event.getEventID(), event.getClass().getSimpleName(), event.getGunner(), event.getCreator(), event.getCreatorMethod(), receiverName, event.getDate()),getLog());
+		}
 	}
 
 }

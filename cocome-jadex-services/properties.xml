@@ -2,6 +2,10 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>Properties for the StartUp of the cashdesk</comment>
+<!-- If true, a test GUI for every component is started. Using this GUI it's possible to fire specific events from this component. -->
 <entry key="testON">false</entry>
+<!-- If true, for each cashdesk the simulation component is started -->
 <entry key="simulationON">false</entry>
+<!-- If true, logs will be write to logfiles for every fiered event -->
+<entry key="logON">true</entry>
 </properties>
