@@ -97,7 +97,7 @@ public class CardReaderControllerAgent extends EventAgent
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
 				logEvent(result, getLog());
-				printInfoLog("Received "+result.getClass().getName());
+				//printInfoLog("Received "+result.getClass().getName());
 			}
 			
 			@Override

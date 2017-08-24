@@ -53,6 +53,9 @@ public class EventAgent {
 	
 	//properties value of logON
 	private boolean logON = false;
+	
+	//properties value of simulationON
+	private boolean simulationOn = false;
 
 	@AgentFeature
 	protected IRequiredServicesFeature requiredServicesFeature;
@@ -79,7 +82,7 @@ public class EventAgent {
 			System.out.println("properties.xml not found, couldn't load simulationOn value - simulation component is not started yet");
 		}
 		
-		//set logON value from properties, logging of events only if this value is true
+		//set logON value from properties, logging of events only if logOn value is true
 		try{
 			File file = new File("properties.xml");
 			final FileInputStream in = new FileInputStream(file.getAbsolutePath());
@@ -95,6 +98,24 @@ public class EventAgent {
 		catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("properties.xml not found, couldn't load logOn value - Events aren't logged yet");
+		}
+		
+		//set simulationON value from properties, if true the simulation GUI is shown and the CashDeskGUI is hide
+		try{
+			File file = new File("properties.xml");
+			final FileInputStream in = new FileInputStream(file.getAbsolutePath());
+			properties.loadFromXML(in);
+	        in.close();
+	        if(properties.getProperty("simulationON").equals("true")){
+				simulationOn=true;
+			}
+	        else{
+	        	simulationOn=false;
+	        }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("properties.xml not found, couldn't load simulationON value - Simulation mode not started");
 		}
 		
 		
@@ -156,11 +177,19 @@ public class EventAgent {
 	
 	
 	/**
-	 * Specific if the test mode is running
+	 * True if the test mode is running
 	 * @return true if the test mode is running
 	 */
 	protected boolean isTestON(){
 		return testON;
+	}
+	
+	/**
+	 * True if the simulation mode is running
+	 * @return the simulationOn
+	 */
+	protected boolean isSimulationOn() {
+		return simulationOn;
 	}
 	
 	/**

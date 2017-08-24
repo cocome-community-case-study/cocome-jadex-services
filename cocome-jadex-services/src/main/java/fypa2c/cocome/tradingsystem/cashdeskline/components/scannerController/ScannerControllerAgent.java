@@ -65,9 +65,12 @@ public class ScannerControllerAgent extends EventAgent
 			initializeTestGUI();
 		}
 		
-		initializeScanner();
-		
-		subscribeToEvents();
+		//GUI is not displayed in simulation mode
+		if(!isSimulationOn()) {
+			initializeScanner();
+			
+			subscribeToEvents();
+		}
 		
 	}
 	
@@ -127,12 +130,15 @@ public class ScannerControllerAgent extends EventAgent
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
 				logEvent(result, getLog());
-				printInfoLog("Received "+result.getClass().getName());
-				if (result instanceof SaleStartedEvent) {
-					scanner.startScanProcess();
-				}
-				if (result instanceof SaleFinishedEvent){
-					scanner.stopScanProcess();
+				//printInfoLog("Received "+result.getClass().getName());
+				//If simulation is on, the scanner should do nothing
+				if(!isSimulationOn()) {
+					if (result instanceof SaleStartedEvent) {
+						scanner.startScanProcess();
+					}
+					if (result instanceof SaleFinishedEvent){
+						scanner.stopScanProcess();
+					}
 				}
 			}
 			

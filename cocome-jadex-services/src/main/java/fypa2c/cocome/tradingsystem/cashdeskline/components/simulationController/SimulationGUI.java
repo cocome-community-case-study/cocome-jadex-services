@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 /**
  * This class creates a GUI for the simulation of the cashdesk and the sale
@@ -27,13 +28,14 @@ public class SimulationGUI {
 		frame = new JFrame("Simulation");
 		frame.setSize(300, 200);
 		frame.getContentPane().setLayout(new BorderLayout());
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		startButton = new JButton("Strart Simulation");
 		stopButton = new JButton("Stop Simulation");
 		gridButtonPanel = new JPanel();
 		gridButtonPanel.setLayout(new GridLayout(2, 1));
 		gridButtonPanel.add(startButton);
 		gridButtonPanel.add(stopButton);
-		frame.getContentPane().add(gridButtonPanel, BorderLayout.SOUTH);
+		frame.getContentPane().add(gridButtonPanel, BorderLayout.CENTER);
 		frame.setVisible(true);
 	}
 
@@ -53,5 +55,12 @@ public class SimulationGUI {
 	 */
 	public JButton getStopButton(){
 		return stopButton;
+	}
+	
+	/**
+	 * Refreshes the GUI if other Threads block this.
+	 */
+	public void refreshGUI() {
+		frame.repaint();
 	}
 }

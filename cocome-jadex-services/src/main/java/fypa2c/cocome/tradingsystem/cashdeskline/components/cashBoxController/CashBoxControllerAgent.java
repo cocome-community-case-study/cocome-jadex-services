@@ -113,7 +113,7 @@ public class CashBoxControllerAgent extends EventAgent
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
 				logEvent(result, getLog());
-				printInfoLog("Received "+result.getClass().getName());
+				//printInfoLog("Received "+result.getClass().getName());
 				if (result instanceof ChangeAmountCalculatedEvent) {
 					//TODO open CashBox
 					printInfoLog("Open CashBox");

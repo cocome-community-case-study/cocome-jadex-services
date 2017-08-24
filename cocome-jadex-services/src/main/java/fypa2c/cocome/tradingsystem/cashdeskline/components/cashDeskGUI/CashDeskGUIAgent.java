@@ -2,7 +2,10 @@ package fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Collection;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -18,6 +21,7 @@ import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.Produ
 import fypa2c.cocome.tradingsystem.cashdeskline.components.cashDeskGUI.GUI.SaleProcessModes;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.eventBus.IEventBusService;
 import fypa2c.cocome.tradingsystem.cashdeskline.components.scannerController.IScannerControllerService;
+import fypa2c.cocome.tradingsystem.cashdeskline.components.simulationController.SimulationControllerAgent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.AddLastScannedProductAgainEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.CashAmountEnteredEvent;
 import fypa2c.cocome.tradingsystem.cashdeskline.events.ChangeAmountCalculatedEvent;
@@ -103,9 +107,13 @@ public class CashDeskGUIAgent extends EventAgent {
 	@AgentBody
 	public void body() {
 
-		initializeGUI();
+		//initialization of GUI and subscription to Events only if the system is not in simulation mode
+		if(!isSimulationOn()) {
+			initializeGUI();
 
-		subscribeToEvents();
+			subscribeToEvents();
+		}
+		
 
 	}
 
@@ -160,11 +168,13 @@ public class CashDeskGUIAgent extends EventAgent {
 			}
 		});
 		
+		//For Payment Mode:
 		gui.setActionListenerPayment(new ActionListener() {
 			
 			//Enter button
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//TODO change amounts of money from double to integer (ct values) the double values causes side effects... (this was declared in the use cases of CoCoMe, hate myself that I followed this instructions, but I haven't enough time to fix this...)
 				double amount = gui.getTextCashAmountTextField();
 				runningTotal = runningTotal - amount;
 				((ICashBoxControllerService)requiredServicesFeature.getRequiredService("cashBoxController").get()).sendCashAmountEnteredEvent(new CashAmountEnteredEvent(amount, runningTotal <= 0,getLog()));
@@ -251,57 +261,60 @@ public class CashDeskGUIAgent extends EventAgent {
 			@Override
 			public void intermediateResultAvailable(IEvent result) {
 				logEvent(result, getLog());
-				printInfoLog("Received " + result.getClass().getName());
-				if (result instanceof SaleStartedEvent) {
-					gui.setMode(SaleProcessModes.SALE_PRODUCT_SELECTION);
-					printInfoLog("Show sale GUI");
-				}
-				if (result instanceof SaleFinishedEvent) {
-					// TODO Switch from sale GUI to pay GUI
-					printInfoLog("Switch from sale GUI to pay GUI");
-				}
-				if (result instanceof RunningTotalChangedEvent) {
-					ProductItem product = new ProductItem(((RunningTotalChangedEvent) result).getBarcode(),((RunningTotalChangedEvent) result).getProductName(), ((RunningTotalChangedEvent) result).getProductPrice());
-					//check if this event indicates the adding or the removal of a product
-					if(product.getBarcode() != -1) {
-						//add new product to shopping card
-						gui.addProductItemToList(product, ((RunningTotalChangedEvent) result).getRunningTotal());
-						gui.setTextActualProductTextField(product);
+				//printInfoLog("Received " + result.getClass().getName());
+				//If the simulation is on, the CashDeskGUI shouldn't display any GUI
+				if(!isSimulationOn()) {
+					if (result instanceof SaleStartedEvent) {
+						gui.setMode(SaleProcessModes.SALE_PRODUCT_SELECTION);
+						printInfoLog("Show sale GUI");
 					}
-					else {
-						//remove last product in shopping card
-						gui.removeLastProductItemFromList(((RunningTotalChangedEvent) result).getRunningTotal());
+					if (result instanceof SaleFinishedEvent) {
+						// TODO Switch from sale GUI to pay GUI
+						printInfoLog("Switch from sale GUI to pay GUI");
 					}
-					runningTotal = ((RunningTotalChangedEvent) result).getRunningTotal();
-				}
-				if (result instanceof CashAmountEnteredEvent) {
-					printInfoLog("Update GUI with with entered cash amount");
-					if(runningTotal<=0) {
-						gui.setMode(SaleProcessModes.PAYMENT_FINISHED);
-						gui.setTextChangeAmount("Change Amount: "+(runningTotal*-1)+"€");
+					if (result instanceof RunningTotalChangedEvent) {
+						ProductItem product = new ProductItem(((RunningTotalChangedEvent) result).getBarcode(),((RunningTotalChangedEvent) result).getProductName(), ((RunningTotalChangedEvent) result).getProductPrice());
+						//check if this event indicates the adding or the removal of a product
+						if(product.getBarcode() != -1) {
+							//add new product to shopping card
+							gui.addProductItemToList(product, ((RunningTotalChangedEvent) result).getRunningTotal());
+							gui.setTextActualProductTextField(product);
+						}
+						else {
+							//remove last product in shopping card
+							gui.removeLastProductItemFromList(((RunningTotalChangedEvent) result).getRunningTotal());
+						}
+						runningTotal = ((RunningTotalChangedEvent) result).getRunningTotal();
 					}
-					else {
-						gui.setTextChangeAmount("Amount to pay: "+runningTotal+"€");
+					if (result instanceof CashAmountEnteredEvent) {
+						printInfoLog("Update GUI with entered cash amount");
+						if(runningTotal<=0) {
+							gui.setMode(SaleProcessModes.PAYMENT_FINISHED);
+							gui.setTextChangeAmount("Change Amount: "+(runningTotal*-1)+"€");
+						}
+						else {
+							gui.setTextChangeAmount("Amount to pay: "+runningTotal+"€");
+						}
+						
 					}
-					
-				}
-				if (result instanceof SaleSuccessEvent) {
-					runningTotal = 0;
-					gui.setMode(SaleProcessModes.SALE_NOT_STARTED);
-				}
-				if (result instanceof InvalidCreditCardEvent) {
-					// TODO Update GUI, invalid credit card
-					printInfoLog("Udate GUI, invalid credit card");
-				}
-				if (result instanceof PaymentModeSelectedEvent) {
-					if(((PaymentModeSelectedEvent)result).getMode() == PaymentMode.CREDIT_CARD) {
-						//TODO implement real Card payment
-						gui.setMode(SaleProcessModes.PAYMENT_FINISHED);	
-						gui.setTextChangeAmount("Card payment successful!");
+					if (result instanceof SaleSuccessEvent) {
+						runningTotal = 0;
+						gui.setMode(SaleProcessModes.SALE_NOT_STARTED);
 					}
-					else if(((PaymentModeSelectedEvent)result).getMode() == PaymentMode.CASH) {
-						gui.setMode(SaleProcessModes.PAYMENT_CASH);
-						gui.setTextChangeAmount("Amount to pay: "+runningTotal+"€");
+					if (result instanceof InvalidCreditCardEvent) {
+						// TODO Update GUI, invalid credit card
+						printInfoLog("Udate GUI, invalid credit card");
+					}
+					if (result instanceof PaymentModeSelectedEvent) {
+						if(((PaymentModeSelectedEvent)result).getMode() == PaymentMode.CREDIT_CARD) {
+							//TODO implement real Card payment
+							gui.setMode(SaleProcessModes.PAYMENT_FINISHED);	
+							gui.setTextChangeAmount("Card payment successful!");
+						}
+						else if(((PaymentModeSelectedEvent)result).getMode() == PaymentMode.CASH) {
+							gui.setMode(SaleProcessModes.PAYMENT_CASH);
+							gui.setTextChangeAmount("Amount to pay: "+runningTotal+"€");
+						}
 					}
 				}
 			}

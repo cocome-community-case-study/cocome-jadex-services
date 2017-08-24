@@ -26,7 +26,6 @@ public class CashBoxControllerService extends EventService implements ICashBoxCo
 	
 	@Override
 	public IFuture<Void> sendSaleStartedEvent(SaleStartedEvent event) {
-		System.out.println("sendSaleStartedEvent called");
 		return component.publishEvent(event);
 	}
 

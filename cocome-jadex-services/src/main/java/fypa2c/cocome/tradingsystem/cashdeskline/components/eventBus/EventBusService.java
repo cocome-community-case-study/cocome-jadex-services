@@ -38,7 +38,7 @@ public class EventBusService implements IEventBusService{
 	
 	@Override
 	public ISubscriptionIntermediateFuture<IEvent> subscribeToEvents(IFilter<IEvent> filter) {
-		component.printInfoLog("Service recieved an subscription");
+		//component.printInfoLog("Service received an subscription");
 		//new SubscriptionIntermediateFuture for an event
 		SubscriptionIntermediateFuture<IEvent> sifuture = new SubscriptionIntermediateFuture<IEvent>();
 		
@@ -67,7 +67,7 @@ public class EventBusService implements IEventBusService{
 	@Override
 	public IFuture<Void> publishEvent(IEvent event) {
 		//Notify the subscriber of this event.
-		component.printInfoLog("Received Event and notifies subscriber");
+		//component.printInfoLog("Received Event and notifies subscriber");
 		for(SubscriptionEntry entry : subscriptions){
 			if(entry.getFilter()==null){
 				entry.sifuture.addIntermediateResultIfUndone(event);

@@ -75,6 +75,7 @@ public class StockItemTO {
 
 	/**
 	 * Returns the unique identifier of the {@link StockItem} entity.
+	 * This is the barcode of the product.
 	 * 
 	 * @return
 	 *         {@link StockItem} entity identifier.

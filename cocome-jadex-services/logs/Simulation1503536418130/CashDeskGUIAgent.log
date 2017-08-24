@@ -1,0 +1,4 @@
+1503536418448;CashDeskGUIAgent;SimulationControllerAgent;run;null;AddLastScannedProductAgainEvent;17
+1503536430532;CashDeskGUIAgent;SimulationControllerAgent;run;null;RemoveLastScannedProductEvent;98
+1503536430638;CashDeskGUIAgent;SimulationControllerAgent;run;null;RemoveLastScannedProductEvent;109
+1503536431956;CashDeskGUIAgent;SimulationControllerAgent;run;null;RemoveLastScannedProductEvent;138

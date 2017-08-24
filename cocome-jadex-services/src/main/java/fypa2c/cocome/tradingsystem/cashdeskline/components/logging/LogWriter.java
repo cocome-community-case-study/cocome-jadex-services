@@ -17,6 +17,8 @@ import java.util.List;
  * @author Florian Abt
  */
 public abstract class LogWriter{
+	
+	public volatile static File path;
 
 	/**
 	 * Writes a LogEntry to the corresponding log file in the logs folder.
@@ -26,16 +28,12 @@ public abstract class LogWriter{
 	 * @return true if write process completed successfully 
 	 */
 	public static boolean writeLog(LogEntry entry,String logComponent) {
-		if(Files.notExists(Paths.get("logs")) || !(new File("logs").isDirectory())) {
-			boolean success = (new File("logs")).mkdir();
-			if (!success) {
-				System.out.println("Couldn't create directory!");
-				return false;
-			}
+		if(!initializePath()) {
+			return false;
 		}
 		//create log file line
 		List<String> lines = Arrays.asList(entry.toString());
-		Path file = Paths.get("logs/"+logComponent+".log");
+		Path file = Paths.get(path.getPath()+"/"+logComponent+".log");
 		try {
 			Files.write(file, lines, Charset.forName("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 		} catch (IOException e) {
@@ -44,6 +42,26 @@ public abstract class LogWriter{
 			return false;
 		}
 		
+		return true;
+	}
+	
+	
+	/**
+	 * to start a new log folder. A new folder with new log files is created for the next simulation.
+	 */
+	public static void startNewLogFolder() {
+		path = null;
+	}
+	
+	private static boolean initializePath() {
+		if(path == null) {
+			path = new File("logs/Simulation"+System.currentTimeMillis());
+			boolean success = path.mkdirs();
+			if(!success) {
+				System.out.println("Couldn't create directory "+path.getPath()+"");
+				return false;
+			}
+		}
 		return true;
 	}
 	
